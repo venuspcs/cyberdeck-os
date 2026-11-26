@@ -42,7 +42,7 @@ debian/*.log
 
 # live-build work trees. Scoped to the repo root and to build/*/
 # so a source directory is not ignored for sharing one of these names.
-.build/
+/.build/
 /cache/
 /chroot/
 /binary/

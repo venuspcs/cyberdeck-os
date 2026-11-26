@@ -71,7 +71,7 @@ The installer is specified for the AMD64 ISO and the generic ARM64 UEFI image. P
 - A supported install target has at least 256 GB of storage.
 - Install targets use GPT, including disks larger than 2 TB, so an MBR layout does not cap the disk.
 - Erase disk creates that GPT layout as one Btrfs root covering the rest of the disk after the small EFI System Partition required to boot (see the implementer notes). A legacy-boot machine also gets the small BIOS boot partition that GRUB needs on GPT.
-- Install alongside keeps the partitions that already hold another operating system and adds a Btrfs root in the free space on a GPT disk. It does not collapse the disk to a single root. A disk that is not GPT is erased and recreated as GPT instead of being installed alongside.
+- Install alongside keeps the partitions that already hold another operating system and adds a Btrfs root in the free space on a GPT disk. It does not collapse the disk to a single root. A non-GPT disk is not eligible for install alongside. Recreating that disk as GPT requires the user to choose erase disk.
 - Manual partitioning places the Btrfs root where the user chooses, on a GPT disk.
 - The system takes a snapshot before every update.
 - The user can roll back from the boot menu, in the style of Snapper plus grub-btrfs.
