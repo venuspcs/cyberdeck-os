@@ -1,6 +1,6 @@
 # Roadmap
 
-Cyberdeck OS is in planning. No milestone below has an image, a live-build tree, or a workflow. Checked items are documentation that is already in the repository. Everything else is still to do.
+Cyberdeck OS is pre-alpha. Milestone 1 has an AMD64 live-build tree, a GitHub Actions workflow, and a built full hybrid ISO. What that image actually did under QEMU is in [build/amd64/README.md](../build/amd64/README.md). Checked items are done in the docs or in that image. Unchecked items are not accepted yet.
 
 The product requirements are in [SPEC.md](SPEC.md).
 
@@ -18,11 +18,11 @@ The product requirements are in [SPEC.md](SPEC.md).
 
 ## Milestone 1 — AMD64 live and installer ISO
 
-The first image. A `ci` hybrid ISO has been built and boot-tested; see `build/amd64/README.md` for what that run actually showed. The `full` package set is listed and not yet the image that was booted. Acceptance for the milestone is still an ISO that boots to Plasma, runs Nomad, and installs with Calamares.
+The first image. A `full` hybrid ISO has been built. `build/amd64/README.md` records what QEMU actually showed, including Plasma, Calamares, and Snapper rollback. Acceptance for the milestone is still an ISO that boots to Plasma, runs Nomad, and installs with Calamares.
 
 - [x] live-build configuration under `build/amd64/` (`ci` profile for the boot test and GitHub Actions, `full` profile for the rest of the Debian packages in the spec)
 - [ ] Package lists under `packages/` for the baseline in the spec
-- [ ] Backported kernel selected, pinned, and named in `docs/SPEC.md`
+- [x] Backported kernel selected, pinned, and named in `docs/SPEC.md`
 - [ ] KDE Plasma on Wayland
 - [ ] Firefox ESR, Chromium as a Flatpak, full media codecs, VLC, Jellyfin client, LibreOffice
 - [ ] Flatpak with the Flathub remote
@@ -30,7 +30,7 @@ The first image. A `ci` hybrid ISO has been built and boot-tested; see `build/am
 - [ ] Mesa and Vulkan
 - [ ] `meshtasticd` and Meshtastic web
 - [ ] GQRX, WSJT-X, Fldigi, and CHIRP
-- [ ] Host firewall enabled by default, and the chosen implementation recorded in the spec
+- [x] Host firewall enabled by default, and the chosen implementation recorded in the spec
 - [ ] NVIDIA proprietary driver included and enabled when a GPU is detected
 - [ ] In-kernel AMD and Intel NPU support via the newer kernel
 - [ ] Calamares launched from a desktop icon named Install Cyberdeck OS

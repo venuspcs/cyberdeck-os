@@ -74,7 +74,7 @@ install -m 0755 "${ROOT}/installer/calamares-install-debian" config/includes.chr
 cp "${ROOT}/installer/49-cyberdeck-calamares.rules" config/includes.chroot_after_packages/etc/polkit-1/rules.d/49-cyberdeck-calamares.rules
 cp "${ROOT}/firstboot/cyberdeck-welcome.desktop" config/includes.chroot_after_packages/usr/share/applications/cyberdeck-welcome.desktop
 cp "${ROOT}/firstboot/cyberdeck-control-panel.desktop" config/includes.chroot_after_packages/usr/share/applications/cyberdeck-control-panel.desktop
-cp "${ROOT}/firstboot/cyberdeck-welcome.desktop" config/includes.chroot_after_packages/etc/xdg/autostart/cyberdeck-welcome.desktop
+cp "${ROOT}/firstboot/cyberdeck-welcome-autostart.desktop" config/includes.chroot_after_packages/etc/xdg/autostart/cyberdeck-welcome.desktop
 cp "${ROOT}/installer/80cyberdeck-snapper" config/includes.chroot_after_packages/etc/apt/apt.conf.d/80cyberdeck-snapper
 cp "${ROOT}/installer/cyberdeck-backports.list" config/includes.chroot_after_packages/etc/apt/sources.list.d/cyberdeck-backports.list
 cp "${ROOT}/installer/cyberdeck-kernel.pref" config/includes.chroot_after_packages/etc/apt/preferences.d/cyberdeck-kernel

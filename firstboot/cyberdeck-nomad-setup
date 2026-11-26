@@ -12,6 +12,10 @@ if grep -q 'cyberdeck.skip-nomad' /proc/cmdline 2>/dev/null; then
 	exit 0
 fi
 
+if [ -e /var/lib/cyberdeck/nomad.done ]; then
+	exit 0
+fi
+
 # On a live boot, leave the wizard to the menu. The autostart entry
 # calls this script; exiting here keeps the live desktop usable.
 if [ -d /run/live/medium ] && [ "${CYBERDECK_SETUP_FORCE:-}" != 1 ]; then
@@ -29,13 +33,67 @@ ask_yes() {
 	whiptail --title "Cyberdeck OS" --yesno "$1" 12 70
 }
 
+disk_backing() {
+	src="$(findmnt -no SOURCE "$1" 2>/dev/null || true)"
+	[ -n "${src}" ] || return 0
+	pk="$(lsblk -no PKNAME "${src}" 2>/dev/null | head -1 || true)"
+	if [ -n "${pk}" ]; then
+		printf '/dev/%s\n' "${pk}"
+	else
+		printf '%s\n' "${src}"
+	fi
+}
+
+is_system_disk() {
+	dev="$1"
+	pk="$(lsblk -no PKNAME "${dev}" 2>/dev/null | head -1 || true)"
+	if [ -n "${pk}" ]; then
+		whole="/dev/${pk}"
+	else
+		whole="${dev}"
+	fi
+	for mountpoint in / /boot /boot/efi /run/live/medium; do
+		sys="$(disk_backing "${mountpoint}")"
+		[ -n "${sys}" ] || continue
+		if [ "${whole}" = "${sys}" ] || [ "${dev}" = "${sys}" ]; then
+			return 0
+		fi
+	done
+	return 1
+}
+
 choose_disk() {
 	set -- boot "Folder on the boot drive"
-	while read -r name size _; do
+	# Never offer the disk that holds the running system or the live medium.
+	while IFS= read -r line; do
+		name="$(printf '%s\n' "${line}" | sed -n 's/.*NAME="\([^"]*\)".*/\1/p')"
+		size="$(printf '%s\n' "${line}" | sed -n 's/.*SIZE="\([^"]*\)".*/\1/p')"
+		fstype="$(printf '%s\n' "${line}" | sed -n 's/.*FSTYPE="\([^"]*\)".*/\1/p')"
+		typ="$(printf '%s\n' "${line}" | sed -n 's/.*TYPE="\([^"]*\)".*/\1/p')"
 		[ -n "${name}" ] || continue
-		set -- "$@" "${name}" "${size}"
+		case "${name}" in
+			/dev/sr*|/dev/fd*|/dev/zram*|/dev/loop*) continue ;;
+		esac
+		if is_system_disk "${name}"; then
+			continue
+		fi
+		case "${typ}" in
+			disk)
+				if [ -n "${fstype}" ]; then
+					label="${size} ${fstype}"
+				else
+					label="${size} empty disk"
+				fi
+				;;
+			part)
+				[ -n "${fstype}" ] || continue
+				label="${size} ${fstype} partition"
+				;;
+			*) continue ;;
+		esac
+		set -- "$@" "${name}" "${label}"
 	done <<EOF
-$(lsblk -dnpo NAME,SIZE,TYPE | awk '$3=="disk" && $1 !~ /(sr|loop|zram|fd)/ {print $1, $2, $3}')
+$(lsblk -P -o NAME,SIZE,FSTYPE,TYPE)
 EOF
 	whiptail --title "Project Nomad" --menu "Where should /library live?" 20 72 8 "$@" 3>&1 1>&2 2>&3
 }
@@ -97,15 +155,20 @@ sed -e "s/__APP_KEY__/${app_key}/" \
 	-e "s/__DB_PASSWORD__/${db_pass}/" \
 	-e "s/__MYSQL_ROOT__/${root_pass}/" \
 	/usr/share/cyberdeck/nomad-compose.yml.in > /library/nomad/compose.yml
+chmod 600 /library/nomad/compose.yml
 
-if lspci -nn 2>/dev/null | grep -qi nvidia; then
+display_pci() {
+	lspci -nn 2>/dev/null | grep -Ei 'VGA compatible controller|3D controller|Display controller' || true
+}
+
+if display_pci | grep -qi nvidia; then
 	if ask_yes "An NVIDIA GPU is present. Install nvidia-driver and nvidia-cuda-toolkit, and let Ollama use the GPU?"; then
 		apt-get update
 		apt-get install -y nvidia-driver nvidia-cuda-toolkit || apt-get install -y nvidia-driver || true
 		echo "NVIDIA driver install was requested. Ollama stays bound to 127.0.0.1:11434. Give the container GPUs after nvidia-container-toolkit is installed." > /var/lib/cyberdeck/gpu.txt
 	fi
 fi
-if lspci -nn 2>/dev/null | grep -Eqi 'amd/ati|advanced micro devices'; then
+if display_pci | grep -Eqi 'amd/ati|advanced micro devices'; then
 	if ask_yes "An AMD display device is present. Install the Debian ROCm packages that exist in this release (rocminfo) and keep Ollama ready for a GPU?"; then
 		apt-get update
 		if apt-get install -y rocminfo; then

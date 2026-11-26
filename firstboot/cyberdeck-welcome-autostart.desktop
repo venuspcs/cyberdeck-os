@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Cyberdeck Welcome
+Comment=Open Project Nomad setup once, after install
+Exec=cyberdeck-welcome --autostart
+Terminal=false
+X-GNOME-Autostart-enabled=true
+NoDisplay=true

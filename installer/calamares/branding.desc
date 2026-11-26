@@ -23,6 +23,7 @@ strings:
 sidebar: widget
 navigation: widget
 
+# Temporary stand-in art copied from Debian branding. Cyberdeck artwork is not in the tree yet.
 images:
     productLogo: "debian-logo.png"
     productIcon: "debian-logo.png"

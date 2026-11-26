@@ -8,4 +8,8 @@ and the support-the-creator link.
 
 Run the Nomad installer again with: sudo cyberdeck-nomad-setup
 EOF
+if [ -t 0 ]; then
+	printf 'Press Enter to close. '
+	read -r _ || true
+fi
 exit 0

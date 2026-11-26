@@ -6,6 +6,6 @@ The live desktop icon **Install Cyberdeck OS** is the Debian Calamares launcher 
 
 `cyberdeck-autoinstall` performs the same GPT, ESP, BIOS-boot, and Btrfs layout without the GUI so a virtual machine can install the live squashfs and reboot it. It is the test path. The desktop path is Calamares.
 
-Supported install targets are 256 GB. Calamares' hard stop is 8 GiB so a smaller disk can still be used for a test.
+Supported install targets are at least 256 GB. Calamares' hard stop is 8 GiB so a smaller disk can still be used for a test.
 
 Requirements: [docs/SPEC.md](../docs/SPEC.md), sections 6 and 7.

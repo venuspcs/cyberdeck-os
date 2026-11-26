@@ -16,6 +16,9 @@ on:
       - "packages/amd64/**"
       - "installer/**"
       - "firstboot/**"
+      - "scripts/**"
+      - "branding/**"
+      - "dashboard/**"
       - ".github/workflows/build-amd64.yml"
 
 concurrency:

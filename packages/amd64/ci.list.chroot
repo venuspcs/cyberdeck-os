@@ -45,5 +45,3 @@ usbutils
 whiptail
 openssl
 xdotool
-qemu-guest-agent
-spice-vdagent

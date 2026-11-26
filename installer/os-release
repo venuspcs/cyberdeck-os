@@ -1,6 +1,6 @@
 PRETTY_NAME="Cyberdeck OS (pre-alpha)"
 NAME="Cyberdeck OS"
-VERSION_ID="0"
+VERSION_ID="13"
 VERSION="pre-alpha"
 VERSION_CODENAME=trixie
 ID=debian

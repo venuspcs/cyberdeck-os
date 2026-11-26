@@ -46,6 +46,19 @@ if [ -z "${TARGET}" ]; then
 	done
 fi
 
+if [ -n "${TARGET}" ] && [ -b "${TARGET}" ]; then
+	target_parent="$(lsblk -no PKNAME "${TARGET}" 2>/dev/null | head -1 || true)"
+	if [ -n "${target_parent}" ]; then
+		target_disk="/dev/${target_parent}"
+	else
+		target_disk="${TARGET}"
+	fi
+	if [ -n "${live_disk}" ] && [ "${target_disk}" = "${live_disk}" ]; then
+		echo "Refusing to install onto the live medium ${TARGET}." >&2
+		exit 1
+	fi
+fi
+
 if [ -z "${TARGET}" ] || [ ! -b "${TARGET}" ]; then
 	echo "No target disk. Pass a device, for example /dev/vdb." >&2
 	lsblk
@@ -130,13 +143,25 @@ CHROOT
 chroot "${MNT}" /usr/sbin/cyberdeck-snapper-setup || echo "snapper setup failed" >/dev/console
 
 echo "Installing GRUB" >/dev/console
-if ! chroot "${MNT}" grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=cyberdeck --removable --no-nvram; then
+grub_ok=0
+if chroot "${MNT}" grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=cyberdeck --removable --no-nvram; then
+	grub_ok=1
+else
 	echo "EFI grub-install failed" >/dev/console
 fi
-if ! chroot "${MNT}" grub-install --target=i386-pc "${TARGET}"; then
+if chroot "${MNT}" grub-install --target=i386-pc "${TARGET}"; then
+	grub_ok=1
+else
 	echo "BIOS grub-install failed" >/dev/console
 fi
-chroot "${MNT}" update-grub || chroot "${MNT}" grub-mkconfig -o /boot/grub/grub.cfg || echo "grub-mkconfig failed" >/dev/console
+if ! chroot "${MNT}" update-grub && ! chroot "${MNT}" grub-mkconfig -o /boot/grub/grub.cfg; then
+	echo "grub-mkconfig failed" >/dev/console
+	grub_ok=0
+fi
+if [ "${grub_ok}" -ne 1 ]; then
+	echo "Install failed: no bootloader was installed." >/dev/console
+	exit 1
+fi
 
 for fs in run sys proc dev; do
 	umount "${MNT}/${fs}" || true

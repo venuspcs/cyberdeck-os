@@ -2,6 +2,8 @@
 # apt pre-install hook: snapshot before package changes.
 # --no-dbus so the hook still works if the system bus is not up yet.
 if command -v snapper >/dev/null 2>&1 && snapper --no-dbus -c root get-config >/dev/null 2>&1; then
-	snapper --no-dbus -c root create --description "before apt" --cleanup-algorithm number || true
+	if ! snapper --no-dbus -c root create --description "before apt" --cleanup-algorithm number; then
+		echo "cyberdeck-snap-pre: could not create a snapshot before apt" >&2
+	fi
 fi
 exit 0

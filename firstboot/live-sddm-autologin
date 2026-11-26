@@ -18,7 +18,6 @@ if ! id "${USER_NAME}" >/dev/null 2>&1; then
 fi
 
 echo "${USER_NAME}:${USER_NAME}" | chpasswd || true
-echo "root:${USER_NAME}" | chpasswd || true
 usermod -aG sudo,netdev,plugdev,video,audio,cdrom,docker "${USER_NAME}" 2>/dev/null || \
 	usermod -aG sudo,netdev,plugdev,video,audio,cdrom "${USER_NAME}" || true
 
