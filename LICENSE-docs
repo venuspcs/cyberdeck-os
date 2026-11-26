@@ -3,10 +3,12 @@ Cyberdeck OS documentation license
 
 Copyright (c) 2026 Richard Colbert
 
-The documentation under docs/, including the specification, the roadmap,
-and the How-To guide (in source form and in the PDF, Kiwix ZIM, and ODT
-editions shipped later), is licensed under the Creative Commons
-Attribution 4.0 International Public License (CC BY 4.0).
+Project documentation is licensed under the Creative Commons
+Attribution 4.0 International Public License (CC BY 4.0). That includes
+docs/ (the specification, the roadmap, and the How-To guide, in source
+form and in the PDF, Kiwix ZIM, and ODT editions shipped later),
+README.md, CONTRIBUTING.md, CODE_OF_CONDUCT.md, SECURITY.md, and the
+Markdown files under .github/.
 
 You may share and adapt this documentation for any purpose, including
 commercial use, if you give appropriate credit, provide a link to the

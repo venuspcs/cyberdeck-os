@@ -36,7 +36,7 @@ This Code of Conduct applies within all community spaces, and also applies when 
 
 ## Enforcement
 
-Instances of abusive, harassing, or otherwise unacceptable behavior may be reported to the community leaders responsible for enforcement by direct message to Richard Colbert on X at [@VeteranPrepper](https://x.com/VeteranPrepper). All complaints will be reviewed and investigated promptly and fairly.
+Instances of abusive, harassing, or otherwise unacceptable behavior may be reported in private to the community leaders responsible for enforcement. Message Richard Colbert on X at [@VeteranPrepper](https://x.com/VeteranPrepper), or open a private security advisory on this repository and say that it is a code of conduct report: <https://github.com/venuspcs/cyberdeck-os/security/advisories/new>. The advisory form does not require an X account. All complaints will be reviewed and investigated promptly and fairly.
 
 All community leaders are obligated to respect the privacy and security of the reporter of any incident.
 

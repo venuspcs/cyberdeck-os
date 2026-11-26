@@ -2,7 +2,6 @@
 name: Hardware report
 about: A machine, cyberdeck, radio, or board you want Cyberdeck OS to boot
 title: "[Hardware] "
-labels: hardware
 ---
 
 Use this while the project is still planning, and later when an image boots (or fails to boot) on real hardware.

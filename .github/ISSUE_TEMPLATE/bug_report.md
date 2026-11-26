@@ -31,4 +31,4 @@ labels: bug
 
 ## Logs
 
-<!-- Paste only the relevant lines. Leave out serial numbers and passwords. -->
+<!-- Paste only the relevant lines. Redact passwords, API keys, tokens, private keys, serial numbers, hostnames, IP and MAC addresses, Wi-Fi names, and other personal data. -->

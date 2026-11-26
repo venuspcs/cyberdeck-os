@@ -11,8 +11,8 @@ Cyberdeck OS is **planning / pre-alpha**. No image has been released, and the re
 
 Please report a vulnerability in private.
 
-1. Open a draft security advisory on this repository: <https://github.com/venuspcs/cyberdeck-os/security/advisories/new>
-2. If private advisories are unavailable, send a direct message to Richard Colbert on X at [@VeteranPrepper](https://x.com/VeteranPrepper).
+1. Open a draft security advisory on this repository: <https://github.com/venuspcs/cyberdeck-os/security/advisories/new>. This is the project channel. It does not require an X account.
+2. You may also message Richard Colbert on X at [@VeteranPrepper](https://x.com/VeteranPrepper) if you already use X. That message is optional. If the advisory form cannot be opened, do not put vulnerability details in a public issue. Wait and use the advisory form.
 
 Include what is affected, what an attacker could do, and how you found it. You do not need to write an exploit.
 

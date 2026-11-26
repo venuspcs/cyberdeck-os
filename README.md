@@ -2,7 +2,7 @@
 
 Cyberdeck OS is a lean, open-source Linux distribution for cyberdecks. Richard Colbert, a disabled Navy veteran ([@VeteranPrepper](https://x.com/VeteranPrepper) on X, [@Disabled_Vet_72](https://www.youtube.com/@Disabled_Vet_72) on YouTube), is building it for anyone who wants a deck that can carry an offline library.
 
-The system is a Debian 13 live and installable OS. Its job is to run Project Nomad, an offline knowledge server made of Docker apps (Kiwix, Jellyfin, Open WebUI with Ollama, Meshtastic Web, and the rest of the Nomad set), and nothing extra. Anything beyond the baseline in the spec is installed from the terminal, from Nomad, or from Flatpak. The OS is free to use. Donations are welcome and never required.
+The system is a Debian 13 live and installable OS. Its job is to run Project Nomad, an offline knowledge server made of Docker apps (Kiwix, Jellyfin, Open WebUI with Ollama, Meshtastic Web, and the rest of the Nomad set), and nothing extra. Anything beyond the baseline in the spec is installed from the terminal, from Nomad, or from Flatpak. Welcome can also install ROCm or CUDA when that hardware is present. Those two stacks are not part of the image. The OS is free to use. Donations are welcome and never required.
 
 **Status: planning / pre-alpha**
 
@@ -17,7 +17,7 @@ The full locked spec is in [docs/SPEC.md](docs/SPEC.md). The milestone checklist
 - KDE Plasma on Wayland. Plasma Mobile on phones and tablets.
 - Live boot from USB, SD, or similar media into the full desktop, with Nomad usable in that session.
 - An **Install Cyberdeck OS** desktop icon that launches Calamares, with erase-disk, install-alongside, and manual partitioning. Full-disk encryption is optional.
-- GPT disks and a Btrfs root, including drives larger than 2 TB. Snapshots before every update, and rollback from the boot menu (Snapper and grub-btrfs style).
+- Erase-disk installs use GPT, including drives larger than 2 TB, with one Btrfs root after the EFI system partition. Install alongside keeps the other operating system and adds a Btrfs root in the free space. Snapshots run before every update, with rollback from the boot menu (Snapper and grub-btrfs style).
 - A first-boot Welcome app: choose Daybreak or Nightwatch, pick the `/library` drive, join Wi-Fi, install ROCm or CUDA when the hardware needs it, set a password, then install Project Nomad and its containers.
 - Nomad admin stays on port 8080, Open WebUI on port 3000, and Ollama on localhost port 11434.
 - Firefox ESR, Chromium (Flatpak), full media codecs, VLC, a Jellyfin client, LibreOffice, Flatpak with Flathub, firmware, Mesa/Vulkan, Meshtastic tools, and a ham/SDR set (GQRX, WSJT-X, Fldigi, CHIRP).
@@ -87,7 +87,7 @@ Issue templates:
 ## License
 
 - Code, build configuration, and scripts: GNU General Public License v3. See [LICENSE](LICENSE).
-- Documentation under [docs/](docs/README.md), including the How-To guide: Creative Commons Attribution 4.0 International. See [LICENSE-docs](LICENSE-docs).
+- Project documentation, including this README, `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, `SECURITY.md`, the Markdown under `.github/`, and [docs/](docs/README.md): Creative Commons Attribution 4.0 International. See [LICENSE-docs](LICENSE-docs).
 
 ## Support the Creator
 

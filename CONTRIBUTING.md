@@ -29,7 +29,7 @@ Those belong in the milestone that produces a real image. The checklist is [docs
 ## Licenses
 
 - Code, build configuration, and scripts are GNU GPLv3. See [LICENSE](LICENSE). New code files should carry a short GPLv3 notice and a copyright line.
-- Documentation under `docs/`, including the How-To, is CC BY 4.0. See [LICENSE-docs](LICENSE-docs). If you contribute to `docs/`, you license that contribution under CC BY 4.0.
+- Project documentation is CC BY 4.0. See [LICENSE-docs](LICENSE-docs). That covers `docs/` (including the How-To), this file, `README.md`, `CODE_OF_CONDUCT.md`, `SECURITY.md`, and the Markdown under `.github/`. If you contribute to those files, you license that contribution under CC BY 4.0.
 
 There is no separate contributor license agreement.
 
@@ -55,4 +55,4 @@ Report vulnerabilities through [SECURITY.md](SECURITY.md). Please do not file an
 
 ## Conduct reports
 
-Report conduct issues to Richard Colbert by direct message on X at [@VeteranPrepper](https://x.com/VeteranPrepper), as the [Code of Conduct](CODE_OF_CONDUCT.md) describes. A public issue is the wrong place for that report.
+Report conduct issues in private, as the [Code of Conduct](CODE_OF_CONDUCT.md) describes: a direct message to Richard Colbert on X at [@VeteranPrepper](https://x.com/VeteranPrepper), or a private security advisory on this repository. A public issue is the wrong place for that report.

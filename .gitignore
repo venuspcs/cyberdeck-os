@@ -40,14 +40,19 @@ debian/tmp/
 debian/*.substvars
 debian/*.log
 
-# live-build work trees (created inside a build config directory)
+# live-build work trees. Scoped to the repo root and to build/*/
+# so a source directory is not ignored for sharing one of these names.
 .build/
-cache/
-chroot/
+/cache/
+/chroot/
+/binary/
+build/**/.build/
+build/**/cache/
+build/**/chroot/
+build/**/binary/
 chroot.files
 chroot.packages.install
 chroot.packages.live
-binary/
 binary.hybrid.iso
 binary.contents
 binary.packages
@@ -66,7 +71,7 @@ live-image-*
 *.raw
 
 # Checksums generated next to a local image build
-/SHA256SUMS
+SHA256SUMS
 *.sha256
 
 # live-build logs

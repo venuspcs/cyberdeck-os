@@ -2,7 +2,7 @@
 
 **Status: planning / pre-alpha.**
 
-This is the locked product spec for the first images. The repository documents that spec and reserves directories for later work. It does not contain live-build configuration, an installer, package lists, scripts that produce an image, or a GitHub Actions workflow.
+The product requirements in this document are the locked baseline for the first images. The implementer notes at the end list build choices that are still open. Those notes do not replace the requirements above them. This branch documents that baseline and reserves directories for later work. It does not itself contain the image build.
 
 Cyberdeck OS is free for anyone building a cyberdeck. Donations are welcome and never required. See the Support the Creator section of the [README](../README.md).
 
@@ -69,8 +69,10 @@ The installer is specified for the AMD64 ISO and the generic ARM64 UEFI image. P
 ## 7. Storage
 
 - A supported install target has at least 256 GB of storage.
-- Disks are partitioned GPT, including disks larger than 2 TB, so the whole disk is used. An MBR layout is not used for these install targets.
-- The root filesystem is one Btrfs partition covering the rest of the disk. The only other partition on that install target is the small EFI System Partition required to boot (see the implementer notes).
+- Install targets use GPT, including disks larger than 2 TB, so an MBR layout does not cap the disk.
+- Erase disk creates that GPT layout as one Btrfs root covering the rest of the disk after the small EFI System Partition required to boot (see the implementer notes). A legacy-boot machine also gets the small BIOS boot partition that GRUB needs on GPT.
+- Install alongside keeps the partitions that already hold another operating system and adds a Btrfs root in the free space on a GPT disk. It does not collapse the disk to a single root. A disk that is not GPT is erased and recreated as GPT instead of being installed alongside.
+- Manual partitioning places the Btrfs root where the user chooses, on a GPT disk.
 - The system takes a snapshot before every update.
 - The user can roll back from the boot menu, in the style of Snapper plus grub-btrfs.
 
@@ -299,7 +301,7 @@ These notes record boot constraints, and the choices a milestone still has to wr
 
 ### EFI System Partition
 
-UEFI boot needs a small EFI System Partition. On the AMD64 ISO and the generic ARM64 UEFI image, GPT still covers the whole disk. After that ESP, the rest of the disk is one Btrfs root, including on disks larger than 2 TB. The installer does not divide the root into a set of small fixed partitions.
+UEFI boot needs a small EFI System Partition. On an erase-disk install of the AMD64 ISO or the generic ARM64 UEFI image, GPT covers the whole disk. After that ESP, the rest of the disk is one Btrfs root, including on disks larger than 2 TB. The erase layout does not divide the root into a set of small fixed partitions. Install alongside and manual partitioning are described in section 7.
 
 ### Devices that do not boot like a PC
 

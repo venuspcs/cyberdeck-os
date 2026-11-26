@@ -4,7 +4,7 @@ Reserved for the Field Dashboard: a KDE Plasma desktop widget, and the drivers t
 
 When it is written, the widget will let the user add, remove, rearrange, and resize tiles, with settings saved per tile. The layout is restored at the next login.
 
-Shipped tile types:
+Planned tile types:
 
 - Internal laptop battery, when the machine has one
 - External battery over Bluetooth, one tile per battery, including smart LiFePO4 and solar batteries that expose a BMS
