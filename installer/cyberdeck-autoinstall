@@ -1,0 +1,139 @@
+#!/bin/sh
+# Non-interactive GPT + ESP + Btrfs install of the running live system.
+# Used to boot-test the layout. The desktop path is Calamares
+# (partition.conf describes the same layout).
+set -eu
+
+LOG=/var/log/cyberdeck-autoinstall.log
+mkdir -p /var/log
+exec >>"${LOG}" 2>&1
+trap 'echo CYBERDECK_INSTALL_EXIT:$? >/dev/console' EXIT
+echo "=== cyberdeck-autoinstall $(date -Is) ==="
+
+if [ ! -d /run/live/medium ]; then
+	echo "This installer runs from the live session." >&2
+	exit 1
+fi
+
+SQASH=/run/live/medium/live/filesystem.squashfs
+if [ ! -f "${SQASH}" ]; then
+	echo "Missing ${SQASH}" >&2
+	exit 1
+fi
+
+live_src="$(findmnt -no SOURCE /run/live/medium || true)"
+live_disk=""
+if [ -n "${live_src}" ]; then
+	live_disk="$(lsblk -no PKNAME "${live_src}" 2>/dev/null || true)"
+	if [ -n "${live_disk}" ]; then
+		live_disk="/dev/${live_disk}"
+	else
+		live_disk="${live_src}"
+	fi
+fi
+
+TARGET="${1:-}"
+if [ -z "${TARGET}" ]; then
+	for disk in $(lsblk -dnpo NAME,TYPE | awk '$2=="disk"{print $1}'); do
+		case "${disk}" in
+			/dev/sr*|/dev/fd*|/dev/zram*|/dev/loop*) continue ;;
+		esac
+		if [ "${disk}" = "${live_disk}" ]; then
+			continue
+		fi
+		TARGET="${disk}"
+		break
+	done
+fi
+
+if [ -z "${TARGET}" ] || [ ! -b "${TARGET}" ]; then
+	echo "No target disk. Pass a device, for example /dev/vdb." >&2
+	lsblk
+	exit 1
+fi
+
+echo "Target disk: ${TARGET}"
+bytes="$(lsblk -bdno SIZE "${TARGET}")"
+if [ "${bytes}" -lt $((8 * 1024 * 1024 * 1024)) ]; then
+	echo "Target is smaller than 8 GiB." >&2
+	exit 1
+fi
+
+# GPT: 1 MiB BIOS boot, 512 MiB ESP, the rest one Btrfs root.
+parted -s "${TARGET}" mklabel gpt
+parted -s "${TARGET}" mkpart biosboot 1MiB 2MiB
+parted -s "${TARGET}" set 1 bios_grub on
+parted -s "${TARGET}" mkpart ESP fat32 2MiB 514MiB
+parted -s "${TARGET}" set 2 esp on
+parted -s "${TARGET}" mkpart root btrfs 514MiB 100%
+partprobe "${TARGET}" || true
+sleep 2
+
+# Partition nodes: /dev/vda2 or /dev/nvme0n1p2.
+p1="$(lsblk -lnpo NAME,TYPE "${TARGET}" | awk '$2=="part"{print $1}' | sed -n '1p')"
+p2="$(lsblk -lnpo NAME,TYPE "${TARGET}" | awk '$2=="part"{print $1}' | sed -n '2p')"
+p3="$(lsblk -lnpo NAME,TYPE "${TARGET}" | awk '$2=="part"{print $1}' | sed -n '3p')"
+echo "Partitions: ${p1} ${p2} ${p3}"
+
+mkfs.vfat -F 32 -n EFI "${p2}"
+mkfs.btrfs -f -L cyberdeck "${p3}"
+
+MNT=/mnt/target
+mkdir -p "${MNT}"
+mount "${p3}" "${MNT}"
+mkdir -p "${MNT}/boot/efi"
+mount "${p2}" "${MNT}/boot/efi"
+
+echo "Unpacking live filesystem..."
+unsquashfs -f -d "${MNT}" "${SQASH}"
+
+btrfs_uuid="$(blkid -s UUID -o value "${p3}")"
+efi_uuid="$(blkid -s UUID -o value "${p2}")"
+cat > "${MNT}/etc/fstab" <<EOF
+UUID=${btrfs_uuid} / btrfs defaults,compress=zstd,noatime 0 1
+UUID=${efi_uuid} /boot/efi vfat umask=0077 0 2
+EOF
+
+for fs in dev proc sys run; do
+	mkdir -p "${MNT}/${fs}"
+	mount --bind "/${fs}" "${MNT}/${fs}"
+done
+
+chroot "${MNT}" /bin/sh <<'CHROOT'
+touch /etc/default/grub
+if ! grep -q '^GRUB_DISABLE_OS_PROBER=' /etc/default/grub 2>/dev/null; then
+	printf '\nGRUB_DISABLE_OS_PROBER=true\n' >> /etc/default/grub
+fi
+if ! id cyberdeck >/dev/null 2>&1; then
+	useradd -m -G sudo,netdev,audio,video,plugdev,cdrom -s /bin/bash cyberdeck || true
+fi
+echo 'cyberdeck:cyberdeck' | chpasswd || true
+echo 'root:cyberdeck' | chpasswd || true
+if ! snapper -c root get-config >/dev/null 2>&1; then
+	snapper -c root create-config / || echo "snapper create-config failed" >/dev/console
+fi
+snapper -c root set-config NUMBER_LIMIT=10 TIMELINE_CREATE=no || true
+systemctl enable grub-btrfsd.service || true
+systemctl enable sddm.service || true
+CHROOT
+
+echo "Installing GRUB" >/dev/console
+if ! chroot "${MNT}" grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=cyberdeck --removable --no-nvram; then
+	echo "EFI grub-install failed" >/dev/console
+fi
+if ! chroot "${MNT}" grub-install --target=i386-pc "${TARGET}"; then
+	echo "BIOS grub-install failed" >/dev/console
+fi
+chroot "${MNT}" update-grub || chroot "${MNT}" grub-mkconfig -o /boot/grub/grub.cfg || echo "grub-mkconfig failed" >/dev/console
+
+for fs in run sys proc dev; do
+	umount "${MNT}/${fs}" || true
+done
+umount "${MNT}/boot/efi" || true
+umount "${MNT}" || true
+
+echo "Install finished on ${TARGET}."
+if grep -q 'cyberdeck.autoinstall' /proc/cmdline; then
+	echo "Powering off."
+	systemctl poweroff || poweroff
+fi

@@ -1,0 +1,17 @@
+#!/bin/sh
+# TODO: full Welcome app (theme, Wi-Fi, password) is a later milestone.
+# Calamares already asks for the account password. NetworkManager is
+# available for Wi-Fi. This stub opens the Nomad installer, which is
+# the part Milestone 1 implements.
+cat <<'EOF'
+Cyberdeck Welcome is not finished.
+
+TODO for a later milestone:
+  - choose Daybreak or Nightwatch
+  - turn sunrise/sunset switching on or off
+  - join Wi-Fi from this screen
+  - set the account password here (Calamares asks for it today)
+
+Opening the Project Nomad installer.
+EOF
+exec /usr/sbin/cyberdeck-nomad-setup "$@"

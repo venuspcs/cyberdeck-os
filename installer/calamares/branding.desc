@@ -1,0 +1,32 @@
+---
+componentName: cyberdeck
+welcomeStyleCalamares: true
+welcomeExpandingLogo: true
+windowExpanding: normal
+windowSize: 800px,580px
+windowPlacement: center
+
+strings:
+    productName: "Cyberdeck OS"
+    shortProductName: "Cyberdeck OS"
+    version: "pre-alpha"
+    shortVersion: "pre-alpha"
+    versionedName: "Cyberdeck OS pre-alpha"
+    shortVersionedName: "Cyberdeck OS"
+    bootloaderEntryName: "Cyberdeck OS"
+    productUrl: "https://github.com/venuspcs/cyberdeck-os"
+    supportUrl: "https://github.com/venuspcs/cyberdeck-os"
+    knownIssuesUrl: "https://github.com/venuspcs/cyberdeck-os/issues"
+    releaseNotesUrl: "https://github.com/venuspcs/cyberdeck-os"
+    donateUrl: "https://cash.app/$richardcolbert72"
+
+sidebar: widget
+navigation: widget
+
+images:
+    productLogo: "debian-logo.png"
+    productIcon: "debian-logo.png"
+    productWelcome: "welcome.png"
+
+slideshow: "show.qml"
+slideshowAPI: 2

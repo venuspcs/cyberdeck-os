@@ -1,0 +1,17 @@
+#!/bin/sh
+# Turn on the packaged NVIDIA driver when the hardware is present.
+set -eu
+if ! command -v lspci >/dev/null 2>&1; then
+	exit 0
+fi
+if ! lspci -nn | grep -qi nvidia; then
+	exit 0
+fi
+if dpkg -s nvidia-driver >/dev/null 2>&1; then
+	modprobe nvidia || true
+	echo "NVIDIA GPU detected. nvidia-driver is installed."
+else
+	echo "NVIDIA GPU detected. nvidia-driver is not installed in this image." >&2
+	echo "Install it with: apt-get install nvidia-driver" >&2
+fi
+exit 0

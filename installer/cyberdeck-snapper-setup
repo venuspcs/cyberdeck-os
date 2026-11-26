@@ -1,0 +1,16 @@
+#!/bin/sh
+# Configure Snapper on a Btrfs root and enable grub-btrfs.
+# Calamares runs this inside the target system.
+set -eu
+
+if ! findmnt -n -o FSTYPE / | grep -q btrfs; then
+	echo "cyberdeck-snapper-setup: root is not btrfs, skipping" >&2
+	exit 0
+fi
+
+if ! snapper -c root get-config >/dev/null 2>&1; then
+	snapper -c root create-config /
+fi
+snapper -c root set-config NUMBER_LIMIT=10 NUMBER_LIMIT_IMPORTANT=5 TIMELINE_CREATE=no || true
+systemctl enable grub-btrfsd.service || true
+exit 0

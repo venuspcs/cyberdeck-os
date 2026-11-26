@@ -1,0 +1,8 @@
+Daybreak and Nightwatch are not in this image yet.
+
+TODO: light and dark themes, one rural homestead wallpaper each,
+boot splash and login screen that follow the selected theme,
+automatic sunrise/sunset switching, a red-only night-vision filter,
+and a high-contrast sunlight mode.
+
+Working names: Daybreak (light), Nightwatch (dark).

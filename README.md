@@ -55,6 +55,16 @@ Phone and tablet images will lean on postmarketOS device support where that fits
 
 Further device images, including the Raspberry Pi 5, follow that first handheld image. Finished images will be published on GitHub Releases with SHA256 checksums. Files larger than 2 GB will also be mirrored on SourceForge. Numbered releases take a homestead-tool codename. Version 1.0 is Axe. GitHub Actions will build the images once there is a real config to build. The checklist is in [docs/ROADMAP.md](docs/ROADMAP.md).
 
+## Build the AMD64 image
+
+The first image is an AMD64 hybrid ISO built with Debian live-build.
+
+```sh
+sudo scripts/build-amd64.sh ci
+```
+
+`ci` is the profile that boots Plasma and Calamares. `sudo scripts/build-amd64.sh full` adds the rest of the packaged baseline (firmware, LibreOffice, VLC, the NVIDIA driver, ham/SDR tools, Flatpak). GitHub Actions builds `ci` and uploads the ISO with a SHA256 file. Details are in [build/amd64/README.md](build/amd64/README.md).
+
 ## Repository layout
 
 | Path | What it will hold |

@@ -18,9 +18,9 @@ The product requirements are in [SPEC.md](SPEC.md).
 
 ## Milestone 1 — AMD64 live and installer ISO
 
-The first published image. Acceptance is an ISO that boots to the KDE Plasma Wayland desktop, can run Nomad in the live session, and installs with Calamares.
+The first image. A `ci` hybrid ISO has been built and boot-tested; see `build/amd64/README.md` for what that run actually showed. The `full` package set is listed and not yet the image that was booted. Acceptance for the milestone is still an ISO that boots to Plasma, runs Nomad, and installs with Calamares.
 
-- [ ] live-build configuration under `build/amd64/`
+- [x] live-build configuration under `build/amd64/` (`ci` profile for the boot test and GitHub Actions, `full` profile for the rest of the Debian packages in the spec)
 - [ ] Package lists under `packages/` for the baseline in the spec
 - [ ] Backported kernel selected, pinned, and named in `docs/SPEC.md`
 - [ ] KDE Plasma on Wayland

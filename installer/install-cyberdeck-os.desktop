@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Install Cyberdeck OS
+GenericName=Calamares Installer
+Exec=calamares-install-debian
+Comment=Install Cyberdeck OS to a disk
+Keywords=calamares;system;install;cyberdeck;installer
+Icon=install-debian
+Terminal=false
+Categories=Qt;System;
+StartupWMClass=calamares
+StartupNotify=True
