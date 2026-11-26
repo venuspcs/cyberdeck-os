@@ -1,8 +1,7 @@
 # Extra packages for the spec baseline. Installed only when
 # CYBERDECK_PROFILE=full. Every name below is in Debian 13.
-# meshtasticd and a Jellyfin client are not in Debian 13; see
-# docs/SPEC.md. Chromium is the Debian package here; the Flatpak
-# build is enabled by the image hook when flatpak is installed.
+# meshtasticd and a Jellyfin client are not in Debian 13.
+# Google Chrome is installed from Google's apt repository when online.
 # ROCm and CUDA are not listed. The first-boot script offers them.
 
 vlc

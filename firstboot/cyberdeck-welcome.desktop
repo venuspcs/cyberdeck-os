@@ -1,8 +1,9 @@
 [Desktop Entry]
 Type=Application
-Name=Cyberdeck Welcome
-Comment=TODO stub that opens the Project Nomad installer
-Exec=cyberdeck-welcome
+Name=Project Nomad Setup
+Comment=Choose the /library drive and start Project Nomad
+Exec=cyberdeck-nomad-launch --force
+Icon=system-installer
 Terminal=false
 Categories=System;
-NoDisplay=false
+StartupNotify=true

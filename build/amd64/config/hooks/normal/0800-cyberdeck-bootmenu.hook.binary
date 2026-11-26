@@ -1,0 +1,7 @@
+#!/bin/sh
+# Live boot menus are generated with the Debian project name. Replace it.
+set -eu
+find binary -type f \( -name '*.cfg' -o -name '*.svg' -o -name 'theme.txt' \) -print0 |
+	xargs -0 sed -i \
+		-e 's/Debian GNU\/Linux/Cyberdeck OS Version 1 (Alpha)/g' \
+		-e 's/title-text: "Live Boot Menu with GRUB"/title-text: "Cyberdeck OS Version 1 (Alpha)"/'

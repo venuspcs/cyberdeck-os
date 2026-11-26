@@ -44,8 +44,8 @@ The first image. A `full` hybrid ISO has been built. `build/amd64/README.md` rec
 - [ ] Nomad admin on port 8080, Open WebUI on port 3000, Ollama bound to localhost port 11434
 - [ ] Offline package cache stored on `/library`
 - [ ] Low-power/solar mode toggle
-- [ ] Daybreak (light) and Nightwatch (dark), each with its own homestead wallpaper, boot splash, and login screen
-- [ ] Automatic Daybreak/Nightwatch switching at sunrise and sunset, by location or by set times
+- [x] Daybreak (light) and Nightwatch (dark), each with its own homestead wallpaper, boot splash, and login screen
+- [x] Automatic Daybreak/Nightwatch switching at sunrise and sunset, by location or by set times
 - [ ] Red night-vision mode (red-only screen filter)
 - [ ] High-contrast sunlight mode
 - [ ] Field Dashboard Plasma widget: add, remove, rearrange, and resize tiles, with per-tile settings

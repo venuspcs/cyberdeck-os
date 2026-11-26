@@ -1,7 +1,15 @@
-Package: linux-image-amd64 linux-headers-amd64 linux-base
+# trixie-backports is NotAutomatic, so unpinned backports stay at priority 100.
+# Kernel, firmware, and Mesa are pinned so HX370-class hardware gets the
+# newer drivers. Everything else stays on trixie unless the user asks.
+
+Package: linux-image-* linux-headers-* linux-base linux-libc-dev
 Pin: release n=trixie-backports
 Pin-Priority: 500
 
-Package: linux-image-* linux-headers-*
+Package: firmware-*
+Pin: release n=trixie-backports
+Pin-Priority: 500
+
+Package: mesa mesa-* libgl1-mesa-* libglx-mesa* libegl-mesa* libgbm1 libgl1-mesa-dri mesa-vulkan-drivers mesa-va-drivers mesa-vdpau-drivers
 Pin: release n=trixie-backports
 Pin-Priority: 500

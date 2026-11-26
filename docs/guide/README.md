@@ -32,6 +32,8 @@ Day-to-day care of the OS and of Project Nomad: the Cyberdeck Control Panel (upd
 
 ### 6. [Adding software](adding-software.md)
 
+### 6b. [Other systems with Distrobox](containers.md)
+
 The three supported ways to add software: the terminal, Project Nomad, and Flatpak with Flathub. The offline package cache on `/library`.
 
 ### 7. [Drives](drives.md)

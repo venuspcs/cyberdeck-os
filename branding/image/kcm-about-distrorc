@@ -1,0 +1,5 @@
+[General]
+LogoPath=/usr/share/cyberdeck/branding/logo.png
+Website=https://github.com/venuspcs/cyberdeck-os
+Name=Cyberdeck OS
+Variant=Version 1 (Alpha)

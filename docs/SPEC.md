@@ -109,7 +109,7 @@ Ollama listens on 127.0.0.1. It is not exposed on the network.
 The baseline image includes:
 
 - Firefox ESR
-- Chromium, installed as a Flatpak
+- Google Chrome stable, from Google's apt repository, installed when the machine is online. The Chrome package is not redistributed in the image.
 - Full media codecs
 - VLC
 - LibreOffice

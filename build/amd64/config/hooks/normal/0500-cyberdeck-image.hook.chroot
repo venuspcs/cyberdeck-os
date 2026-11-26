@@ -27,8 +27,7 @@ if command -v flatpak >/dev/null 2>&1; then
 	flatpak remote-add --if-not-exists --system flathub \
 		https://dl.flathub.org/repo/flathub.flatpakrepo
 	if [ -f /etc/cyberdeck/profile ] && grep -qx full /etc/cyberdeck/profile; then
-		flatpak install -y --noninteractive --system flathub \
-			org.jellyfin.JellyfinDesktop org.chromium.Chromium
+		flatpak install -y --noninteractive --system flathub org.jellyfin.JellyfinDesktop
 	fi
 fi
 

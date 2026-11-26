@@ -1,0 +1,299 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Count 5 /Kids [9 0 R 10 0 R 11 0 R 12 0 R 13 0 R] >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Length 1749 >>
+stream
+BT
+/F1 11 Tf
+50 780 Td
+14 TL
+(Cyberdeck OS Version 1 \(Alpha\)) '
+(How-To guide) '
+() '
+(README.md) '
+() '
+(Cyberdeck OS How-To guide) '
+() '
+(Status: outline only. The chapters linked below are stubs. They are not instructions, and following ) '
+() '
+(When the guide is written, it will ship offline as a PDF, a Kiwix ZIM, and an ODT file, so it can be) '
+() '
+(This guide is licensed under [CC BY 4.0]\(../../LICENSE-docs\). Copyright \(c\) 2026 Richard Colbert) '
+() '
+(The behavior the guide will describe is specified in [../SPEC.md]\(../SPEC.md\).) '
+() '
+(Chapters) '
+() '
+(1. [Installing]\(install.md\)) '
+() '
+(Creating boot media, booting the live desktop, and running Calamares from the Install Cyberdeck OS i) '
+() '
+(2. [Live use]\(live-use.md\)) '
+() '
+(What the live session is for, how the desktop is laid out, and how to use Project Nomad before anyth) '
+() '
+(3. [Updates]\(updates.md\)) '
+() '
+(Installing updates, the snapshot taken before each update, and where to look when an update needs a ) '
+() '
+(4. [Repair and rollback]\(repair-rollback.md\)) '
+() '
+(Choosing a snapshot from the boot menu, returning to the previous root, and what rollback does to No) '
+() '
+(5. [Maintenance]\(maintenance.md\)) '
+() '
+(Day-to-day care of the OS and of Project Nomad: the Cyberdeck Control Panel \(update, repair, backup) '
+() '
+(6. [Adding software]\(adding-software.md\)) '
+() '
+(6b. [Other systems with Distrobox]\(containers.md\)) '
+() '
+(The three supported ways to add software: the terminal, Project Nomad, and Flatpak with Flathub. The) '
+() '
+(7. [Drives]\(drives.md\)) '
+() '
+(The first-boot choice of where /library lives. A folder on the boot drive, or another drive formatte) '
+() '
+(8. [Meshtastic]\(meshtastic.md\)) '
+ET
+endstream
+endobj
+5 0 obj
+<< /Length 1827 >>
+stream
+BT
+/F1 11 Tf
+50 780 Td
+14 TL
+() '
+(meshtasticd, the Meshtastic web client, and how that fits next to Meshtastic Web inside Nomad.) '
+() '
+(9. [Ham and SDR tools]\(ham-tools.md\)) '
+() '
+(GQRX, WSJT-X, Fldigi, and CHIRP: what each program is on the image, and where radio hardware setup w) '
+() '
+(Also covered when the chapters are written) '
+() '
+(- Ports that stay fixed: Nomad admin on 8080, Open WebUI on 3000, Ollama on localhost port 11434.) '
+(- The Welcome app: theme, /library, Wi-Fi, ROCm or CUDA, and the account password.) '
+(- Daybreak and Nightwatch, automatic sunrise/sunset switching, red night-vision, and high-contrast s) '
+(- The Field Dashboard and its tiles, including adding a Bluetooth battery or charge controller.) '
+(- Offline OpenStreetMap tiles on /library/maps.) '
+(- The low-power/solar mode toggle.) '
+(- Phone, tablet, and Raspberry Pi 5 differences, once those images exist.) '
+(- How to support the creator, with the same links as the project README.) '
+() '
+(install.md) '
+() '
+(Installing Cyberdeck OS) '
+() '
+(Status: stub. This chapter is not written. It is not an install procedure.) '
+() '
+(This chapter will cover preparing USB or SD boot media, booting the live desktop, and launching Cala) '
+() '
+(Requirements: [the specification]\(../SPEC.md\), sections 5, 6, and 7.) '
+() '
+(This guide is licensed under [CC BY 4.0]\(../../LICENSE-docs\).) '
+() '
+(live-use.md) '
+() '
+(Live use) '
+() '
+(Status: stub. This chapter is not written.) '
+() '
+(This chapter will cover booting from USB, SD, or similar media into the full desktop, what works bef) '
+() '
+(Requirements: [the specification]\(../SPEC.md\), section 5.) '
+() '
+(This guide is licensed under [CC BY 4.0]\(../../LICENSE-docs\).) '
+() '
+(updates.md) '
+() '
+(Updates) '
+() '
+(Status: stub. This chapter is not written.) '
+() '
+ET
+endstream
+endobj
+6 0 obj
+<< /Length 1576 >>
+stream
+BT
+/F1 11 Tf
+50 780 Td
+14 TL
+(This chapter will cover updating Cyberdeck OS and Project Nomad, the Btrfs snapshot taken before eve) '
+() '
+(Requirements: [the specification]\(../SPEC.md\), section 7.) '
+() '
+(This guide is licensed under [CC BY 4.0]\(../../LICENSE-docs\).) '
+() '
+(repair-rollback.md) '
+() '
+(Repair and rollback) '
+() '
+(Status: stub. This chapter is not written.) '
+() '
+(This chapter will cover repairing an install that no longer boots cleanly, choosing a snapshot from ) '
+() '
+(Requirements: [the specification]\(../SPEC.md\), sections 7 and 8.) '
+() '
+(This guide is licensed under [CC BY 4.0]\(../../LICENSE-docs\).) '
+() '
+(maintenance.md) '
+() '
+(Maintaining the OS and Nomad) '
+() '
+(Status: stub. This chapter is not written.) '
+() '
+(This chapter will cover routine care of Cyberdeck OS and Project Nomad through the Cyberdeck Control) '
+() '
+(Requirements: [the specification]\(../SPEC.md\), sections 7 and 12 through 14.) '
+() '
+(This guide is licensed under [CC BY 4.0]\(../../LICENSE-docs\).) '
+() '
+(adding-software.md) '
+() '
+(Adding software) '
+() '
+(Status: stub. This chapter is not written.) '
+() '
+(This chapter will cover the three ways to install more software: the terminal \(Debian packages\), P) '
+() '
+(The image baseline stays as specified: Firefox ESR, Google Chrome \(from Google's repository, when o) '
+() '
+(Requirements: [the specification]\(../SPEC.md\), sections 1, 9, and 11.) '
+() '
+(This guide is licensed under [CC BY 4.0]\(../../LICENSE-docs\).) '
+() '
+(containers.md) '
+() '
+(Other systems with Distrobox) '
+() '
+ET
+endstream
+endobj
+7 0 obj
+<< /Length 1398 >>
+stream
+BT
+/F1 11 Tf
+50 780 Td
+14 TL
+(Status: short guide.) '
+() '
+(Cyberdeck OS keeps one Debian system on the disk. When a program is packaged for Ubuntu, Arch, or an) '
+() '
+(The image includes Distrobox and Podman.) '
+() '
+(Create an Ubuntu container and open a shell in it:) '
+() '
+(sh) '
+(distrobox create --name ubuntu --image ubuntu:24.04) '
+(distrobox enter ubuntu) '
+() '
+() '
+(Arch is the same idea:) '
+() '
+(sh) '
+(distrobox create --name arch --image archlinux:latest) '
+(distrobox enter arch) '
+() '
+() '
+(Programs installed inside the container stay there. The host apt sources stay Debian 13, plus the ve) '
+() '
+(Requirements: [the specification]\(../SPEC.md\), section 9.) '
+() '
+(drives.md) '
+() '
+(Drives and /library) '
+() '
+(Status: stub. This chapter is not written.) '
+() '
+(This chapter will cover the Welcome drive choice. On the boot drive, Welcome creates a /library fold) '
+() '
+(Requirements: [the specification]\(../SPEC.md\), section 8.) '
+() '
+(This guide is licensed under [CC BY 4.0]\(../../LICENSE-docs\).) '
+() '
+(meshtastic.md) '
+() '
+(Meshtastic) '
+() '
+(Status: stub. This chapter is not written.) '
+() '
+(This chapter will cover the Meshtastic tools included on the image \(meshtasticd and the Meshtastic ) '
+() '
+(Requirements: [the specification]\(../SPEC.md\), sections 1 and 9.) '
+() '
+(This guide is licensed under [CC BY 4.0]\(../../LICENSE-docs\).) '
+() '
+ET
+endstream
+endobj
+8 0 obj
+<< /Length 384 >>
+stream
+BT
+/F1 11 Tf
+50 780 Td
+14 TL
+(ham-tools.md) '
+() '
+(Ham and SDR tools) '
+() '
+(Status: stub. This chapter is not written.) '
+() '
+(This chapter will cover the ham and SDR programs included on the image: GQRX, WSJT-X, Fldigi, and CH) '
+() '
+(Requirements: [the specification]\(../SPEC.md\), section 9.) '
+() '
+(This guide is licensed under [CC BY 4.0]\(../../LICENSE-docs\).) '
+() '
+ET
+endstream
+endobj
+9 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 3 0 R >> >> >>
+endobj
+10 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 5 0 R /Resources << /Font << /F1 3 0 R >> >> >>
+endobj
+11 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 6 0 R /Resources << /Font << /F1 3 0 R >> >> >>
+endobj
+12 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 7 0 R /Resources << /Font << /F1 3 0 R >> >> >>
+endobj
+13 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 8 0 R /Resources << /Font << /F1 3 0 R >> >> >>
+endobj
+xref
+0 14
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000143 00000 n 
+0000000213 00000 n 
+0000002014 00000 n 
+0000003893 00000 n 
+0000005521 00000 n 
+0000006971 00000 n 
+0000007406 00000 n 
+0000007532 00000 n 
+0000007659 00000 n 
+0000007786 00000 n 
+0000007913 00000 n 
+trailer << /Size 14 /Root 1 0 R >>
+startxref
+8040
+%%EOF

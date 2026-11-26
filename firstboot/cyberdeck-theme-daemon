@@ -1,0 +1,7 @@
+#!/bin/sh
+# Keep the desktop on Daybreak or Nightwatch while the session is open.
+/usr/bin/cyberdeck-theme
+while true; do
+	sleep 600
+	/usr/bin/cyberdeck-theme
+done

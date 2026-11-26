@@ -20,7 +20,7 @@ The full locked spec is in [docs/SPEC.md](docs/SPEC.md). The milestone checklist
 - Erase-disk installs use GPT, including drives larger than 2 TB, with one Btrfs root after the EFI system partition. Install alongside keeps the other operating system and adds a Btrfs root in the free space. Snapshots run before every update, with rollback from the boot menu (Snapper and grub-btrfs style).
 - A first-boot Welcome app: choose Daybreak or Nightwatch, pick the `/library` drive, join Wi-Fi, install ROCm or CUDA when the hardware needs it, set a password, then install Project Nomad and its containers.
 - Nomad admin stays on port 8080, Open WebUI on port 3000, and Ollama on localhost port 11434.
-- Firefox ESR, Chromium (Flatpak), full media codecs, VLC, a Jellyfin client, LibreOffice, Flatpak with Flathub, firmware, Mesa/Vulkan, Meshtastic tools, and a ham/SDR set (GQRX, WSJT-X, Fldigi, CHIRP).
+- Firefox ESR, Google Chrome (from Google's apt repository, installed when online), full media codecs, VLC, a Jellyfin client, LibreOffice, Flatpak with Flathub, firmware, Mesa/Vulkan, Meshtastic tools, and a ham/SDR set (GQRX, WSJT-X, Fldigi, CHIRP).
 - A host firewall enabled by default.
 - In-kernel AMD and Intel NPU support. The NVIDIA proprietary driver is included and turned on when a matching GPU is detected. ROCm and CUDA are offered from Welcome when that hardware is present, and they are not part of the image.
 - An offline package cache on `/library`, a Cyberdeck Control Panel, and a low-power/solar mode toggle.
@@ -38,14 +38,23 @@ Apple Silicon is outside this project. A supported install needs at least 256 GB
 
 | Hardware | Architecture | Session | Image | Status |
 | --- | --- | --- | --- | --- |
-| PCs and laptops | AMD64 | KDE Plasma (Wayland) | Live and installer ISO | Planned, first image |
-| Generic UEFI laptops, desktops, and boards | ARM64 | KDE Plasma (Wayland) | One generic UEFI image | Planned, second image |
-| PinePhone Pro | ARM64 | Plasma Mobile | Per-device image | Planned |
-| Librem 5 | ARM64 | Plasma Mobile | Per-device image | Planned |
-| PineTab2 | ARM64 | Plasma Mobile | Per-device image | Planned |
-| Raspberry Pi 5 | ARM64 | KDE Plasma (Wayland) | Per-device image | Planned |
+| PCs and laptops | AMD64 | KDE Plasma (Wayland) | Live and installer ISO | In progress, Version 1 (Alpha) |
+| Generic UEFI laptops, desktops, and boards | ARM64 | KDE Plasma (Wayland) | One generic UEFI image | On hold |
+| PinePhone Pro | ARM64 | Plasma Mobile | Per-device image | On hold |
+| Librem 5 | ARM64 | Plasma Mobile | Per-device image | On hold |
+| PineTab2 | ARM64 | Plasma Mobile | Per-device image | On hold |
+| Raspberry Pi 5 | ARM64 | KDE Plasma (Wayland) | Per-device image | On hold |
 
-Phone and tablet images will lean on postmarketOS device support where that fits. Per-device notes live under [devices/](devices/README.md).
+Phone and tablet images are on hold. The current work is the AMD64 image. Per-device notes live under [devices/](devices/README.md).
+
+## Tested on (hardware)
+
+Reports use the columns in [docs/HARDWARE.md](docs/HARDWARE.md). Add a row by opening a [Hardware test report](https://github.com/venuspcs/cyberdeck-os/issues/new?template=hardware_test_report.md).
+
+| Device | CPU/GPU | Build/version | Live boot | Install | Wi-Fi | Audio | Notes | Tester |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Asus Vivobook S16 (M5606WA) | AMD Ryzen AI 9 HX370, Radeon 890M | Cyberdeck OS Version 1 (Alpha), pre-fix ISO | Works | Works | Unknown | Unknown | Debian branding, wallpaper, manual, and Nomad autorun issues found; those are being fixed in this image | [@VeteranPrepper](https://x.com/VeteranPrepper) |
+| QEMU (BIOS and UEFI) | Virtual machine, no GPU | Local full ISO `4d1a64bf8b7652401d24b3a4f1f87afd1f0fa4c85d10ecd91a86fe54462ecdc4` | Works, BIOS and UEFI, Plasma Wayland | Erase install boots to SDDM under UEFI. Snapper snapshots appear in the GRUB menu after an update | n/a | n/a | Calamares opened after the launcher fix was applied in the live session. Install alongside kept an existing ext4 file, then GRUB stopped at a prompt | Project QEMU test |
 
 ## Roadmap
 
