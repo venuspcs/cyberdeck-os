@@ -40,8 +40,16 @@ mkdir -p config/package-lists \
 printf '%s\n' "${PROFILE}" > config/includes.chroot_after_packages/etc/cyberdeck/profile
 
 cp "${ROOT}/packages/amd64/ci.list.chroot" config/package-lists/ci.list.chroot
+rm -f config/archives/meshtastic.list.chroot config/archives/meshtastic.key.chroot
+rm -f config/includes.chroot_after_packages/etc/apt/sources.list.d/meshtastic.list
+rm -f config/includes.chroot_after_packages/etc/apt/trusted.gpg.d/meshtastic-obs.asc
 if [ "${PROFILE}" = "full" ]; then
 	cp "${ROOT}/packages/amd64/full.list.chroot" config/package-lists/full.list.chroot
+	cp "${ROOT}/installer/meshtastic.list" config/archives/meshtastic.list.chroot
+	cp "${ROOT}/installer/meshtastic-obs.key" config/archives/meshtastic.key.chroot
+	mkdir -p config/includes.chroot_after_packages/etc/apt/trusted.gpg.d
+	cp "${ROOT}/installer/meshtastic.list" config/includes.chroot_after_packages/etc/apt/sources.list.d/meshtastic.list
+	cp "${ROOT}/installer/meshtastic-obs.key" config/includes.chroot_after_packages/etc/apt/trusted.gpg.d/meshtastic-obs.asc
 else
 	rm -f config/package-lists/full.list.chroot
 fi

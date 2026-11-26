@@ -104,18 +104,30 @@ touch /etc/default/grub
 if ! grep -q '^GRUB_DISABLE_OS_PROBER=' /etc/default/grub 2>/dev/null; then
 	printf '\nGRUB_DISABLE_OS_PROBER=true\n' >> /etc/default/grub
 fi
+if grep -q '^GRUB_TIMEOUT=' /etc/default/grub; then
+	sed -i 's/^GRUB_TIMEOUT=.*/GRUB_TIMEOUT=15/' /etc/default/grub
+else
+	echo 'GRUB_TIMEOUT=15' >> /etc/default/grub
+fi
+if grep -q '^GRUB_TIMEOUT_STYLE=' /etc/default/grub; then
+	sed -i 's/^GRUB_TIMEOUT_STYLE=.*/GRUB_TIMEOUT_STYLE=menu/' /etc/default/grub
+else
+	echo 'GRUB_TIMEOUT_STYLE=menu' >> /etc/default/grub
+fi
+if grep -q '^GRUB_CMDLINE_LINUX=' /etc/default/grub; then
+	sed -i 's|^GRUB_CMDLINE_LINUX=.*|GRUB_CMDLINE_LINUX="console=tty0 console=ttyS0,115200"|' /etc/default/grub
+else
+	echo 'GRUB_CMDLINE_LINUX="console=tty0 console=ttyS0,115200"' >> /etc/default/grub
+fi
 if ! id cyberdeck >/dev/null 2>&1; then
 	useradd -m -G sudo,netdev,audio,video,plugdev,cdrom -s /bin/bash cyberdeck || true
 fi
 echo 'cyberdeck:cyberdeck' | chpasswd || true
 echo 'root:cyberdeck' | chpasswd || true
-if ! snapper -c root get-config >/dev/null 2>&1; then
-	snapper -c root create-config / || echo "snapper create-config failed" >/dev/console
-fi
-snapper -c root set-config NUMBER_LIMIT=10 TIMELINE_CREATE=no || true
-systemctl enable grub-btrfsd.service || true
 systemctl enable sddm.service || true
 CHROOT
+
+chroot "${MNT}" /usr/sbin/cyberdeck-snapper-setup || echo "snapper setup failed" >/dev/console
 
 echo "Installing GRUB" >/dev/console
 if ! chroot "${MNT}" grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=cyberdeck --removable --no-nvram; then

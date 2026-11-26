@@ -9,6 +9,6 @@ Package lists for the image build.
 
 ROCm and CUDA stay off these lists. The Nomad installer offers them after hardware detection.
 
-`meshtasticd` and a Jellyfin desktop client are not published in Debian 13, so they are not in the lists. Flatpak and Flathub are in the `full` profile. The image hook adds the Flathub remote when `flatpak` is installed.
+`meshtasticd` is installed on the `full` profile from the Meshtastic Open Build Service repository for Debian 13. The Jellyfin client is the Flathub app `org.jellyfin.JellyfinDesktop`, installed by the image hook when that profile is built. Flatpak and Flathub are in the `full` package list.
 
 Requirements: [docs/SPEC.md](../docs/SPEC.md), sections 9, 10, 15, and 16.

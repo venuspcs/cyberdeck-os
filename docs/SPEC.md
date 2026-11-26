@@ -112,12 +112,12 @@ The baseline image includes:
 - Chromium, installed as a Flatpak
 - Full media codecs
 - VLC
-- A Jellyfin client
 - LibreOffice
 - Flatpak, with the Flathub remote enabled
 - `firmware-linux-nonfree`, plus common Wi-Fi, Bluetooth, and GPU firmware
 - Mesa and Vulkan
-- Meshtastic tools: `meshtasticd` and the Meshtastic web client
+- Meshtastic tools: `meshtasticd` from the Meshtastic Open Build Service repository `network:Meshtastic:beta` for Debian 13, and the Meshtastic web client
+- A Jellyfin client: the Flathub app `org.jellyfin.JellyfinDesktop`
 - Ham and SDR tools: GQRX, WSJT-X, Fldigi, and CHIRP
 - The Field Dashboard (section 15)
 - An OpenStreetMap viewer, with map tiles stored under `/library/maps` (section 16)
