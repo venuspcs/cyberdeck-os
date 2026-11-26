@@ -13,4 +13,4 @@ The first handheld image is one of the PinePhone Pro, the Librem 5, or the PineT
 
 Each subdirectory is a planning stub. None of them contain a kernel, a bootloader config, or an image definition.
 
-Requirements: [docs/SPEC.md](../docs/SPEC.md), sections 3 and 17.
+Requirements: [docs/SPEC.md](../docs/SPEC.md), sections 3 and 19.

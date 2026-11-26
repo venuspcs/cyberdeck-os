@@ -43,6 +43,8 @@ Per-device notes and, later, device-specific config belong under [devices/](../d
 
 - KDE Plasma on Wayland for AMD64, for the generic ARM64 UEFI image, and for the Raspberry Pi 5.
 - Plasma Mobile for phones and tablets.
+- Two built-in themes, Daybreak and Nightwatch, described in section 14.
+- A Field Dashboard Plasma widget, described in section 15.
 
 ## 5. Live session
 
@@ -72,13 +74,23 @@ The installer is specified for the AMD64 ISO and the generic ARM64 UEFI image. P
 - The system takes a snapshot before every update.
 - The user can roll back from the boot menu, in the style of Snapper plus grub-btrfs.
 
-## 8. First boot, Project Nomad, and `/library`
+## 8. First boot, the Welcome app, and `/library`
 
-The installed system runs a first-boot Nomad installer. It installs Project Nomad and its containers, then asks which drive holds `/library`.
+The installed system starts a first-boot Welcome app. Welcome is the place that collects the choices below, then installs Project Nomad and its containers.
 
-If the user chooses the boot drive, the installer creates a `/library` directory on that drive.
+Welcome asks the user to:
 
-If the user chooses another drive, the installer offers two choices: format the drive, or use it as-is. Either way it mounts that drive by UUID from `/etc/fstab`, and Docker is configured to start only after `/library` is mounted.
+1. Choose a theme: Daybreak or Nightwatch. The same step can turn on automatic day/night switching (section 14).
+2. Pick the drive that holds `/library`.
+3. Join a Wi-Fi network. This step can be skipped. Downloads wait until a network is available, and the Cyberdeck Control Panel keeps the same offers for later.
+4. Install an AI driver when the hardware needs it: a one-click ROCm or CUDA install, then configure Ollama for that driver (section 10). This step can be skipped.
+5. Set the account password.
+
+If the user chooses the boot drive for `/library`, Welcome creates a `/library` directory on that drive.
+
+If the user chooses another drive, Welcome offers two choices: format the drive, or use it as-is. Either way it mounts that drive by UUID from `/etc/fstab`, and Docker is configured to start only after `/library` is mounted.
+
+Welcome is the first-boot path on an installed system. The live session requirement stays in section 5.
 
 Service ports:
 
@@ -105,6 +117,8 @@ The baseline image includes:
 - Mesa and Vulkan
 - Meshtastic tools: `meshtasticd` and the Meshtastic web client
 - Ham and SDR tools: GQRX, WSJT-X, Fldigi, and CHIRP
+- The Field Dashboard (section 15)
+- An OpenStreetMap viewer, with map tiles stored under `/library/maps` (section 16)
 - A host firewall that is enabled by default
 
 The firewall package (for example nftables directly, firewalld, or ufw) is chosen in the AMD64 milestone and then named in this spec. The requirement for this pass is that a firewall is on in the default system.
@@ -116,7 +130,7 @@ Anything outside this list is something the user installs, through the terminal,
 - AMD and Intel NPUs use their in-kernel drivers. The backported kernel exists in part so those drivers are present, including AMD XDNA on Ryzen AI HX370.
 - The NVIDIA proprietary driver is included in the image and enabled automatically when an NVIDIA GPU is detected.
 - ROCm and CUDA are not in the image.
-- On first boot, if the hardware needs ROCm or CUDA, the system offers a one-click install and then configures Ollama to use it.
+- Welcome offers a one-click ROCm or CUDA install when that hardware is present, then configures Ollama to use it. The same offer stays available from the Cyberdeck Control Panel.
 
 ## 11. Offline package cache
 
@@ -132,7 +146,12 @@ A desktop application named Cyberdeck Control Panel provides:
 - drive health
 - move `/library`
 - restart Nomad
+- theme selection (Daybreak or Nightwatch) and automatic day/night switching
+- red night-vision mode and high-contrast sunlight mode
+- the ROCm or CUDA install, when Welcome skipped it or the hardware shows up later
 - a link to support the creator (the same destinations as the README: Cash App, Venmo, and X Money via @VeteranPrepper)
+
+The panel is the maintenance app. Glanceable field readings live on the Field Dashboard (section 15), not in this panel.
 
 The UI toolkit is chosen when the panel is implemented. This repository does not contain the application yet.
 
@@ -140,11 +159,90 @@ The UI toolkit is chosen when the panel is implemented. This repository does not
 
 The system has a low-power/solar mode toggle for battery and solar cyberdecks. The concrete policy (CPU governor, screen power, which services pause) is defined with the control panel work and then added to this spec.
 
-## 14. Branding
+Low-power/solar mode is a power policy. Red night-vision and high-contrast sunlight mode are display modes (section 14). Each one is its own toggle.
 
-Cyberdeck OS has its own boot splash, wallpaper, and logo. Those assets are not part of this planning pass. They will land under [branding/](../branding/README.md). Until they exist, the image build uses a documented stand-in only if a file is required for the boot path to succeed, and that stand-in is labeled as temporary.
+## 14. Themes and branding
 
-## 15. Documentation
+Cyberdeck OS ships two themes. The names Daybreak and Nightwatch are the working names.
+
+| Theme | Working name | Mode | Wallpaper |
+| --- | --- | --- | --- |
+| Light | Daybreak | Light colors across the desktop | A rural homestead / off-grid home, unique to this theme |
+| Dark | Nightwatch | Dark colors across the desktop | A rural homestead / off-grid home, a different image from Daybreak |
+
+The boot splash and the login screen follow the theme that is in effect. With a theme chosen by hand, they use that theme. With automatic switching on, they use Daybreak or Nightwatch according to the rule below.
+
+The logo is one shared mark. Theme art is the wallpaper, the boot splash, and the login screen. Assets are not in this planning pass. They will land under [branding/](../branding/README.md). Until they exist, the image build uses a documented stand-in only if a file is required for the boot path to succeed, and that stand-in is labeled as temporary.
+
+### Automatic day/night switching
+
+The user can keep one theme, or turn on automatic switching. Automatic mode applies Daybreak at sunrise and Nightwatch at sunset.
+
+The switch time comes from one of two sources, chosen by the user:
+
+- Location. Sunrise and sunset are computed on the machine for a GPS fix, or for coordinates the user enters. The location stays on the machine.
+- Set times. The user picks the clock time for the morning switch and the clock time for the evening switch.
+
+Welcome and the Cyberdeck Control Panel both expose this choice.
+
+### Red night-vision mode
+
+A red night-vision mode applies a red-only filter to the screen, for working in the dark without a bright white display. The user turns it on and off. It stays available on top of whichever base theme is active.
+
+### High-contrast sunlight mode
+
+A high-contrast sunlight mode makes the screen readable outdoors. The user turns it on and off. It stays available on top of whichever base theme is active.
+
+## 15. Field Dashboard
+
+The Field Dashboard is a desktop widget built on KDE Plasma widgets. It is a glanceable board for power, storage, and radio status in the field.
+
+The user can add tiles, remove tiles, rearrange them, and resize them. Each tile has its own settings. The layout and those settings are saved for the user and restored at the next login.
+
+On Plasma Mobile, the same widget is included where that shell can place a Plasma widget. A device image records any layout difference in its device directory when that image is built.
+
+### Tiles
+
+| Tile | What it shows | How many |
+| --- | --- | --- |
+| Internal laptop battery | Charge and state of the machine's own battery | One tile type. It reports that no internal battery is present when the machine has none |
+| External battery | Readings from one smart battery over Bluetooth, including a LiFePO4 or other solar battery that exposes a BMS | One tile per battery. Several batteries can be on the dashboard at the same time |
+| Solar charge controller | Readings from one controller over Bluetooth | One tile per controller. Several controllers can be on the dashboard at the same time |
+| Drive space | Free and used space for the mounts chosen in that tile's settings. The starting set is the root filesystem and `/library` | As many tiles as the user adds |
+| Nomad status | Whether Project Nomad is running, and the state of its containers | As many tiles as the user adds |
+| Meshtastic node count | How many nodes the local Meshtastic node currently knows | As many tiles as the user adds. Tile settings choose the radio when more than one is present |
+| GPS time | The time reported by a GPS receiver | As many tiles as the user adds |
+
+The first external-battery driver covers smart LiFePO4 and solar batteries that expose a BMS over Bluetooth Low Energy. Further brands are additional drivers.
+
+The first solar-controller drivers cover:
+
+- Victron SmartSolar over BLE
+- Renogy BT-1
+- Renogy BT-2
+- EPEver
+
+A battery tile shows state of charge, voltage, current, and connection status when the BMS provides them. A controller tile shows the PV and battery readings that controller provides (such as PV voltage, charge current, battery voltage, and charge state) and a connection status. A device that is out of range shows a disconnected state on its own tile and leaves the other tiles alone.
+
+The dashboard can keep several Bluetooth devices connected at once, so a set of batteries and a set of controllers can appear together.
+
+### Plugin and driver model
+
+Tiles are plugins loaded by the dashboard shell. The shell owns layout: add, remove, rearrange, resize, and per-tile settings. A plugin owns one tile type.
+
+Hardware plugins are drivers. A driver has a stable name, a device class, a way to discover matching devices, and a way to read one selected device. The same driver can be added more than once, once per physical device, which is how the dashboard shows multiple batteries and multiple charge controllers.
+
+A new BLE battery or charge controller is a new driver. Adding one does not require a change to the shell. The driver is the supported way to grow the device list.
+
+The language and the Plasma widget packaging are chosen when the dashboard is implemented and then recorded in this spec. This repository does not contain a widget, a driver, or sample device data. The reserved directory is [dashboard/](../dashboard/README.md).
+
+## 16. Offline maps
+
+The image includes an OpenStreetMap viewer. Map tiles are stored on `/library`, under `/library/maps`, and the viewer reads those local tiles. Once the tiles for an area are stored, that area can be browsed with no network.
+
+Saving a region onto `/library` can use a network once. The viewer program and the download tool are chosen in the AMD64 milestone and then named in this spec.
+
+## 17. Documentation
 
 A How-To guide covers:
 
@@ -157,6 +255,10 @@ A How-To guide covers:
 - drives
 - Meshtastic
 - ham tools
+- themes, including Daybreak, Nightwatch, automatic day/night switching, red night-vision, and sunlight mode
+- the Welcome app
+- the Field Dashboard
+- offline maps
 
 The guide ships offline in three forms: PDF, a Kiwix ZIM, and ODT.
 
@@ -164,16 +266,17 @@ The guide, and the rest of `docs/`, is licensed CC BY 4.0. See [LICENSE-docs](..
 
 The guide is an outline plus chapter stubs in [docs/guide/](guide/README.md). It is not written yet, and the PDF, ZIM, and ODT files are not in the tree.
 
-## 16. Releases and continuous integration
+## 18. Releases and continuous integration
 
 - Images are published on GitHub Releases.
 - Each release includes SHA256 checksums.
 - A file larger than 2 GB is also mirrored on SourceForge.
 - GitHub Actions builds the images.
+- A numbered release carries a codename taken from homestead tools. Version 1.0 is **Axe**. The version and the codename are part of the release title and of the OS identity the user can read on the system. Pre-1.0 images use a version number only. Later codenames are chosen when that release is cut and written into the release notes.
 
 No workflow file is committed in the planning pass. A workflow that cannot produce an image would look like a build system that does not exist.
 
-## 17. Build order
+## 19. Build order
 
 1. AMD64 live and installer ISO.
 2. Generic ARM64 UEFI image.
@@ -181,7 +284,7 @@ No workflow file is committed in the planning pass. A workflow that cannot produ
 
 The other phone and tablet images, and the Raspberry Pi 5 image, come after that first handheld image. The checklist is [docs/ROADMAP.md](ROADMAP.md).
 
-## 18. Licensing
+## 20. Licensing
 
 | Material | License |
 | --- | --- |
@@ -190,9 +293,9 @@ The other phone and tablet images, and the Raspberry Pi 5 image, come after that
 
 Copyright (c) 2026 Richard Colbert.
 
-## 19. Implementer notes
+## 21. Implementer notes
 
-These notes record boot constraints so the storage rules can be implemented. They do not add features.
+These notes record boot constraints, and the choices a milestone still has to write back into this spec.
 
 ### EFI System Partition
 
@@ -216,4 +319,9 @@ Record the choice in this file when it is made:
 - which program maintains the offline package mirror on `/library`
 - NVIDIA packaging details beyond "included, and enabled when the GPU is detected"
 - live-session Nomad delivery, as described in section 5
+- whether Calamares also asks for a password, or Welcome is the only password step, so the user is asked once
 - low-power/solar mode policy, as described in section 13
+- display-manager and boot-splash packages that apply Daybreak and Nightwatch
+- how a GPS fix is read for the GPS-time tile and for sunrise/sunset location
+- Field Dashboard language and how a driver is packaged
+- OpenStreetMap viewer and the tool that fills `/library/maps`

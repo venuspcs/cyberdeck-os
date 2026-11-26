@@ -49,7 +49,10 @@ GQRX, WSJT-X, Fldigi, and CHIRP: what each program is on the image, and where ra
 ## Also covered when the chapters are written
 
 - Ports that stay fixed: Nomad admin on 8080, Open WebUI on 3000, Ollama on localhost port 11434.
-- The first-boot offer to install ROCm or CUDA when the hardware needs it.
+- The Welcome app: theme, `/library`, Wi-Fi, ROCm or CUDA, and the account password.
+- Daybreak and Nightwatch, automatic sunrise/sunset switching, red night-vision, and high-contrast sunlight mode.
+- The Field Dashboard and its tiles, including adding a Bluetooth battery or charge controller.
+- Offline OpenStreetMap tiles on `/library/maps`.
 - The low-power/solar mode toggle.
 - Phone, tablet, and Raspberry Pi 5 differences, once those images exist.
 - How to support the creator, with the same links as the project README.

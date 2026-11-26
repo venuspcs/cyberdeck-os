@@ -18,13 +18,18 @@ The full locked spec is in [docs/SPEC.md](docs/SPEC.md). The milestone checklist
 - Live boot from USB, SD, or similar media into the full desktop, with Nomad usable in that session.
 - An **Install Cyberdeck OS** desktop icon that launches Calamares, with erase-disk, install-alongside, and manual partitioning. Full-disk encryption is optional.
 - GPT disks and a Btrfs root, including drives larger than 2 TB. Snapshots before every update, and rollback from the boot menu (Snapper and grub-btrfs style).
-- A first-boot installer that sets up Project Nomad, its containers, and the `/library` drive.
+- A first-boot Welcome app: choose Daybreak or Nightwatch, pick the `/library` drive, join Wi-Fi, install ROCm or CUDA when the hardware needs it, set a password, then install Project Nomad and its containers.
 - Nomad admin stays on port 8080, Open WebUI on port 3000, and Ollama on localhost port 11434.
 - Firefox ESR, Chromium (Flatpak), full media codecs, VLC, a Jellyfin client, LibreOffice, Flatpak with Flathub, firmware, Mesa/Vulkan, Meshtastic tools, and a ham/SDR set (GQRX, WSJT-X, Fldigi, CHIRP).
 - A host firewall enabled by default.
-- In-kernel AMD and Intel NPU support. The NVIDIA proprietary driver is included and turned on when a matching GPU is detected. ROCm and CUDA are installed later, from a first-boot prompt, when that hardware is present.
+- In-kernel AMD and Intel NPU support. The NVIDIA proprietary driver is included and turned on when a matching GPU is detected. ROCm and CUDA are offered from Welcome when that hardware is present, and they are not part of the image.
 - An offline package cache on `/library`, a Cyberdeck Control Panel, and a low-power/solar mode toggle.
+- Two themes, with working names Daybreak (light) and Nightwatch (dark). Each has its own rural homestead / off-grid wallpaper. Boot splash and login follow the selected theme. The theme can switch automatically at sunrise and sunset, by location or by set times.
+- A red night-vision mode (red-only screen filter) and a high-contrast sunlight mode for outdoor screens.
+- A Field Dashboard on the desktop, built as a KDE Plasma widget. Tiles can be added, removed, rearranged, and resized, with settings per tile: internal battery, multiple Bluetooth batteries, multiple Bluetooth solar charge controllers, drive space, Nomad status, Meshtastic node count, and GPS time. New BLE batteries and controllers are added as drivers.
+- Offline OpenStreetMap maps, with tiles stored on `/library`.
 - Custom boot splash, wallpaper, and logo. Artwork is not in the tree yet.
+- Release codenames taken from homestead tools. Version 1.0 is Axe.
 - A How-To guide, shipped offline as PDF, Kiwix ZIM, and ODT. The guide is outlined and not written yet.
 
 ## Supported hardware
@@ -48,7 +53,7 @@ Phone and tablet images will lean on postmarketOS device support where that fits
 2. Generic ARM64 UEFI image.
 3. The first phone or tablet image (PinePhone Pro, Librem 5, or PineTab2).
 
-Further device images, including the Raspberry Pi 5, follow that first handheld image. Finished images will be published on GitHub Releases with SHA256 checksums. Files larger than 2 GB will also be mirrored on SourceForge. GitHub Actions will build the images once there is a real config to build. The checklist is in [docs/ROADMAP.md](docs/ROADMAP.md).
+Further device images, including the Raspberry Pi 5, follow that first handheld image. Finished images will be published on GitHub Releases with SHA256 checksums. Files larger than 2 GB will also be mirrored on SourceForge. Numbered releases take a homestead-tool codename. Version 1.0 is Axe. GitHub Actions will build the images once there is a real config to build. The checklist is in [docs/ROADMAP.md](docs/ROADMAP.md).
 
 ## Repository layout
 
@@ -56,11 +61,12 @@ Further device images, including the Raspberry Pi 5, follow that first handheld 
 | --- | --- |
 | [build/](build/README.md) | live-build configuration, split by architecture |
 | [installer/](installer/README.md) | Calamares configuration |
-| [firstboot/](firstboot/README.md) | Nomad installer and `/library` drive setup |
+| [firstboot/](firstboot/README.md) | Welcome app, Nomad install, and `/library` drive setup |
+| [dashboard/](dashboard/README.md) | Field Dashboard Plasma widget and device drivers |
 | [packages/](packages/README.md) | Package lists for the image |
 | [devices/](devices/README.md) | Per-device ARM images |
 | [control-panel/](control-panel/README.md) | Cyberdeck Control Panel |
-| [branding/](branding/README.md) | Boot splash, wallpaper, and logo (assets later) |
+| [branding/](branding/README.md) | Daybreak and Nightwatch art, boot splash, login, and logo (assets later) |
 | [scripts/](scripts/README.md) | Maintainer scripts, when there is something to automate |
 | [docs/](docs/README.md) | Spec, roadmap, and the How-To guide |
 

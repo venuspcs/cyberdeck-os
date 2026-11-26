@@ -13,6 +13,7 @@ The product requirements are in [SPEC.md](SPEC.md).
 - [x] Contributing guide, code of conduct, security policy, issue templates, pull request template
 - [x] Funding links (Cash App and Venmo only)
 - [x] `.gitignore` for live-build and image output
+- [x] Homestead themes, Welcome, Field Dashboard, offline maps, and release codenames recorded in the spec
 - [ ] Maintainer pass over the spec before any build config is added
 
 ## Milestone 1 — AMD64 live and installer ISO
@@ -38,15 +39,23 @@ The first published image. Acceptance is an ISO that boots to the KDE Plasma Way
 - [ ] GPT on the install target, including disks larger than 2 TB, with one Btrfs root after the EFI System Partition
 - [ ] Install target of at least 256 GB enforced or clearly warned
 - [ ] Snapshot before every update, and rollback from the boot menu (Snapper and grub-btrfs style)
-- [ ] First-boot Nomad installer: containers, `/library` on the boot drive or on another drive, UUID mount, Docker ordered after that mount
+- [ ] Welcome app: theme, `/library` drive, Wi-Fi (skippable), ROCm or CUDA when hardware is present (skippable), account password, then Project Nomad and its containers
+- [ ] `/library` on the boot drive or on another drive, UUID mount, Docker ordered after that mount
 - [ ] Nomad admin on port 8080, Open WebUI on port 3000, Ollama bound to localhost port 11434
-- [ ] First-boot offer to install ROCm or CUDA when that hardware is present, then configure Ollama
 - [ ] Offline package cache stored on `/library`
 - [ ] Low-power/solar mode toggle
+- [ ] Daybreak (light) and Nightwatch (dark), each with its own homestead wallpaper, boot splash, and login screen
+- [ ] Automatic Daybreak/Nightwatch switching at sunrise and sunset, by location or by set times
+- [ ] Red night-vision mode (red-only screen filter)
+- [ ] High-contrast sunlight mode
+- [ ] Field Dashboard Plasma widget: add, remove, rearrange, and resize tiles, with per-tile settings
+- [ ] Dashboard tiles for internal battery, multiple BLE batteries, multiple BLE solar controllers, drive space, Nomad status, Meshtastic node count, and GPS time
+- [ ] Driver model so a new BLE battery or charge controller is a new plugin. First controller drivers: Victron SmartSolar BLE, Renogy BT-1, Renogy BT-2, EPEver
+- [ ] Offline OpenStreetMap viewer, tiles stored under `/library/maps`
 - [ ] GitHub Actions workflow that builds this ISO
 - [ ] GitHub Release with the ISO and a SHA256 checksum
 - [ ] SourceForge mirror when the file is larger than 2 GB
-- [ ] Branding hooks. Final splash, wallpaper, and logo when the artwork exists
+- [ ] Theme art hooks. Final Daybreak and Nightwatch splash, wallpaper, login art, and the shared logo when the artwork exists
 
 ## Milestone 2 — Generic ARM64 UEFI image
 
@@ -55,7 +64,7 @@ One image for ARM64 laptops, desktops, and boards that boot UEFI. Same desktop a
 - [ ] live-build (or the equivalent image config) under `build/arm64/`
 - [ ] Boot to KDE Plasma on Wayland
 - [ ] Calamares install path, GPT, Btrfs root, snapshots, and rollback
-- [ ] Nomad first-boot and `/library` behavior carried over from milestone 1
+- [ ] Welcome, themes, Field Dashboard, and offline maps carried over from milestone 1
 - [ ] GitHub Release with SHA256, and a SourceForge mirror when the file is larger than 2 GB
 
 ## Milestone 3 — First phone or tablet image
@@ -80,8 +89,9 @@ These are part of the spec. They land with the earliest milestone that can carry
 
 - [ ] How-To guide written in `docs/guide/`
 - [ ] Guide exported to PDF, Kiwix ZIM, and ODT, and included for offline reading
-- [ ] Cyberdeck Control Panel (update, repair, backup, drive health, move `/library`, restart Nomad, support-the-creator link)
-- [ ] Final branding assets in `branding/`
+- [ ] Cyberdeck Control Panel (update, repair, backup, drive health, move `/library`, restart Nomad, theme and display modes, support-the-creator link)
+- [ ] Final Daybreak and Nightwatch artwork, plus the shared logo, in `branding/`
+- [ ] Release 1.0 named Axe. Later numbered releases take the next homestead-tool codename
 
 ## Explicitly later
 
