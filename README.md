@@ -1,2 +1,94 @@
-# cyberdeck-os
-Cyberdeck OS: a lean Debian-based live/installable Linux for cyberdecks, built around Project Nomad offline tools. AMD64 + ARM64.
+# Cyberdeck OS
+
+Cyberdeck OS is a lean, open-source Linux distribution for cyberdecks. Richard Colbert, a disabled Navy veteran ([@VeteranPrepper](https://x.com/VeteranPrepper) on X, [@Disabled_Vet_72](https://www.youtube.com/@Disabled_Vet_72) on YouTube), is building it for anyone who wants a deck that can carry an offline library.
+
+The system is a Debian 13 live and installable OS. Its job is to run Project Nomad, an offline knowledge server made of Docker apps (Kiwix, Jellyfin, Open WebUI with Ollama, Meshtastic Web, and the rest of the Nomad set), and nothing extra. Anything beyond the baseline in the spec is installed from the terminal, from Nomad, or from Flatpak. The OS is free to use. Donations are welcome and never required.
+
+**Status: planning / pre-alpha**
+
+There is no image to download yet. This repository holds the spec, the roadmap, and empty directories for the work that comes next. Nothing here builds an ISO.
+
+The full locked spec is in [docs/SPEC.md](docs/SPEC.md). The milestone checklist is in [docs/ROADMAP.md](docs/ROADMAP.md).
+
+## Features
+
+- Debian 13 base with a newer backported kernel, so newer hardware (including the AMD XDNA NPU on Ryzen AI HX370) can work.
+- AMD64 and ARM64 only. One generic ARM64 UEFI image for laptops, desktops, and boards, plus separate images for phones, tablets, and the Raspberry Pi 5.
+- KDE Plasma on Wayland. Plasma Mobile on phones and tablets.
+- Live boot from USB, SD, or similar media into the full desktop, with Nomad usable in that session.
+- An **Install Cyberdeck OS** desktop icon that launches Calamares, with erase-disk, install-alongside, and manual partitioning. Full-disk encryption is optional.
+- GPT disks and a Btrfs root, including drives larger than 2 TB. Snapshots before every update, and rollback from the boot menu (Snapper and grub-btrfs style).
+- A first-boot installer that sets up Project Nomad, its containers, and the `/library` drive.
+- Nomad admin stays on port 8080, Open WebUI on port 3000, and Ollama on localhost port 11434.
+- Firefox ESR, Chromium (Flatpak), full media codecs, VLC, a Jellyfin client, LibreOffice, Flatpak with Flathub, firmware, Mesa/Vulkan, Meshtastic tools, and a ham/SDR set (GQRX, WSJT-X, Fldigi, CHIRP).
+- A host firewall enabled by default.
+- In-kernel AMD and Intel NPU support. The NVIDIA proprietary driver is included and turned on when a matching GPU is detected. ROCm and CUDA are installed later, from a first-boot prompt, when that hardware is present.
+- An offline package cache on `/library`, a Cyberdeck Control Panel, and a low-power/solar mode toggle.
+- Custom boot splash, wallpaper, and logo. Artwork is not in the tree yet.
+- A How-To guide, shipped offline as PDF, Kiwix ZIM, and ODT. The guide is outlined and not written yet.
+
+## Supported hardware
+
+Apple Silicon is outside this project. A supported install needs at least 256 GB of storage.
+
+| Hardware | Architecture | Session | Image | Status |
+| --- | --- | --- | --- | --- |
+| PCs and laptops | AMD64 | KDE Plasma (Wayland) | Live and installer ISO | Planned, first image |
+| Generic UEFI laptops, desktops, and boards | ARM64 | KDE Plasma (Wayland) | One generic UEFI image | Planned, second image |
+| PinePhone Pro | ARM64 | Plasma Mobile | Per-device image | Planned |
+| Librem 5 | ARM64 | Plasma Mobile | Per-device image | Planned |
+| PineTab2 | ARM64 | Plasma Mobile | Per-device image | Planned |
+| Raspberry Pi 5 | ARM64 | KDE Plasma (Wayland) | Per-device image | Planned |
+
+Phone and tablet images will lean on postmarketOS device support where that fits. Per-device notes live under [devices/](devices/README.md).
+
+## Roadmap
+
+1. AMD64 live and installer ISO.
+2. Generic ARM64 UEFI image.
+3. The first phone or tablet image (PinePhone Pro, Librem 5, or PineTab2).
+
+Further device images, including the Raspberry Pi 5, follow that first handheld image. Finished images will be published on GitHub Releases with SHA256 checksums. Files larger than 2 GB will also be mirrored on SourceForge. GitHub Actions will build the images once there is a real config to build. The checklist is in [docs/ROADMAP.md](docs/ROADMAP.md).
+
+## Repository layout
+
+| Path | What it will hold |
+| --- | --- |
+| [build/](build/README.md) | live-build configuration, split by architecture |
+| [installer/](installer/README.md) | Calamares configuration |
+| [firstboot/](firstboot/README.md) | Nomad installer and `/library` drive setup |
+| [packages/](packages/README.md) | Package lists for the image |
+| [devices/](devices/README.md) | Per-device ARM images |
+| [control-panel/](control-panel/README.md) | Cyberdeck Control Panel |
+| [branding/](branding/README.md) | Boot splash, wallpaper, and logo (assets later) |
+| [scripts/](scripts/README.md) | Maintainer scripts, when there is something to automate |
+| [docs/](docs/README.md) | Spec, roadmap, and the How-To guide |
+
+Each of those directories currently contains a README and no build files.
+
+## Contributing
+
+The useful work right now is spec review, hardware reports, and writing the How-To. Build scripts, live-build config, and GitHub Actions workflows belong with the milestone that produces a real image.
+
+Read [CONTRIBUTING.md](CONTRIBUTING.md) and the [Code of Conduct](CODE_OF_CONDUCT.md). Security reports go through [SECURITY.md](SECURITY.md).
+
+Issue templates:
+
+- [Bug report](.github/ISSUE_TEMPLATE/bug_report.md)
+- [Hardware report](.github/ISSUE_TEMPLATE/hardware_report.md)
+- [Feature request](.github/ISSUE_TEMPLATE/feature_request.md)
+
+## License
+
+- Code, build configuration, and scripts: GNU General Public License v3. See [LICENSE](LICENSE).
+- Documentation under [docs/](docs/README.md), including the How-To guide: Creative Commons Attribution 4.0 International. See [LICENSE-docs](LICENSE-docs).
+
+## Support the Creator
+
+Cyberdeck OS is free for anyone building a cyberdeck. If you want to support Richard Colbert:
+
+- Cash App: <https://cash.app/$richardcolbert72>
+- Venmo: <https://venmo.com/u/Richard-Colbert-17>
+- X Money: visit [@VeteranPrepper](https://x.com/VeteranPrepper) on X and tap the $ icon
+
+GitHub Sponsors is not set up yet. The funding links in this repository are the Cash App and Venmo URLs above.

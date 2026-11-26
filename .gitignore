@@ -1,0 +1,79 @@
+# Cyberdeck OS
+# Planning tree today. These rules are for the live-build output and
+# local artifacts that will show up once an image milestone starts.
+# Source under build/, installer/, packages/, and docs/ stays tracked.
+
+# Editor and OS clutter
+.DS_Store
+Thumbs.db
+*~
+*.swp
+*.swo
+.idea/
+.vscode/
+*.code-workspace
+
+# Secrets and local environment
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+id_rsa
+id_ed25519
+
+# Local language toolchains, if someone experiments
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+node_modules/
+
+# Debian package build leftovers
+*.deb
+*.udeb
+*.buildinfo
+*.changes
+debian/files
+debian/.debhelper/
+debian/tmp/
+debian/*.substvars
+debian/*.log
+
+# live-build work trees (created inside a build config directory)
+.build/
+cache/
+chroot/
+chroot.files
+chroot.packages.install
+chroot.packages.live
+binary/
+binary.hybrid.iso
+binary.contents
+binary.packages
+binary.zsync
+
+# Image output. Published files belong on GitHub Releases, not in git.
+live-image-*
+*.iso
+*.img
+*.img.xz
+*.iso.xz
+*.squashfs
+*.qcow2
+*.vmdk
+*.vdi
+*.raw
+
+# Checksums generated next to a local image build
+/SHA256SUMS
+*.sha256
+
+# live-build logs
+lb-*.log
+build.log
+
+# Generated offline editions of the How-To (PDF, ZIM, ODT).
+# Markdown source stays in docs/guide/. Releases carry the built files.
+docs/guide/dist/
+*.zim
