@@ -54,7 +54,9 @@ jobs:
       - name: Checksum
         run: |
           cd build/amd64
-          sha256sum *.iso | tee SHA256SUMS
+          sudo sha256sum *.iso | sudo tee SHA256SUMS >/dev/null
+          sudo chmod 644 *.iso SHA256SUMS
+          sha256sum -c SHA256SUMS
           ls -lh *.iso SHA256SUMS
 
       - uses: actions/upload-artifact@v4
