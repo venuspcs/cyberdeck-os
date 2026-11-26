@@ -11,24 +11,25 @@ sudo scripts/build-amd64.sh full
 
 The backports kernel pin, Calamares settings, and first-boot scripts are copied into the image tree by `auto/config` from `packages/amd64/`, `installer/`, and `firstboot/`.
 
-GitHub Actions (`.github/workflows/build-amd64.yml`) builds the `ci` profile on push and can build `full` from the workflow dispatch input. The job uploads the ISO and a SHA256 file.
+GitHub Actions (`.github/workflows/build-amd64.yml`) builds the `full` profile on push. A workflow dispatch can select `ci` or `full`. The job uploads the ISO and a SHA256 file. The checksum step writes `SHA256SUMS` as root, because the ISO build does.
 
-`meshtasticd` and a Jellyfin client are not in Debian 13. Chromium's Flatpak remote is added when Flatpak is installed (`full`). Daybreak, Nightwatch, the Welcome app, the Control Panel, and the Field Dashboard are stubs. See the TODO files those directories install into `/usr/share/doc/cyberdeck-os/`.
+`full` installs `meshtasticd` from the Meshtastic OBS repository for Debian 13 and the Jellyfin Desktop Flatpak from Flathub. Daybreak, Nightwatch, the Welcome app, the Control Panel, and the Field Dashboard are stubs. See the TODO files those directories install into `/usr/share/doc/cyberdeck-os/`.
 
 ## What was built and booted
 
-The `ci` profile produced `cyberdeck-os-amd64-amd64.hybrid.iso` (1.9 GiB).
+The `full` profile produced `cyberdeck-os-amd64-amd64.hybrid.iso`, 3992977408 bytes.
 
 ```
-a7043cc5dc1df991b9bf7c0829a7d15eaafadc4d2828ced79dfb23da7e9feced
+4d1a64bf8b7652401d24b3a4f1f87afd1f0fa4c85d10ecd91a86fe54462ecdc4
 ```
 
-QEMU checks on that ISO:
+That image contains the backports kernel `7.3.4+deb13-amd64`, `meshtasticd`, and `org.jellyfin.JellyfinDesktop`. QEMU checks on it:
 
-- UEFI and BIOS both reach a KDE Plasma Wayland live desktop. `loginctl` reported `SESSION=wayland` and the session command was `startplasma-wayland`. The kernel was `7.3.4+deb13-amd64` from trixie-backports.
-- The live desktop shows an **Install Cyberdeck OS** icon. A headless start of the Calamares process on that Wayland session did not open a window, so the installer pages were not screenshotted.
-- `cyberdeck-autoinstall` wrote a GPT disk: 1 MiB BIOS boot, 512 MiB EFI (vfat), and the rest one Btrfs volume, with `/etc/fstab` mounting those UUIDs. Snapper's `create-config` failed in that run and was logged; GRUB still installed. The disk then booted under OVMF to the SDDM login screen.
+- The live session is KDE Plasma Wayland and shows an **Install Cyberdeck OS** icon. Calamares opens on Xwayland after the branding file includes a `style` map and the desktop launcher starts Calamares with `QT_QPA_PLATFORM=xcb`. The wizard was walked with Alt+N through Welcome, Location (New York), Keyboard (English US), and Partitions.
+- On a 20 GiB GPT disk that already has a 4 GiB ext4 partition, the partition page offers **Erase disk** and **Manual partitioning**, labels the disk GPT, and draws the existing `vda1` ext4 next to free space. It does not offer a separate Install alongside radio for that disk.
+- A scripted alongside install on a 40 GiB disk left the existing ext4 partition in place (`keep-me` was read back from GRUB) and created an EFI system partition plus a Btrfs root. Snapper's install snapshot was created. The removable GRUB image dropped to a `grub>` prompt instead of the menu.
+- `cyberdeck-autoinstall` (erase) wrote a GPT disk that boots under OVMF to the SDDM greeter, Plasma Wayland. Snapper created the install snapshot. After `apt-get install --reinstall ncurses-base`, GRUB's **Cyberdeck OS snapshots** menu listed the install snapshot and the before-apt snapshot.
 
-The `full` package list is in the repo and was not the image that was booted. `meshtasticd` and a Jellyfin client are not in Debian 13. Daybreak, Nightwatch, Welcome, the Control Panel, and the Field Dashboard are stubs.
+The completed GitHub Actions build of this tree before the Calamares launcher fix is run [45839014847](https://github.com/venuspcs/cyberdeck-os/actions/runs/45839014847). Its ISO checksum is `fc84c567536f591e944335156e28c34b7eecc6601164663f4e9f19c43a09d010`. A later commit fixes the Calamares branding and launcher; that run is a separate rebuild.
 
 Requirements: [docs/SPEC.md](../../docs/SPEC.md). Milestone: [docs/ROADMAP.md](../../docs/ROADMAP.md), milestone 1.

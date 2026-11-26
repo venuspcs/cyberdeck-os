@@ -29,4 +29,12 @@ images:
     productWelcome: "welcome.png"
 
 slideshow: "show.qml"
+
+# Calamares 3.3 treats a missing style map as a fatal YAML error.
+style:
+    SidebarBackground: "#26475b"
+    SidebarText: "#FFFFFF"
+    SidebarTextCurrent: "#fbfbfb"
+    SidebarBackgroundCurrent: "#265370"
+
 slideshowAPI: 2

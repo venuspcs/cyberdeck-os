@@ -32,6 +32,7 @@ mkdir -p config/package-lists \
 	config/includes.chroot_after_packages/etc/apt/sources.list.d \
 	config/includes.chroot_after_packages/etc/apt/preferences.d \
 	config/includes.chroot_after_packages/etc/systemd/system \
+	config/includes.chroot_after_packages/etc/polkit-1/rules.d \
 	config/includes.chroot_after_packages/usr/share/doc/cyberdeck-os \
 	config/archives \
 	config/preseed \
@@ -69,6 +70,8 @@ cp "${ROOT}/installer/calamares/settings.conf" config/includes.chroot_after_pack
 cp "${ROOT}/installer/calamares/modules/"*.conf config/includes.chroot_after_packages/etc/calamares/modules/
 cp "${ROOT}/installer/calamares/branding.desc" config/includes.chroot_after_packages/etc/calamares/branding/cyberdeck/branding.desc
 cp "${ROOT}/installer/install-cyberdeck-os.desktop" config/includes.chroot_after_packages/usr/share/applications/calamares-install-debian.desktop
+install -m 0755 "${ROOT}/installer/calamares-install-debian" config/includes.chroot_after_packages/usr/bin/calamares-install-debian
+cp "${ROOT}/installer/49-cyberdeck-calamares.rules" config/includes.chroot_after_packages/etc/polkit-1/rules.d/49-cyberdeck-calamares.rules
 cp "${ROOT}/firstboot/cyberdeck-welcome.desktop" config/includes.chroot_after_packages/usr/share/applications/cyberdeck-welcome.desktop
 cp "${ROOT}/firstboot/cyberdeck-control-panel.desktop" config/includes.chroot_after_packages/usr/share/applications/cyberdeck-control-panel.desktop
 cp "${ROOT}/firstboot/cyberdeck-welcome.desktop" config/includes.chroot_after_packages/etc/xdg/autostart/cyberdeck-welcome.desktop
