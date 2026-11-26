@@ -93,7 +93,7 @@ choose_disk() {
 		esac
 		set -- "$@" "${name}" "${label}"
 	done <<EOF
-$(lsblk -P -o NAME,SIZE,FSTYPE,TYPE)
+$(lsblk -P -p -o NAME,SIZE,FSTYPE,TYPE)
 EOF
 	whiptail --title "Project Nomad" --menu "Where should /library live?" 20 72 8 "$@" 3>&1 1>&2 2>&3
 }

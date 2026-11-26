@@ -63,7 +63,7 @@ The first image is an AMD64 hybrid ISO built with Debian live-build.
 sudo scripts/build-amd64.sh ci
 ```
 
-`full` is the image GitHub Actions builds. It boots Plasma and opens Calamares; the partition page was screenshotted under QEMU. `sudo scripts/build-amd64.sh ci` is the smaller profile used while bringing the build up. Details and the limits of that test are in [build/amd64/README.md](build/amd64/README.md).
+`full` is the image GitHub Actions builds. A live session of that profile was opened under QEMU and the Calamares partition page was screenshotted after the launcher fix was applied in the session. The ISO artifact from the run before that fix does not include it. `sudo scripts/build-amd64.sh ci` is the smaller profile used while bringing the build up. Details and the limits of that test are in [build/amd64/README.md](build/amd64/README.md).
 
 ## Repository layout
 
