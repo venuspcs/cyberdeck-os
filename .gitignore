@@ -19,6 +19,7 @@ Thumbs.db
 !.env.example
 *.pem
 *.key
+!installer/meshtastic-obs.key
 id_rsa
 id_ed25519
 

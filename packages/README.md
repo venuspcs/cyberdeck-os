@@ -1,25 +1,14 @@
 # packages/
 
-Reserved for the package lists the image build will install.
+Package lists for the image build.
 
-The lists, once a milestone adds them, will cover the baseline in the spec:
+| File | Profile |
+| --- | --- |
+| [amd64/ci.list.chroot](amd64/ci.list.chroot) | Bootable AMD64 image: Plasma, Calamares, Snapper, Docker, ufw, Firefox ESR |
+| [amd64/full.list.chroot](amd64/full.list.chroot) | Spec baseline that exists in Debian 13, added on top of `ci` |
 
-- Debian 13 with the backported kernel
-- KDE Plasma (Wayland), and Plasma Mobile for phone and tablet images
-- Firefox ESR, full media codecs, VLC, a Jellyfin client, LibreOffice
-- Flatpak, with Chromium delivered as a Flatpak and Flathub enabled
-- `firmware-linux-nonfree` and common Wi-Fi, Bluetooth, and GPU firmware
-- Mesa and Vulkan
-- `meshtasticd` and the Meshtastic web client
-- GQRX, WSJT-X, Fldigi, and CHIRP
-- the host firewall (package chosen in milestone 1)
-- the NVIDIA proprietary driver, enabled when a GPU is detected
-- Calamares and the snapshot tools (Snapper and grub-btrfs style)
-- the Welcome app, the Cyberdeck Control Panel, and the Field Dashboard Plasma widget
-- an OpenStreetMap viewer that reads tiles from `/library/maps`
+ROCm and CUDA stay off these lists. The Nomad installer offers them after hardware detection.
 
-ROCm and CUDA stay off these lists. Welcome offers them as a later install, and they are not part of the image.
-
-**No package list files are in this directory.** An empty or guessed `.list.chroot` would look like a live-build input. Do not add one until the AMD64 config exists and the list matches the spec.
+`meshtasticd` is installed on the `full` profile from the Meshtastic Open Build Service repository for Debian 13. The Jellyfin client is the Flathub app `org.jellyfin.JellyfinDesktop`, installed by the image hook when that profile is built. Flatpak and Flathub are in the `full` package list.
 
 Requirements: [docs/SPEC.md](../docs/SPEC.md), sections 9, 10, 15, and 16.

@@ -1,0 +1,47 @@
+# Cyberdeck OS AMD64 ci profile.
+# Enough to boot Plasma, launch Calamares, install a GPT+ESP+Btrfs system,
+# and run the Nomad first-boot script. The full spec set is full.list.chroot.
+
+live-boot
+live-config
+live-config-systemd
+user-setup
+sudo
+locales
+console-setup
+keyboard-configuration
+network-manager
+plasma-desktop
+plasma-workspace
+plasma-nm
+sddm
+kde-config-sddm
+konsole
+dolphin
+firefox-esr
+calamares
+calamares-settings-debian
+btrfs-progs
+snapper
+grub-efi-amd64-bin
+grub-pc-bin
+grub-common
+grub2-common
+os-prober
+dosfstools
+parted
+cryptsetup
+cryptsetup-initramfs
+squashfs-tools
+rsync
+ufw
+docker.io
+docker-cli
+docker-compose
+curl
+ca-certificates
+pciutils
+usbutils
+whiptail
+openssl
+xdotool

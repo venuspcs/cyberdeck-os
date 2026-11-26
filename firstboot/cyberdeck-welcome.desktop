@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Cyberdeck Welcome
+Comment=TODO stub that opens the Project Nomad installer
+Exec=cyberdeck-welcome
+Terminal=false
+Categories=System;
+NoDisplay=false

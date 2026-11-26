@@ -1,0 +1,7 @@
+Package: linux-image-amd64 linux-headers-amd64 linux-base
+Pin: release n=trixie-backports
+Pin-Priority: 500
+
+Package: linux-image-* linux-headers-*
+Pin: release n=trixie-backports
+Pin-Priority: 500

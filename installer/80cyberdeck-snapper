@@ -1,0 +1,2 @@
+// Snapshot the root filesystem before apt changes it.
+DPkg::Pre-Install-Pkgs {"/usr/sbin/cyberdeck-snap-pre";};

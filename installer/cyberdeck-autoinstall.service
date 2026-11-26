@@ -1,0 +1,11 @@
+[Unit]
+Description=Cyberdeck non-interactive install
+ConditionKernelCommandLine=cyberdeck.autoinstall
+After=live-config.service
+[Service]
+Type=oneshot
+ExecStart=/usr/sbin/cyberdeck-autoinstall
+StandardOutput=journal+console
+StandardError=journal+console
+[Install]
+WantedBy=multi-user.target

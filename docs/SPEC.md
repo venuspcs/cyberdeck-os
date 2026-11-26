@@ -2,7 +2,7 @@
 
 **Status: planning / pre-alpha.**
 
-The product requirements in this document are the locked baseline for the first images. The implementer notes at the end list build choices that are still open. Those notes do not replace the requirements above them. This branch documents that baseline and reserves directories for later work. It does not itself contain the image build.
+The product requirements in this document are the locked baseline for the first images. The implementer notes at the end list build choices that are still open. Those notes do not replace the requirements above them. The AMD64 live-build configuration lives under `build/amd64/`. Other architectures are still only reserved directories.
 
 Cyberdeck OS is free for anyone building a cyberdeck. Donations are welcome and never required. See the Support the Creator section of the [README](../README.md).
 
@@ -21,7 +21,7 @@ A person using an installed system, or a live session, can still install additio
 ## 2. Base system
 
 - Debian 13.
-- A newer kernel, backported, in place of the default Debian 13 kernel. One reason is newer accelerators such as the AMD XDNA NPU in the Ryzen AI HX370. The exact package version is chosen when the AMD64 image is built, and then recorded here.
+- A newer kernel, backported, in place of the default Debian 13 kernel. One reason is newer accelerators such as the AMD XDNA NPU in the Ryzen AI HX370. The AMD64 image pins `linux-image-amd64` and `linux-base` to `trixie-backports`. The image that was boot-tested ran `7.3.4+deb13-amd64` (`linux-image-amd64` `7.3.4-1~bpo13+1`).
 - AMD64 and ARM64 only. Apple Silicon is not a target.
 
 ## 3. Architectures and images
@@ -50,7 +50,7 @@ Per-device notes and, later, device-specific config belong under [devices/](../d
 
 The image boots from removable media (USB, SD, or similar) into the full desktop. Project Nomad is usable in that live session.
 
-How the live session carries Nomad (preinstalled data versus the same first-boot path used after install) is decided in the AMD64 milestone. The requirement is the behavior: a live desktop can use Nomad.
+The live image carries the Nomad installer and the compose file. Container images are pulled when that installer runs with a network, and their data is stored on `/library`. A live desktop can start that installer from the menu.
 
 ## 6. Installer
 
@@ -112,18 +112,18 @@ The baseline image includes:
 - Chromium, installed as a Flatpak
 - Full media codecs
 - VLC
-- A Jellyfin client
 - LibreOffice
 - Flatpak, with the Flathub remote enabled
 - `firmware-linux-nonfree`, plus common Wi-Fi, Bluetooth, and GPU firmware
 - Mesa and Vulkan
-- Meshtastic tools: `meshtasticd` and the Meshtastic web client
+- Meshtastic tools: `meshtasticd` from the Meshtastic Open Build Service repository `network:Meshtastic:beta` for Debian 13, and the Meshtastic web client
+- A Jellyfin client: the Flathub app `org.jellyfin.JellyfinDesktop`
 - Ham and SDR tools: GQRX, WSJT-X, Fldigi, and CHIRP
 - The Field Dashboard (section 15)
 - An OpenStreetMap viewer, with map tiles stored under `/library/maps` (section 16)
 - A host firewall that is enabled by default
 
-The firewall package (for example nftables directly, firewalld, or ufw) is chosen in the AMD64 milestone and then named in this spec. The requirement for this pass is that a firewall is on in the default system.
+The host firewall is **ufw**, enabled in the image with incoming traffic dropped and outgoing traffic allowed. Docker published ports are not filtered by ufw; Ollama is published only on `127.0.0.1`.
 
 Anything outside this list is something the user installs, through the terminal, Nomad, or Flatpak.
 
@@ -314,7 +314,7 @@ Where GRUB is the bootloader, snapshot rollback is a boot menu entry (Snapper an
 Record the choice in this file when it is made:
 
 - exact backported kernel package and Debian suite pin
-- host firewall implementation
+- host firewall implementation (decided: ufw)
 - Cyberdeck Control Panel language and toolkit
 - which of the three handhelds is the first device image
 - Snapper retention

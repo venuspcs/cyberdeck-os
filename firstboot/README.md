@@ -1,19 +1,11 @@
 # firstboot/
 
-Reserved for the first-boot Welcome app.
+The first-boot Project Nomad installer and the stubs around it.
 
-When it is written, Welcome will ask the user to:
+`cyberdeck-nomad-setup` asks whether `/library` is a folder on the boot drive or another disk. Another disk can be formatted as Btrfs or used as-is. The mount is written to `fstab` by UUID, and Docker is ordered with `RequiresMountsFor=/library`. The compose file it writes keeps Nomad admin on port 8080, Open WebUI on port 3000, and Ollama on `127.0.0.1:11434`. If an NVIDIA or AMD display device is present it offers a one-click package install (NVIDIA driver and CUDA toolkit, or Debian's `rocminfo` for AMD). Container images are pulled only when the user says yes and a network is up.
 
-1. Choose Daybreak or Nightwatch, and optionally turn on automatic sunrise/sunset switching.
-2. Pick the drive that holds `/library`. The boot drive gets a `/library` directory. Another drive can be formatted or used as-is, then mounted by UUID in `/etc/fstab`, with Docker starting only after `/library` is mounted.
-3. Join Wi-Fi. This step can be skipped.
-4. Install ROCm or CUDA when that hardware is present, then configure Ollama. This step can be skipped. Ollama stays on localhost port 11434.
-5. Set the account password.
+`cyberdeck-welcome` and `cyberdeck-control-panel` are stubs. Welcome prints the TODO for themes, Wi-Fi, and the password screen, then runs the Nomad installer. Calamares collects the account password. NetworkManager is on the image for Wi-Fi.
 
-Welcome then installs Project Nomad and its containers. Nomad admin stays on port 8080. Open WebUI stays on port 3000.
-
-The live desktop also has to make Nomad usable. That session requirement is in the spec. This directory is the installed system's first-boot path.
-
-**There is no Welcome app here.** No shell script, no systemd unit, and no Docker compose file. Adding a script that looks ready to run would pretend this step works.
+Nothing here is a finished Welcome app or Control Panel.
 
 Requirements: [docs/SPEC.md](../docs/SPEC.md), sections 5, 8, and 10.

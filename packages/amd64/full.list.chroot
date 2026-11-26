@@ -1,0 +1,33 @@
+# Extra packages for the spec baseline. Installed only when
+# CYBERDECK_PROFILE=full. Every name below is in Debian 13.
+# meshtasticd and a Jellyfin client are not in Debian 13; see
+# docs/SPEC.md. Chromium is the Debian package here; the Flatpak
+# build is enabled by the image hook when flatpak is installed.
+# ROCm and CUDA are not listed. The first-boot script offers them.
+
+vlc
+ffmpeg
+gstreamer1.0-libav
+gstreamer1.0-plugins-good
+gstreamer1.0-plugins-bad
+gstreamer1.0-plugins-ugly
+libavcodec-extra
+libreoffice
+flatpak
+firmware-linux
+firmware-linux-nonfree
+firmware-iwlwifi
+firmware-atheros
+firmware-realtek
+firmware-amd-graphics
+firmware-misc-nonfree
+intel-microcode
+amd64-microcode
+mesa-vulkan-drivers
+nvidia-detect
+nvidia-driver
+gqrx-sdr
+wsjtx
+fldigi
+chirp
+meshtasticd

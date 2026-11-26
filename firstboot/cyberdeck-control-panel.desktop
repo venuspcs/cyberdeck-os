@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Cyberdeck Control Panel
+Comment=TODO stub for the maintenance app
+Exec=cyberdeck-control-panel
+Terminal=true
+Categories=System;

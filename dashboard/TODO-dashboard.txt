@@ -1,0 +1,7 @@
+The Field Dashboard Plasma widget is not in this image yet.
+
+TODO: a KDE Plasma widget with add, remove, rearrange, and resize,
+per-tile settings, and drivers for an internal battery, multiple BLE
+batteries, multiple BLE solar charge controllers (Victron SmartSolar,
+Renogy BT-1, Renogy BT-2, EPEver), drive space, Nomad status,
+Meshtastic node count, and GPS time.

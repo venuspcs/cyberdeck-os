@@ -1,0 +1,9 @@
+// Live installer: the desktop user in the sudo group may start Calamares
+// without a password prompt. The installed system still asks for an
+// administrator password unless that user is in the sudo group.
+polkit.addRule(function(action, subject) {
+    if (action.id == "com.github.calamares.calamares.pkexec.run" &&
+        subject.isInGroup("sudo")) {
+        return polkit.Result.YES;
+    }
+});

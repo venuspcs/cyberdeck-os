@@ -1,11 +1,11 @@
 # installer/
 
-Reserved for Calamares configuration.
+Calamares configuration and the non-interactive install path used to test the disk layout.
 
-The installed desktop will have an icon named **Install Cyberdeck OS** that launches Calamares. The installer will offer erase disk, install alongside, and manual partitioning, plus optional full-disk encryption. Install targets use GPT, including disks larger than 2 TB, with a Btrfs root after the EFI System Partition required to boot. A supported target is at least 256 GB.
+The live desktop icon **Install Cyberdeck OS** is the Debian Calamares launcher with that name. It opens Calamares. Erase disk uses GPT, a 512 MiB EFI system partition on UEFI machines, a 1 MiB BIOS boot partition, and one Btrfs root. Alongside and manual partitioning stay available. Optional encryption is Calamares' own LUKS checkbox. Snapper is configured at the end of the install, and apt takes a snapshot before later package changes.
 
-Phone, tablet, and Raspberry Pi 5 images may need a different installer path. That difference is documented with the device, not invented here.
+`cyberdeck-autoinstall` performs the same GPT, ESP, BIOS-boot, and Btrfs layout without the GUI so a virtual machine can install the live squashfs and reboot it. It is the test path. The desktop path is Calamares.
 
-**There is no Calamares config in this directory.** No `settings.conf`, no partition module config, and no branding folder. Those files arrive with the AMD64 milestone.
+Supported install targets are at least 256 GB. Calamares' hard stop is 8 GiB so a smaller disk can still be used for a test.
 
 Requirements: [docs/SPEC.md](../docs/SPEC.md), sections 6 and 7.

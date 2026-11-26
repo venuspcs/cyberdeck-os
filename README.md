@@ -6,7 +6,7 @@ The system is a Debian 13 live and installable OS. Its job is to run Project Nom
 
 **Status: planning / pre-alpha**
 
-There is no image to download yet. This repository holds the spec, the roadmap, and empty directories for the work that comes next. Nothing here builds an ISO.
+There is no numbered release yet. The AMD64 live and installer image builds from this repository with Debian live-build. See [Build the AMD64 image](#build-the-amd64-image). Other architectures are still reserved directories.
 
 The full locked spec is in [docs/SPEC.md](docs/SPEC.md). The milestone checklist is in [docs/ROADMAP.md](docs/ROADMAP.md).
 
@@ -53,7 +53,17 @@ Phone and tablet images will lean on postmarketOS device support where that fits
 2. Generic ARM64 UEFI image.
 3. The first phone or tablet image (PinePhone Pro, Librem 5, or PineTab2).
 
-Further device images, including the Raspberry Pi 5, follow that first handheld image. Finished images will be published on GitHub Releases with SHA256 checksums. Files larger than 2 GB will also be mirrored on SourceForge. Numbered releases take a homestead-tool codename. Version 1.0 is Axe. GitHub Actions will build the images once there is a real config to build. The checklist is in [docs/ROADMAP.md](docs/ROADMAP.md).
+Further device images, including the Raspberry Pi 5, follow that first handheld image. Finished images will be published on GitHub Releases with SHA256 checksums. Files larger than 2 GB will also be mirrored on SourceForge. Numbered releases take a homestead-tool codename. Version 1.0 is Axe. GitHub Actions builds the AMD64 ISO. The checklist is in [docs/ROADMAP.md](docs/ROADMAP.md).
+
+## Build the AMD64 image
+
+The first image is an AMD64 hybrid ISO built with Debian live-build.
+
+```sh
+sudo scripts/build-amd64.sh ci
+```
+
+`full` is the image GitHub Actions builds. A live session of that profile was opened under QEMU and the Calamares partition page was screenshotted after the launcher fix was applied in the session. The ISO artifact from the run before that fix does not include it. `sudo scripts/build-amd64.sh ci` is the smaller profile used while bringing the build up. Details and the limits of that test are in [build/amd64/README.md](build/amd64/README.md).
 
 ## Repository layout
 
