@@ -21,6 +21,7 @@ install -m 0644 "$B/google-chrome.sources" /etc/apt/sources.list.d/google-chrome
 install -m 0644 "$B/docker.sources" /etc/apt/sources.list.d/docker.sources
 install -m 0644 "$B/cyberdeck-hardware.pref" /etc/apt/preferences.d/cyberdeck-hardware
 install -m 0644 "$B/default-wifi-powersave-off.conf" /etc/NetworkManager/conf.d/default-wifi-powersave-off.conf
+install -m 0644 "$B/wifi-stable-mac.conf" /etc/NetworkManager/conf.d/wifi-stable-mac.conf
 install -m 0644 "$B/mt7921e.conf" /etc/modprobe.d/mt7921e.conf
 rm -f /etc/apt/sources.list.d/cyberdeck-backports.list \
 	/etc/apt/sources.list.d/backports.list \
@@ -103,6 +104,16 @@ if [ "${1:-}" = "--packages" ]; then
 	apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 	# containerd.io replaces Debian containerd. Put Podman back if that removal took it.
 	apt-get install -y podman distrobox crun
+	# MT7922 firmware from trixie, not the backports snapshot.
+	apt-get install -y firmware-mediatek
+	# Debian 13 stock kernel as a GRUB fallback beside the backports kernel.
+	stock_pkg=$(apt-cache show linux-image-amd64 | awk '
+		$1 == "Version:" { ver = $2; next }
+		$1 == "Depends:" && ver ~ /^6\.12\./ { print $2; exit }
+	')
+	if [ -n "${stock_pkg}" ]; then
+		apt-get install -y "${stock_pkg}"
+	fi
 	systemctl enable docker.service || true
 	if command -v flatpak >/dev/null 2>&1; then
 		flatpak remote-add --if-not-exists --system flathub https://dl.flathub.org/repo/flathub.flatpakrepo || true

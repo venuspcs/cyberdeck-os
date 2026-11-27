@@ -1,6 +1,9 @@
 # trixie-backports is NotAutomatic, so unpinned backports stay at priority 100.
-# Kernel, firmware, and Mesa are pinned so HX370-class hardware gets the
-# newer drivers. Everything else stays on trixie unless the user asks.
+# Kernel, most firmware, and Mesa are pinned so HX370-class hardware gets the
+# newer drivers. firmware-mediatek stays on trixie: the backports package
+# 20260916 replaced an MT7922 blob the stock firmware did not ship, and that
+# combo failed 802.11 authenticate on a Starlink Mini. Everything else stays
+# on trixie unless the user asks.
 
 Package: linux-image-* linux-headers-* linux-base linux-libc-dev
 Pin: release n=trixie-backports
@@ -9,6 +12,10 @@ Pin-Priority: 500
 Package: firmware-*
 Pin: release n=trixie-backports
 Pin-Priority: 500
+
+Package: firmware-mediatek
+Pin: release n=trixie
+Pin-Priority: 990
 
 Package: mesa mesa-* libgl1-mesa-* libglx-mesa* libegl-mesa* libgbm1 libgl1-mesa-dri mesa-vulkan-drivers mesa-va-drivers mesa-vdpau-drivers
 Pin: release n=trixie-backports
