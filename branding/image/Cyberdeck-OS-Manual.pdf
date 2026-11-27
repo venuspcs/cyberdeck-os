@@ -22,7 +22,7 @@ BT
 () '
 (Cyberdeck OS How-To guide) '
 () '
-(Status: outline only. The chapters linked below are stubs. They are not instructions, and following ) '
+(Status: outline only. The chapters linked below are stubs, except the Wi-Fi drop note in maintenance) '
 () '
 (When the guide is written, it will ship offline as a PDF, a Kiwix ZIM, and an ODT file, so it can be) '
 () '
@@ -125,7 +125,7 @@ ET
 endstream
 endobj
 6 0 obj
-<< /Length 1576 >>
+<< /Length 1592 >>
 stream
 BT
 /F1 11 Tf
@@ -153,12 +153,42 @@ BT
 () '
 (Maintaining the OS and Nomad) '
 () '
-(Status: stub. This chapter is not written.) '
+(Status: stub, except the Wi-Fi note. The rest of this chapter is not written.) '
+() '
+(Wi-Fi drops) '
+() '
+(The image turns Wi-Fi power saving off:) '
+() '
+(/etc/NetworkManager/conf.d/default-wifi-powersave-off.conf) '
+() '
+(wifi.powersave = 2) '
+() '
+(It also loads the MediaTek driver with ASPM disabled:) '
+() '
+(/etc/modprobe.d/mt7921e.conf) '
+() '
+(options mt7921e disable_aspm=1) '
+() '
+(That pair is for the MT7922 on an Asus Vivobook S16.) '
+(The mt7921e driver dropped Wi-Fi every few minutes on kernel 7.3.4+deb13.) '
+() '
+(On a WPA2/WPA3 mixed router, such as Starlink, WPA3 \(SAE\) can still drop.) '
+(Open the connection and set security to WPA2 \(wpa-psk\).) '
 () '
 (This chapter will cover routine care of Cyberdeck OS and Project Nomad through the Cyberdeck Control) '
 () '
 (Requirements: [the specification]\(../SPEC.md\), sections 7 and 12 through 14.) '
 () '
+ET
+endstream
+endobj
+7 0 obj
+<< /Length 1434 >>
+stream
+BT
+/F1 11 Tf
+50 780 Td
+14 TL
 (This guide is licensed under [CC BY 4.0]\(../../LICENSE-docs\).) '
 () '
 (adding-software.md) '
@@ -179,16 +209,6 @@ BT
 () '
 (Other systems with Distrobox) '
 () '
-ET
-endstream
-endobj
-7 0 obj
-<< /Length 1398 >>
-stream
-BT
-/F1 11 Tf
-50 780 Td
-14 TL
 (Status: short guide.) '
 () '
 (Cyberdeck OS keeps one Debian system on the disk. When a program is packaged for Ubuntu, Arch, or an) '
@@ -211,10 +231,22 @@ BT
 () '
 (Programs installed inside the container stay there. The host apt sources stay Debian 13, plus the ve) '
 () '
+(Ollama has no official apt repository. The image does not add one. Project Nomad runs the ollama/oll) '
+() '
 (Requirements: [the specification]\(../SPEC.md\), section 9.) '
 () '
 (drives.md) '
 () '
+ET
+endstream
+endobj
+8 0 obj
+<< /Length 1071 >>
+stream
+BT
+/F1 11 Tf
+50 780 Td
+14 TL
 (Drives and /library) '
 () '
 (Status: stub. This chapter is not written.) '
@@ -237,16 +269,6 @@ BT
 () '
 (This guide is licensed under [CC BY 4.0]\(../../LICENSE-docs\).) '
 () '
-ET
-endstream
-endobj
-8 0 obj
-<< /Length 384 >>
-stream
-BT
-/F1 11 Tf
-50 780 Td
-14 TL
 (ham-tools.md) '
 () '
 (Ham and SDR tools) '
@@ -286,14 +308,14 @@ xref
 0000000213 00000 n 
 0000002014 00000 n 
 0000003893 00000 n 
-0000005521 00000 n 
-0000006971 00000 n 
-0000007406 00000 n 
-0000007532 00000 n 
-0000007659 00000 n 
-0000007786 00000 n 
-0000007913 00000 n 
+0000005537 00000 n 
+0000007023 00000 n 
+0000008146 00000 n 
+0000008272 00000 n 
+0000008399 00000 n 
+0000008526 00000 n 
+0000008653 00000 n 
 trailer << /Size 14 /Root 1 0 R >>
 startxref
-8040
+8780
 %%EOF

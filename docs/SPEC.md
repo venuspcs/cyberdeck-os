@@ -115,6 +115,7 @@ The baseline image includes:
 - LibreOffice
 - Flatpak, with the Flathub remote enabled
 - `firmware-linux-nonfree`, plus common Wi-Fi, Bluetooth, and GPU firmware
+- Wi-Fi power saving off (`wifi.powersave = 2`) and `options mt7921e disable_aspm=1`, for MediaTek MT7922 drops seen on kernel `7.3.4+deb13`
 - Mesa and Vulkan
 - Meshtastic tools: `meshtasticd` from the Meshtastic Open Build Service repository `network:Meshtastic:beta` for Debian 13, and the Meshtastic web client
 - A Jellyfin client: the Flathub app `org.jellyfin.JellyfinDesktop`

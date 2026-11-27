@@ -22,6 +22,15 @@ else
 	wall=/usr/share/wallpapers/cyberdeck/nightwatch.png
 	scheme=BreezeDark
 fi
+if [ -x /usr/bin/google-chrome-stable ] && command -v xdg-settings >/dev/null 2>&1; then
+	current=$(xdg-settings get default-web-browser 2>/dev/null || true)
+	case "$current" in
+		google-chrome.desktop) ;;
+		firefox-esr.desktop|firefox.desktop|"")
+			xdg-settings set default-web-browser google-chrome.desktop || true
+			;;
+	esac
+fi
 if [ -n "${WAYLAND_DISPLAY:-}${DISPLAY:-}" ]; then
 	plasma-apply-wallpaperimage "$wall" >/dev/null 2>&1 || true
 	plasma-apply-colorscheme "$scheme" >/dev/null 2>&1 || true
