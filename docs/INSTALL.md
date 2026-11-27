@@ -19,7 +19,7 @@ Apple Silicon Macs (M1 and later) cannot boot this image. An ARM64 image is plan
 
 ## 1. Download and check the checksum
 
-You need the ISO and a file named `SHA256SUMS`. The checksum file is one line: the SHA256 hash, two spaces, then `cyberdeck-os-amd64-amd64.hybrid.iso`.
+You need the ISO and a file named `SHA256SUMS`. Unzip the download first (section 2). `SHA256SUMS` is inside that zip, next to the ISO. The checksum file is one line: the SHA256 hash, two spaces, then `cyberdeck-os-amd64-amd64.hybrid.iso`.
 
 Check the hash before you write the USB. If it does not match, download again. Do not flash a file that failed the check.
 
@@ -316,7 +316,7 @@ Intel Macs can use the Option key, as in the table above.
 
 Booting the USB does not install anything. It starts a live desktop. Your internal disk is unchanged until you confirm the install.
 
-**Back up first.** Erase disk deletes every partition on the drive you select. A dual boot can still make the other system unbootable if the wrong partition is removed. Copy personal files off, and keep the BitLocker key if Windows is encrypted.
+**Back up first.** Copy personal files off the computer before you confirm the install. Erase disk deletes every partition on the drive you select. Install alongside keeps the other system and resizes its partition, and that resize can still leave the other system unable to boot. If Windows is encrypted, save the BitLocker recovery key before you start.
 
 1. At the menu titled **Cyberdeck OS Version 1 (Alpha)**, choose a **Live system** line. The current image lists two kernels on that menu: `Live system, kernel 7.3.4+deb13-amd64` and `Live system, kernel 6.12.118+deb13-amd64`. Either line is a valid start. The 6.12 line is the fallback when the newer kernel misbehaves (including some Wi-Fi chips). A later image may print different version numbers. Use the lines that menu shows.
 2. Wait for the desktop. The live session logs in by itself as the user `cyberdeck`, password `cyberdeck`, on KDE Plasma (Wayland). That account can use `sudo`. This password is only for the live session.
@@ -327,10 +327,25 @@ The installed system has no separate root password. The account you create in Ca
 
 ### Full disk or dual boot
 
-- **Erase disk** deletes the selected drive and installs Cyberdeck OS. The layout is GPT: a 1 MB BIOS boot partition, a 512 MB EFI system partition, and one Btrfs root. Pick this when this computer will only run Cyberdeck OS, or when you have already copied your files off. On the partition screen that was tested, **Erase disk** and **Manual partitioning** were the choices shown.
-- **Dual boot** means you keep the other operating system. The tested partition screen did not show a separate "Install alongside" button. Use **Manual partitioning**: leave the other system's partitions in place, and install into free space. Make that free space before you boot the USB (in Windows, Disk Management → Shrink volume). Install alongside is only defined for a disk that is already GPT. A disk that is not GPT is not eligible. Rewriting it as GPT means Erase disk, which removes the other system.
-- A supported install disk is at least **256 GB**. Calamares will still allow a smaller disk, down to about 8 GB, so a test install can finish. A disk under 256 GB is not a supported everyday install.
-- Encryption is optional. `cryptsetup` is in the image, and it stays off unless you turn it on in the partition step. If you turn it on, store the passphrase somewhere you can read without this disk. There is no recovery if you lose it.
+The partition screen offers **Erase disk**, **Install alongside**, and **Manual partitioning**.
+
+**Erase disk** deletes the selected drive and installs Cyberdeck OS. The layout is GPT: a 1 MB BIOS boot partition, a 512 MB EFI system partition, and one Btrfs root. Pick this when this computer will only run Cyberdeck OS, or when you have already copied your files off.
+
+**Install alongside** is the dual-boot choice. It keeps the other operating system and adds Cyberdeck OS on the same disk. A slider shows the two systems side by side. Drag it to choose how much space each one gets, then continue. Leave the other system enough room for its own files. The installer shrinks that system's partition to make the space.
+
+Do this before you choose Install alongside on a Windows PC:
+
+1. Back up anything you still need. The slider changes the size of the Windows partition.
+2. Turn off Windows Fast Startup, then shut Windows down fully (hold Shift while you click Shut down). Fast Startup leaves Windows half-hibernated, and the installer cannot safely resize that partition.
+3. If Windows uses BitLocker or device encryption, save the recovery key first (often in your Microsoft account). Suspend protection before the install, or Windows can boot to a recovery screen after the partition changes size. In an administrator PowerShell window: `manage-bde -protectors -disable C:`. Turn protection back on from Windows after you have confirmed Windows still boots.
+
+Install alongside needs a GPT disk. A disk that is not GPT is not eligible. Rewriting it as GPT means Erase disk, which removes the other system.
+
+**Manual partitioning** is the advanced choice. Use it when you want to pick the partitions yourself. Leave the other system's partitions in place, and put the Cyberdeck OS Btrfs root in free space on a GPT disk.
+
+A supported install disk is at least **256 GB**. Calamares will still allow a smaller disk, down to about 8 GB, so a test install can finish. A disk under 256 GB is not a supported everyday install.
+
+Encryption is optional. `cryptsetup` is in the image, and it stays off unless you turn it on in the partition step. If you turn it on, store the passphrase somewhere you can read without this disk. There is no recovery if you lose it.
 
 When Calamares finishes, reboot and remove the USB when the computer asks you to. Sign in with the account you created.
 
@@ -349,15 +364,15 @@ The installed system opens **Project Nomad Setup** once, in a terminal, at first
 
 ### Black screen
 
-At the GRUB menu, highlight the Live system line and press `e`. Find the line that starts with `linux`. At the end of that line, add a space and:
+UEFI boots with GRUB. Legacy BIOS boots with Syslinux. The edit is the same idea on both, and it lasts for this boot only.
 
-```text
-nomodeset
-```
+**UEFI (GRUB).** Highlight the Live system line and press `e`. Find the line that starts with `linux`. At the end of that line, add a space and `nomodeset`. Press Ctrl+X or F10 to boot.
 
-Press Ctrl+X or F10 to boot that edited line. The edit lasts for this boot only. `nomodeset` tells the kernel to skip the graphics driver's modesetting, which gets past a blank screen on some GPUs. The picture may be a plain mode until the system is installed and a driver is set up.
+**Legacy BIOS (Syslinux).** Highlight the Live line and press Tab. The boot command appears at the bottom of the screen. At the end of that line, add a space and `nomodeset`. Press Enter to boot.
 
-If the menu has a fail-safe Live system entry, you can try that too. The build's fail-safe options are `noapic noapm nodma nomce nosplash`. You can still add `nomodeset` on that line the same way.
+`nomodeset` tells the kernel to skip the graphics driver's modesetting, which gets past a blank screen on some GPUs. The picture may be a plain mode until the system is installed and a driver is set up.
+
+If the menu has a fail-safe Live entry, you can try that too. The build's fail-safe options are `noapic noapm nodma nomce nosplash`. You can still add `nomodeset` on that line the same way: `e` then Ctrl+X or F10 in GRUB, or Tab then Enter in Syslinux.
 
 ### The boot hangs
 
