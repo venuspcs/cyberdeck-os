@@ -1,9 +1,9 @@
 # Repair and rollback
 
-**Status: stub.** This chapter is not written.
+**Status: written for Alpha 3 (Hatchet).**
 
-This chapter will cover repairing an install that no longer boots cleanly, choosing a snapshot from the boot menu (Snapper and grub-btrfs style), and what a rollback changes on the root filesystem versus data on `/library`.
+At the installed GRUB menu, the advanced or main list includes snapshot entries from grub-btrfs after apt has taken a snapshot. Booting a snapshot returns the Btrfs root to that moment. Data you stored only on `/library` is not inside the root snapshot.
 
-Requirements: [the specification](../SPEC.md), sections 7 and 8.
+If the 7.3 kernel will not boot or Wi-Fi will not associate, choose the `6.12` kernel line instead of a snapshot. That kernel stays installed next to the backports kernel.
 
 This guide is licensed under [CC BY 4.0](../../LICENSE-docs).

@@ -73,10 +73,32 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     ports:
-      - "3000:8080"
+      - "127.0.0.1:3000:8080"
     environment:
       - OLLAMA_BASE_URL=http://ollama:11434
+      - DEFAULT_MODELS=llama3.2:3b
     volumes:
       - /library/open-webui:/app/backend/data
     depends_on:
       - ollama
+
+  dozzle:
+    image: amir20/dozzle:v10.0
+    container_name: nomad_dozzle
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:9999:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - DOZZLE_ENABLE_ACTIONS=false
+      - DOZZLE_ENABLE_SHELL=false
+
+  qdrant:
+    image: qdrant/qdrant:v1.16
+    container_name: nomad_qdrant
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:6333:6333"
+    volumes:
+      - /library/nomad/storage/qdrant:/qdrant/storage

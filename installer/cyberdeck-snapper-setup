@@ -24,8 +24,8 @@ if ! snapper --no-dbus -c root get-config >/dev/null 2>&1; then
 		cp /usr/share/snapper/config-templates/default /etc/snapper/configs/root
 		sed -i 's|^SUBVOLUME=.*|SUBVOLUME="/"|' /etc/snapper/configs/root
 		sed -i 's|^TIMELINE_CREATE=.*|TIMELINE_CREATE="no"|' /etc/snapper/configs/root
-		sed -i 's|^NUMBER_LIMIT=.*|NUMBER_LIMIT="10"|' /etc/snapper/configs/root
-		sed -i 's|^NUMBER_LIMIT_IMPORTANT=.*|NUMBER_LIMIT_IMPORTANT="5"|' /etc/snapper/configs/root
+		sed -i 's|^NUMBER_LIMIT=.*|NUMBER_LIMIT="4"|' /etc/snapper/configs/root
+		sed -i 's|^NUMBER_LIMIT_IMPORTANT=.*|NUMBER_LIMIT_IMPORTANT="4"|' /etc/snapper/configs/root
 		if [ -f /etc/default/snapper ] && grep -q '^SNAPPER_CONFIGS=' /etc/default/snapper; then
 			sed -i 's|^SNAPPER_CONFIGS=.*|SNAPPER_CONFIGS="root"|' /etc/default/snapper
 		else
@@ -34,7 +34,7 @@ if ! snapper --no-dbus -c root get-config >/dev/null 2>&1; then
 	fi
 fi
 
-snapper --no-dbus -c root set-config NUMBER_LIMIT=10 NUMBER_LIMIT_IMPORTANT=5 TIMELINE_CREATE=no || true
+snapper --no-dbus -c root set-config NUMBER_LIMIT=4 NUMBER_LIMIT_IMPORTANT=4 TIMELINE_CREATE=no || true
 
 if ! snapper --no-dbus -c root create --description "install" --cleanup-algorithm number; then
 	log "could not create the install snapshot"

@@ -1,27 +1,12 @@
 # Other systems with Distrobox
 
-**Status: short guide.**
+**Status: written for Alpha 3 (Hatchet).**
 
-Cyberdeck OS keeps one Debian system on the disk. When a program is packaged for Ubuntu, Arch, or another distribution, run it in a container instead of adding that distribution's package repository to the host.
+The image includes Distrobox and Podman. Use them when a program is packaged for Ubuntu or Arch.
 
-The image includes Distrobox and Podman.
+    distrobox create --name ubuntu --image ubuntu:24.04
+    distrobox enter ubuntu
 
-Create an Ubuntu container and open a shell in it:
+Ollama has no apt repository. Project Nomad runs the `ollama/ollama` container on `127.0.0.1:11434`. The first-boot installer pulls `llama3.2:3b`. Tags containing `-text-` are base models and produce gibberish. Do not select them. DeepSeek R1 remains available if you pull it yourself.
 
-```sh
-distrobox create --name ubuntu --image ubuntu:24.04
-distrobox enter ubuntu
-```
-
-Arch is the same idea:
-
-```sh
-distrobox create --name arch --image archlinux:latest
-distrobox enter arch
-```
-
-Programs installed inside the container stay there. The host apt sources stay Debian 13, plus the vendor repositories Cyberdeck OS configures (Google Chrome, Docker CE, and Meshtastic). Do not add Ubuntu, Debian Sid, or Debian Testing repositories to the host.
-
-Ollama has no official apt repository. The image does not add one. Project Nomad runs the `ollama/ollama` container, published on `127.0.0.1:11434`. The first-boot installer sets that up. The upstream install script is `https://ollama.com/install.sh` if you want Ollama on the host instead.
-
-Requirements: [the specification](../SPEC.md), section 9.
+This guide is licensed under [CC BY 4.0](../../LICENSE-docs).

@@ -23,8 +23,24 @@ CHAPTERS = [
 ]
 
 
+def wrap(text, width=90):
+    words = text.split()
+    if not words:
+        return [""]
+    rows = []
+    cur = words[0]
+    for word in words[1:]:
+        if len(cur) + 1 + len(word) > width:
+            rows.append(cur)
+            cur = word
+        else:
+            cur += " " + word
+    rows.append(cur)
+    return rows
+
+
 def lines():
-    out = ["Cyberdeck OS Version 1 (Alpha)", "How-To guide", ""]
+    out = ["Cyberdeck OS Alpha 3 (Hatchet)", "How-To guide", ""]
     for name in CHAPTERS:
         path = GUIDE / name
         if not path.exists():
@@ -35,7 +51,7 @@ def lines():
             text = raw.replace("**", "").replace("`", "")
             if text.startswith("#"):
                 text = text.lstrip("#").strip()
-            out.append(text)
+            out.extend(wrap(text))
         out.append("")
     return out
 
@@ -60,8 +76,8 @@ def write_pdf(paragraphs, dest: Path):
         commands = ["BT", "/F1 11 Tf", "50 780 Td", "14 TL"]
         for line in page:
             safe = line.replace("\\", "\\\\").replace("(", "\\(").replace(")", "\\)")
-            if len(safe) > 100:
-                safe = safe[:100]
+            if len(safe) > 110:
+                safe = safe[:110]
             commands.append(f"({safe}) '")
         commands.append("ET")
         stream = "\n".join(commands).encode("latin-1", "replace")

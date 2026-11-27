@@ -23,6 +23,11 @@ install -m 0644 "$B/cyberdeck-hardware.pref" /etc/apt/preferences.d/cyberdeck-ha
 install -m 0644 "$B/default-wifi-powersave-off.conf" /etc/NetworkManager/conf.d/default-wifi-powersave-off.conf
 install -m 0644 "$B/wifi-stable-mac.conf" /etc/NetworkManager/conf.d/wifi-stable-mac.conf
 install -m 0644 "$B/mt7921e.conf" /etc/modprobe.d/mt7921e.conf
+install -d -m 0755 /etc/xdg /etc/skel/.config /etc/cyberdeck
+install -m 0644 "$B/mimeapps.list" /etc/xdg/mimeapps.list
+install -m 0644 "$B/mimeapps.list" /etc/skel/.config/mimeapps.list
+install -m 0644 "$B/conky.conf" /etc/cyberdeck/conky.conf
+install -m 0644 "$B/cyberdeck-lan-firewall.service" /etc/systemd/system/cyberdeck-lan-firewall.service
 rm -f /etc/apt/sources.list.d/cyberdeck-backports.list \
 	/etc/apt/sources.list.d/backports.list \
 	/etc/apt/preferences.d/cyberdeck-kernel \
@@ -97,6 +102,8 @@ install -m 0644 "$B/cyberdeck-flatpak-update.service" /etc/systemd/system/cyberd
 install -m 0644 "$B/cyberdeck-flatpak-update.timer" /etc/systemd/system/cyberdeck-flatpak-update.timer
 install -m 0644 "$B/cyberdeck-chrome.service" /etc/systemd/system/cyberdeck-chrome.service
 install -m 0644 "$B/cyberdeck-chrome.timer" /etc/systemd/system/cyberdeck-chrome.timer
+install -m 0644 "$B/cyberdeck-extras.service" /etc/systemd/system/cyberdeck-extras.service
+install -m 0644 "$B/cyberdeck-extras.timer" /etc/systemd/system/cyberdeck-extras.timer
 
 if [ "${1:-}" = "--packages" ]; then
 	apt-get update
@@ -121,5 +128,8 @@ if [ "${1:-}" = "--packages" ]; then
 	fi
 	systemctl enable cyberdeck-flatpak-update.timer || true
 	systemctl enable cyberdeck-chrome.timer || true
+	systemctl enable cyberdeck-extras.timer || true
 	systemctl enable unattended-upgrades.service || true
+	systemctl enable systemd-timesyncd.service || true
+	systemctl enable cyberdeck-lan-firewall.service || true
 fi

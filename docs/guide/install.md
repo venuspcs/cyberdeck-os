@@ -1,9 +1,11 @@
-# Installing Cyberdeck OS
+# Installing
 
-**Status: stub.** This chapter is not written. It is not an install procedure.
+**Status: written for Alpha 3 (Hatchet).**
 
-This chapter will cover preparing USB or SD boot media, booting the live desktop, and launching Calamares from the **Install Cyberdeck OS** icon. It will document erase-disk, install-alongside, and manual partitioning, optional full-disk encryption, GPT layout with a Btrfs root (including disks larger than 2 TB), and the 256 GB minimum for an install target.
+Download the ISO from GitHub Releases. Join the parts if the release split the file, check SHA256, then write the USB. Secure Boot stays off. The full walk-through is [docs/INSTALL.md](../INSTALL.md).
 
-Requirements: [the specification](../SPEC.md), sections 5, 6, and 7.
+On the live desktop, open **Install Cyberdeck OS**. Erase disk replaces the disk with GPT, an EFI system partition, and a Btrfs root. Install alongside needs a GPT disk with free space. Manual partitioning is the advanced path. Calamares asks for the account password.
+
+The boot menu title is Cyberdeck OS Alpha 3 (Hatchet). It lists the 7.3 backports kernel and the Debian 13 6.12 kernel.
 
 This guide is licensed under [CC BY 4.0](../../LICENSE-docs).

@@ -50,7 +50,7 @@ Apple Silicon is outside this project. A supported install needs at least 256 GB
 
 | Hardware | Architecture | Session | Image | Status |
 | --- | --- | --- | --- | --- |
-| PCs and laptops | AMD64 | KDE Plasma (Wayland) | Live and installer ISO | In progress, Version 1 (Alpha) |
+| PCs and laptops | AMD64 | KDE Plasma (Wayland) | Live and installer ISO | Alpha 3 (Hatchet) |
 | Generic UEFI laptops, desktops, and boards | ARM64 | KDE Plasma (Wayland) | One generic UEFI image | On hold |
 | PinePhone Pro | ARM64 | Plasma Mobile | Per-device image | On hold |
 | Librem 5 | ARM64 | Plasma Mobile | Per-device image | On hold |
@@ -65,6 +65,7 @@ Reports use the columns in [docs/HARDWARE.md](docs/HARDWARE.md). Add a row by op
 
 | Device | CPU/GPU | Build/version | Live boot | Install | Wi-Fi | Audio | Notes | Tester |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Asus Vivobook S16 (M5606WA) | AMD Ryzen AI 9 HX 370, Radeon 890M, MT7922 | Build 2 | Works | Works | Stable | Not reported | Installs and boots, feels fast, Wi-Fi and Ethernet stayed up, no Debian branding. Chrome, Discover, both kernels, and ufw were OK | [@VeteranPrepper](https://x.com/VeteranPrepper) |
 | Asus Vivobook S16 (M5606WA) | AMD Ryzen AI 9 HX370, Radeon 890M | Cyberdeck OS Version 1 (Alpha), pre-fix ISO | Works | Works | Starlink 5 GHz fails | Unknown | MT7922 (`mt7921e`) on kernel `7.3.4+deb13` dropped every few minutes, then failed immediately at 802.11 authenticate on a Starlink Mini SSID (5 GHz, Ethernet plugged into that router, `CONN_FAILED`). Another SSID worked. The same laptop worked on Zorin OS and Linux Mint. The image after this report keeps MediaTek firmware on Debian 13, disables scan MAC randomization, uses a stable connection MAC, leaves powersave off, and lists the Debian 13 6.12 kernel on the GRUB menu. Branding, wallpaper, manual, and Nomad autorun issues were also found on the pre-fix ISO | [@VeteranPrepper](https://x.com/VeteranPrepper) |
 | QEMU (BIOS and UEFI) | Virtual machine, no GPU | Local full ISO `4d1a64bf8b7652401d24b3a4f1f87afd1f0fa4c85d10ecd91a86fe54462ecdc4` | Works, BIOS and UEFI, Plasma Wayland | Erase install boots to SDDM under UEFI. Snapper snapshots appear in the GRUB menu after an update | n/a | n/a | Calamares opened after the launcher fix was applied in the live session. Install alongside kept an existing ext4 file, then GRUB stopped at a prompt | Project QEMU test |
 

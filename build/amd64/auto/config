@@ -46,13 +46,14 @@ rm -f config/includes.chroot_after_packages/etc/apt/sources.list.d/meshtastic.li
 rm -f config/includes.chroot_after_packages/etc/apt/trusted.gpg.d/meshtastic-obs.asc
 if [ "${PROFILE}" = "full" ]; then
 	cp "${ROOT}/packages/amd64/full.list.chroot" config/package-lists/full.list.chroot
+	cp "${ROOT}/packages/amd64/alpha3.list.chroot" config/package-lists/alpha3.list.chroot
 	cp "${ROOT}/installer/meshtastic.list" config/archives/meshtastic.list.chroot
 	cp "${ROOT}/installer/meshtastic-obs.key" config/archives/meshtastic.key.chroot
 	mkdir -p config/includes.chroot_after_packages/etc/apt/trusted.gpg.d
 	cp "${ROOT}/installer/meshtastic.list" config/includes.chroot_after_packages/etc/apt/sources.list.d/meshtastic.list
 	cp "${ROOT}/installer/meshtastic-obs.key" config/includes.chroot_after_packages/etc/apt/trusted.gpg.d/meshtastic-obs.asc
 else
-	rm -f config/package-lists/full.list.chroot
+	rm -f config/package-lists/full.list.chroot config/package-lists/alpha3.list.chroot
 fi
 
 # Installer, first-boot, and image overlays. Source of truth is the repo
@@ -89,6 +90,13 @@ cp "${ROOT}/installer/cyberdeck-apply-image" config/includes.chroot_after_packag
 cp "${ROOT}/installer/cyberdeck-chrome-install" config/includes.chroot_after_packages/usr/sbin/cyberdeck-chrome-install
 cp "${ROOT}/firstboot/cyberdeck-theme" config/includes.chroot_after_packages/usr/bin/cyberdeck-theme
 cp "${ROOT}/firstboot/cyberdeck-theme-daemon" config/includes.chroot_after_packages/usr/bin/cyberdeck-theme-daemon
+cp "${ROOT}/firstboot/cyberdeck-support" config/includes.chroot_after_packages/usr/bin/cyberdeck-support
+cp "${ROOT}/firstboot/cyberdeck-support.desktop" config/includes.chroot_after_packages/usr/share/applications/cyberdeck-support.desktop
+cp "${ROOT}/firstboot/cyberdeck-extras" config/includes.chroot_after_packages/usr/sbin/cyberdeck-extras
+cp "${ROOT}/firstboot/cyberdeck-extras.desktop" config/includes.chroot_after_packages/usr/share/applications/cyberdeck-extras.desktop
+cp "${ROOT}/firstboot/cyberdeck-conky.desktop" config/includes.chroot_after_packages/etc/xdg/autostart/cyberdeck-conky.desktop
+cp "${ROOT}/installer/cyberdeck-lan-firewall" config/includes.chroot_after_packages/usr/sbin/cyberdeck-lan-firewall
+cp "${ROOT}/firstboot/nomad-supply.yml.in" config/includes.chroot_after_packages/usr/share/cyberdeck/nomad-supply.yml.in
 cp "${ROOT}/firstboot/cyberdeck-nomad-launch" config/includes.chroot_after_packages/usr/bin/cyberdeck-nomad-launch
 cp "${ROOT}/firstboot/cyberdeck-theme.desktop" config/includes.chroot_after_packages/etc/xdg/autostart/cyberdeck-theme.desktop
 chmod 755 config/includes.chroot_after_packages/usr/sbin/* \

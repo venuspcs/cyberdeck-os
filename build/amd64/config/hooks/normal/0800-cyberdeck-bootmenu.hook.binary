@@ -4,5 +4,5 @@
 set -eu
 find . -type f \( -name '*.cfg' -o -name '*.svg' -o -name 'theme.txt' \) -print0 |
 	xargs -0 -r sed -i \
-		-e 's/Debian GNU\/Linux/Cyberdeck OS Version 1 (Alpha)/g' \
-		-e 's/title-text: "Live Boot Menu with GRUB"/title-text: "Cyberdeck OS Version 1 (Alpha)"/'
+		-e 's/Debian GNU\/Linux/Cyberdeck OS Alpha 3 (Hatchet)/g' \
+		-e 's/title-text: "Live Boot Menu with GRUB"/title-text: "Cyberdeck OS Alpha 3 (Hatchet)"/'

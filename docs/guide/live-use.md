@@ -1,9 +1,11 @@
 # Live use
 
-**Status: stub.** This chapter is not written.
+**Status: written for Alpha 3 (Hatchet).**
 
-This chapter will cover booting from USB, SD, or similar media into the full desktop, what works before the system is installed, and how to use Project Nomad in that live session. It will also point at the Field Dashboard, Daybreak and Nightwatch, and the offline map viewer once those exist on the image.
+The live user is `cyberdeck` with password `cyberdeck`, and that account can use sudo without a password. The installed account cannot. Project Nomad Setup does not auto-start on the live desktop. The menu entry still opens it.
 
-Requirements: [the specification](../SPEC.md), section 5.
+The desktop uses Daybreak or Nightwatch from the clock. The manual icon is on the desktop. **Support Cyberdeck OS** is in the application menu. The Conky HUD shows CPU, battery, and network when those devices exist.
+
+The live firewall drops incoming traffic and allows outgoing traffic. Chrome installs itself when the network is up. The larger Alpha 3 apps install from **Install Alpha 3 extras** or the background timer.
 
 This guide is licensed under [CC BY 4.0](../../LICENSE-docs).

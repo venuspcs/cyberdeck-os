@@ -18,6 +18,10 @@ if [ -f /etc/default/ufw ]; then
 	sed -i 's/^DEFAULT_OUTPUT_POLICY=.*/DEFAULT_OUTPUT_POLICY="ACCEPT"/' /etc/default/ufw
 	sed -i 's/^DEFAULT_FORWARD_POLICY=.*/DEFAULT_FORWARD_POLICY="DROP"/' /etc/default/ufw
 fi
+
+systemctl enable systemd-timesyncd.service 2>/dev/null || true
+timedatectl set-ntp true 2>/dev/null || true
+systemctl enable cyberdeck-lan-firewall.service 2>/dev/null || true
 systemctl enable ufw.service 2>/dev/null || true
 systemctl enable docker.service 2>/dev/null || true
 systemctl enable cyberdeck-autoinstall.service 2>/dev/null || true

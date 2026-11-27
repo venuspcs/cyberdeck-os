@@ -53,3 +53,7 @@ usbutils
 whiptail
 openssl
 xdotool
+systemd-timesyncd
+okular
+python3-tk
+inotify-tools

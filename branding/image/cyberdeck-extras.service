@@ -1,0 +1,9 @@
+[Unit]
+Description=Install large Alpha 3 applications when online
+After=network-online.target
+Wants=network-online.target
+ConditionPathExists=!/var/lib/cyberdeck/extras.done
+
+[Service]
+Type=oneshot
+ExecStart=/usr/sbin/cyberdeck-extras

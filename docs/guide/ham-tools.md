@@ -1,9 +1,9 @@
 # Ham and SDR tools
 
-**Status: stub.** This chapter is not written.
+**Status: written for Alpha 3 (Hatchet).**
 
-This chapter will cover the ham and SDR programs included on the image: GQRX, WSJT-X, Fldigi, and CHIRP. Radio licensing, local band plans, and hardware-specific wiring stay the operator's responsibility. The chapter will identify each program and where device setup notes will go.
+The full image includes GQRX, WSJT-X, Fldigi, CHIRP, JS8Call, Pat, Dire Wolf, Xastir, and gpsd. FoxtrotGPS is not in Debian 13, so it is not installed. Map tiles you add yourself belong under `/library`.
 
-Requirements: [the specification](../SPEC.md), section 9.
+Serial consoles for radios and boards use minicom, picocom, or screen. Arduino IDE and PlatformIO install with the Alpha 3 extras. KiCad does too.
 
 This guide is licensed under [CC BY 4.0](../../LICENSE-docs).

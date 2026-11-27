@@ -9,109 +9,88 @@ endobj
 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
 endobj
 4 0 obj
-<< /Length 1749 >>
+<< /Length 1923 >>
 stream
 BT
 /F1 11 Tf
 50 780 Td
 14 TL
-(Cyberdeck OS Version 1 \(Alpha\)) '
+(Cyberdeck OS Alpha 3 \(Hatchet\)) '
 (How-To guide) '
 () '
 (README.md) '
 () '
 (Cyberdeck OS How-To guide) '
 () '
-(Status: outline only. The chapters linked below are stubs, except the Wi-Fi drop note in maintenance) '
+(Status: written for Alpha 3 \(Hatchet\). The chapters below match this image. They are not a) '
+(substitute for the specification.) '
 () '
-(When the guide is written, it will ship offline as a PDF, a Kiwix ZIM, and an ODT file, so it can be) '
+(This guide ships on the desktop as a PDF and an ODT file. Okular opens the PDF.) '
 () '
-(This guide is licensed under [CC BY 4.0]\(../../LICENSE-docs\). Copyright \(c\) 2026 Richard Colbert) '
+(This guide is licensed under [CC BY 4.0]\(../../LICENSE-docs\). Copyright \(c\) 2026 Richard) '
+(Colbert. Credit Richard Colbert and Cyberdeck OS if you share or adapt it.) '
 () '
-(The behavior the guide will describe is specified in [../SPEC.md]\(../SPEC.md\).) '
+(The behavior the guide describes is specified in [../SPEC.md]\(../SPEC.md\).) '
 () '
 (Chapters) '
 () '
 (1. [Installing]\(install.md\)) '
-() '
-(Creating boot media, booting the live desktop, and running Calamares from the Install Cyberdeck OS i) '
-() '
 (2. [Live use]\(live-use.md\)) '
-() '
-(What the live session is for, how the desktop is laid out, and how to use Project Nomad before anyth) '
-() '
 (3. [Updates]\(updates.md\)) '
-() '
-(Installing updates, the snapshot taken before each update, and where to look when an update needs a ) '
-() '
 (4. [Repair and rollback]\(repair-rollback.md\)) '
-() '
-(Choosing a snapshot from the boot menu, returning to the previous root, and what rollback does to No) '
-() '
-(5. [Maintenance]\(maintenance.md\)) '
-() '
-(Day-to-day care of the OS and of Project Nomad: the Cyberdeck Control Panel \(update, repair, backup) '
-() '
+(5. [Maintenance]\(maintenance.md\), including Wi-Fi, the clock, and support links) '
 (6. [Adding software]\(adding-software.md\)) '
+(7. [Other systems with Distrobox]\(containers.md\)) '
+(8. [Drives and Project Nomad]\(drives.md\)) '
+(9. [Meshtastic]\(meshtastic.md\)) '
+(10. [Ham and SDR tools]\(ham-tools.md\)) '
 () '
-(6b. [Other systems with Distrobox]\(containers.md\)) '
+(install.md) '
 () '
-(The three supported ways to add software: the terminal, Project Nomad, and Flatpak with Flathub. The) '
+(Installing) '
 () '
-(7. [Drives]\(drives.md\)) '
+(Status: written for Alpha 3 \(Hatchet\).) '
 () '
-(The first-boot choice of where /library lives. A folder on the boot drive, or another drive formatte) '
+(Download the ISO from GitHub Releases. Join the parts if the release split the file, check) '
+(SHA256, then write the USB. Secure Boot stays off. The full walk-through is) '
+([docs/INSTALL.md]\(../INSTALL.md\).) '
 () '
-(8. [Meshtastic]\(meshtastic.md\)) '
+(On the live desktop, open Install Cyberdeck OS. Erase disk replaces the disk with GPT, an) '
+(EFI system partition, and a Btrfs root. Install alongside needs a GPT disk with free) '
+(space. Manual partitioning is the advanced path. Calamares asks for the account password.) '
+() '
+(The boot menu title is Cyberdeck OS Alpha 3 \(Hatchet\). It lists the 7.3 backports kernel) '
+(and the Debian 13 6.12 kernel.) '
+() '
+(This guide is licensed under [CC BY 4.0]\(../../LICENSE-docs\).) '
 ET
 endstream
 endobj
 5 0 obj
-<< /Length 1827 >>
+<< /Length 1987 >>
 stream
 BT
 /F1 11 Tf
 50 780 Td
 14 TL
 () '
-(meshtasticd, the Meshtastic web client, and how that fits next to Meshtastic Web inside Nomad.) '
-() '
-(9. [Ham and SDR tools]\(ham-tools.md\)) '
-() '
-(GQRX, WSJT-X, Fldigi, and CHIRP: what each program is on the image, and where radio hardware setup w) '
-() '
-(Also covered when the chapters are written) '
-() '
-(- Ports that stay fixed: Nomad admin on 8080, Open WebUI on 3000, Ollama on localhost port 11434.) '
-(- The Welcome app: theme, /library, Wi-Fi, ROCm or CUDA, and the account password.) '
-(- Daybreak and Nightwatch, automatic sunrise/sunset switching, red night-vision, and high-contrast s) '
-(- The Field Dashboard and its tiles, including adding a Bluetooth battery or charge controller.) '
-(- Offline OpenStreetMap tiles on /library/maps.) '
-(- The low-power/solar mode toggle.) '
-(- Phone, tablet, and Raspberry Pi 5 differences, once those images exist.) '
-(- How to support the creator, with the same links as the project README.) '
-() '
-(install.md) '
-() '
-(Installing Cyberdeck OS) '
-() '
-(Status: stub. This chapter is not written. It is not an install procedure.) '
-() '
-(This chapter will cover preparing USB or SD boot media, booting the live desktop, and launching Cala) '
-() '
-(Requirements: [the specification]\(../SPEC.md\), sections 5, 6, and 7.) '
-() '
-(This guide is licensed under [CC BY 4.0]\(../../LICENSE-docs\).) '
-() '
 (live-use.md) '
 () '
 (Live use) '
 () '
-(Status: stub. This chapter is not written.) '
+(Status: written for Alpha 3 \(Hatchet\).) '
 () '
-(This chapter will cover booting from USB, SD, or similar media into the full desktop, what works bef) '
+(The live user is cyberdeck with password cyberdeck, and that account can use sudo without) '
+(a password. The installed account cannot. Project Nomad Setup does not auto-start on the) '
+(live desktop. The menu entry still opens it.) '
 () '
-(Requirements: [the specification]\(../SPEC.md\), section 5.) '
+(The desktop uses Daybreak or Nightwatch from the clock. The manual icon is on the desktop.) '
+(Support Cyberdeck OS is in the application menu. The Conky HUD shows CPU, battery, and) '
+(network when those devices exist.) '
+() '
+(The live firewall drops incoming traffic and allows outgoing traffic. Chrome installs) '
+(itself when the network is up. The larger Alpha 3 apps install from Install Alpha 3 extras) '
+(or the background timer.) '
 () '
 (This guide is licensed under [CC BY 4.0]\(../../LICENSE-docs\).) '
 () '
@@ -119,21 +98,17 @@ BT
 () '
 (Updates) '
 () '
-(Status: stub. This chapter is not written.) '
+(Status: written for Alpha 3 \(Hatchet\).) '
 () '
-ET
-endstream
-endobj
-6 0 obj
-<< /Length 2010 >>
-stream
-BT
-/F1 11 Tf
-50 780 Td
-14 TL
-(This chapter will cover updating Cyberdeck OS and Project Nomad, the Btrfs snapshot taken before eve) '
+(unattended-upgrades installs Debian security and stable updates. It does not reboot the) '
+(machine for you. Backports stay available for the kernel, Mesa, and most firmware.) '
+(firmware-mediatek stays on Debian 13.) '
 () '
-(Requirements: [the specification]\(../SPEC.md\), section 7.) '
+(Flatpak updates run from a daily timer. Discover shows package and Flatpak updates. Apt) '
+(takes a Snapper snapshot before it changes packages.) '
+() '
+(Google Chrome, Docker CE, Brave, Signal, VS Code, VirtualBox, and Grok Bot update from) '
+(their own signed repositories after Install Alpha 3 extras has added those repositories.) '
 () '
 (This guide is licensed under [CC BY 4.0]\(../../LICENSE-docs\).) '
 () '
@@ -141,11 +116,24 @@ BT
 () '
 (Repair and rollback) '
 () '
-(Status: stub. This chapter is not written.) '
+(Status: written for Alpha 3 \(Hatchet\).) '
 () '
-(This chapter will cover repairing an install that no longer boots cleanly, choosing a snapshot from ) '
+(At the installed GRUB menu, the advanced or main list includes snapshot entries from) '
+(grub-btrfs after apt has taken a snapshot. Booting a snapshot returns the Btrfs root to) '
+(that moment. Data you stored only on /library is not inside the root snapshot.) '
+ET
+endstream
+endobj
+6 0 obj
+<< /Length 1957 >>
+stream
+BT
+/F1 11 Tf
+50 780 Td
+14 TL
 () '
-(Requirements: [the specification]\(../SPEC.md\), sections 7 and 8.) '
+(If the 7.3 kernel will not boot or Wi-Fi will not associate, choose the 6.12 kernel line) '
+(instead of a snapshot. That kernel stays installed next to the backports kernel.) '
 () '
 (This guide is licensed under [CC BY 4.0]\(../../LICENSE-docs\).) '
 () '
@@ -153,60 +141,59 @@ BT
 () '
 (Maintaining the OS and Nomad) '
 () '
-(Status: stub, except the Wi-Fi note. The rest of this chapter is not written.) '
+(Status: written for Alpha 3 \(Hatchet\).) '
 () '
 (Wi-Fi) '
 () '
-(Two separate problems showed up on an Asus Vivobook S16 with a MediaTek MT7922 \(mt7921e\).) '
+(The image turns Wi-Fi power saving off \(wifi.powersave = 2\) and sets options mt7921e) '
+(disable_aspm=1 for the MediaTek MT7922. Scans and connections use one stable MAC) '
+(\(wifi.scan-rand-mac-address=no and wifi.cloned-mac-address=stable\). MediaTek firmware) '
+(stays on Debian 13, not backports.) '
 () '
-(The connection dropped every few minutes on kernel 7.3.4+deb13.) '
-(The image turns power saving off and disables ASPM for that driver:) '
+(On a WPA2/WPA3 mixed router such as Starlink, if the link drops after it associates, edit) '
+(the connection and set security to WPA2 \(wpa-psk\). Forget the network once after upgrading) '
+(so the stable MAC is saved.) '
 () '
-(/etc/NetworkManager/conf.d/default-wifi-powersave-off.conf sets wifi.powersave = 2) '
+(If the backports kernel still cannot join, boot the menu line that contains 6.12.) '
 () '
-(/etc/modprobe.d/mt7921e.conf sets options mt7921e disable_aspm=1) '
+(Clock and wallpaper) '
 () '
-(A Starlink Mini SSID then failed immediately on 5 GHz.) '
-(Ethernet was plugged into that same router.) '
-(The log line is CTRL-EVENT-SSID-TEMP-DISABLED with reason=CONN_FAILED at 802.11 authenticate.) '
-(Another router's SSID worked. The same laptop worked on Zorin OS and Linux Mint.) '
-(Those systems are Ubuntu-based.) '
-(Zorin 17 is 22.04. Mint 22 is 24.04. Both use Ubuntu linux-firmware.) '
-(This image had been using Linux 7.3.4 and MediaTek firmware 20260916 from Debian backports.) '
-(The MT7922 patch file in that package is dated 20260724.) '
+(Daybreak \(light\) runs from 06:30 until 18:30 in the timezone the desktop is using.) '
+(Nightwatch is every other time. The switch runs at login, again within 15 seconds of a) '
+(clock or timezone change, and after the machine resumes. The choice is logged in) '
+(~/.local/share/cyberdeck-theme.log.) '
 () '
-(Debian's NetworkManager also scanned with a random MAC and connected with the permanent MAC.) '
-(mt7921e is not in the driver list that skips MAC changes.) '
-(The image now scans and connects with one stable MAC:) '
+(9:00 America/Chicago is Daybreak. 21:00 America/Chicago is Nightwatch.) '
 () '
+(Time sync) '
+() '
+(systemd-timesyncd is installed and enabled. System Settings can turn NTP on. If it still) '
+(says it cannot change NTP, run timedatectl set-ntp true.) '
+() '
+(Manual) '
+() '
+(The desktop icon Cyberdeck OS Manual opens the PDF in Okular. Okular is the default PDF) '
+(application.) '
+() '
+(Snapshots) '
+() '
+(Snapper keeps the 4 newest numbered snapshots \(NUMBER_LIMIT=4\), which is two pre/post) '
+(pairs from apt. Apt takes a snapshot before it changes packages.) '
 ET
 endstream
 endobj
 7 0 obj
-<< /Length 1918 >>
+<< /Length 2060 >>
 stream
 BT
 /F1 11 Tf
 50 780 Td
 14 TL
-(/etc/NetworkManager/conf.d/wifi-stable-mac.conf) '
 () '
-(wifi.scan-rand-mac-address=no and wifi.cloned-mac-address=stable) '
+(Support) '
 () '
-(MediaTek firmware stays on Debian 13 firmware-mediatek \(20250410-2\), not backports.) '
-(Wi-Fi still uses wpa_supplicant. iwd is not installed. WPA3 is not turned off for every network.) '
-() '
-(On a WPA2/WPA3 mixed router, such as Starlink, WPA3 \(SAE\) can still drop after it connects.) '
-(Open the connection and set security to WPA2 \(wpa-psk\).) '
-(Forget the network once after this image update so the stable MAC is used.) '
-() '
-(The boot menu lists the Debian 13 stock kernel, 6.12, next to 7.3.4.) '
-(Choose the 6.12 entry if the backports kernel still cannot join the Starlink SSID.) '
-(AMD graphics firmware stays on backports. Only firmware-mediatek is held back.) '
-() '
-(This chapter will cover routine care of Cyberdeck OS and Project Nomad through the Cyberdeck Control) '
-() '
-(Requirements: [the specification]\(../SPEC.md\), sections 7 and 12 through 14.) '
+(Support Cyberdeck OS in the menu opens X Money, Cash App, and Venmo. Nothing is charged) '
+(from that window.) '
 () '
 (This guide is licensed under [CC BY 4.0]\(../../LICENSE-docs\).) '
 () '
@@ -214,13 +201,28 @@ BT
 () '
 (Adding software) '
 () '
-(Status: stub. This chapter is not written.) '
+(Status: written for Alpha 3 \(Hatchet\).) '
 () '
-(This chapter will cover the three ways to install more software: the terminal \(Debian packages\), P) '
+(Debian packages install with apt. The host sources are Debian 13 \(main, contrib, non-free,) '
+(non-free-firmware\), updates, security, and backports. Do not add Ubuntu, Sid, or Testing.) '
 () '
-(The image baseline stays as specified: Firefox ESR, Google Chrome \(from Google's repository, when o) '
+(These are already in the full image: the network tools \(nmap, zenmap, Wireshark, tcpdump,) '
+(and the rest of that set except Kismet\), qBittorrent, Tor Browser launcher, KeePassXC,) '
+(Syncthing, GParted, Okular, BleachBit, Remmina, FileZilla, Ark, 7-Zip, Xarchiver, KCalc,) '
+(Qalculate!, Galculator, the build tools, Git, Rust from Debian, Node, Go, the radio tools) '
+(that Debian ships \(JS8Call, Pat, Dire Wolf, Xastir, gpsd\), WireGuard, ClamAV, Lynis,) '
+(cool-retro-term, btop, Conky, and Foliate.) '
 () '
-(Requirements: [the specification]\(../SPEC.md\), sections 1, 9, and 11.) '
+(GIMP, Krita, Kdenlive, Audacity, OBS Studio, Calibre, KiCad, Arduino, PlatformIO, the KDE) '
+(games set, RetroArch, PeaZip, GitHub Desktop, Brave, Signal, VS Code, VirtualBox, and Grok) '
+(Bot install when the machine is online. Open Install Alpha 3 extras or wait for its timer.) '
+(They are not copied into the ISO because of size or license.) '
+() '
+(Kismet, SpeedCrunch, FoxtrotGPS, Briar, and VeraCrypt are not in Debian 13 and this image) '
+(does not add an unsigned repository for them.) '
+() '
+(Chrome and Grok Bot come from their publishers' apt repositories. The packages are not) '
+(stored in the ISO.) '
 () '
 (This guide is licensed under [CC BY 4.0]\(../../LICENSE-docs\).) '
 () '
@@ -228,51 +230,53 @@ BT
 () '
 (Other systems with Distrobox) '
 () '
-(Status: short guide.) '
+(Status: written for Alpha 3 \(Hatchet\).) '
 () '
-(Cyberdeck OS keeps one Debian system on the disk. When a program is packaged for Ubuntu, Arch, or an) '
+(The image includes Distrobox and Podman. Use them when a program is packaged for Ubuntu or) '
+(Arch.) '
 () '
-(The image includes Distrobox and Podman.) '
-() '
-(Create an Ubuntu container and open a shell in it:) '
-() '
-(sh) '
+(distrobox create --name ubuntu --image ubuntu:24.04) '
+(distrobox enter ubuntu) '
 ET
 endstream
 endobj
 8 0 obj
-<< /Length 1457 >>
+<< /Length 2094 >>
 stream
 BT
 /F1 11 Tf
 50 780 Td
 14 TL
-(distrobox create --name ubuntu --image ubuntu:24.04) '
-(distrobox enter ubuntu) '
 () '
+(Ollama has no apt repository. Project Nomad runs the ollama/ollama container on) '
+(127.0.0.1:11434. The first-boot installer pulls llama3.2:3b. Tags containing -text- are) '
+(base models and produce gibberish. Do not select them. DeepSeek R1 remains available if) '
+(you pull it yourself.) '
 () '
-(Arch is the same idea:) '
-() '
-(sh) '
-(distrobox create --name arch --image archlinux:latest) '
-(distrobox enter arch) '
-() '
-() '
-(Programs installed inside the container stay there. The host apt sources stay Debian 13, plus the ve) '
-() '
-(Ollama has no official apt repository. The image does not add one. Project Nomad runs the ollama/oll) '
-() '
-(Requirements: [the specification]\(../SPEC.md\), section 9.) '
+(This guide is licensed under [CC BY 4.0]\(../../LICENSE-docs\).) '
 () '
 (drives.md) '
 () '
-(Drives and /library) '
+(Drives and Project Nomad) '
 () '
-(Status: stub. This chapter is not written.) '
+(Status: written for Alpha 3 \(Hatchet\).) '
 () '
-(This chapter will cover the Welcome drive choice. On the boot drive, Welcome creates a /library fold) '
+(Project Nomad Setup asks where /library lives, writes it to fstab by UUID, and orders) '
+(Docker after that mount. It then starts Nomad admin on port 8080, Open WebUI on) '
+(127.0.0.1:3000, Ollama on 127.0.0.1:11434, Dozzle logs on 127.0.0.1:9999, and Qdrant on) '
+(127.0.0.1:6333.) '
 () '
-(Requirements: [the specification]\(../SPEC.md\), section 8.) '
+(It also starts the Supply Depot apps except Vaultwarden: Kiwix \(8090\), Kolibri, Flatnotes,) '
+(CyberChef, Stirling PDF, File Browser, Calibre Web, IT Tools, Excalidraw, Homebox,) '
+(Jellyfin \(8490\), LibreTranslate, Meshtastic Web \(9443\), and MeshCore Web. Their data) '
+(directories are under /library/nomad/storage. Qdrant's directory is mode 777 so the) '
+(container can write it.) '
+() '
+(The firewall allows those published LAN ports only from 192.168.0.0/16 and 10.0.0.0/8.) '
+(Ollama, Open WebUI, Dozzle, and Qdrant stay on localhost.) '
+() '
+(The default model pull is llama3.2:3b. After Qdrant answers http://127.0.0.1:6333/healthz,) '
+(upload a document in the Knowledge Base and ask the 3b model about it.) '
 () '
 (This guide is licensed under [CC BY 4.0]\(../../LICENSE-docs\).) '
 () '
@@ -280,33 +284,37 @@ BT
 () '
 (Meshtastic) '
 () '
-(Status: stub. This chapter is not written.) '
+(Status: written for Alpha 3 \(Hatchet\).) '
 () '
-(This chapter will cover the Meshtastic tools included on the image \(meshtasticd and the Meshtastic ) '
-() '
-(Requirements: [the specification]\(../SPEC.md\), sections 1 and 9.) '
+(meshtasticd is installed from the Meshtastic repository configured for Debian 13.) '
+(Meshtastic Web is one of the Supply Depot containers, published on port 9443 for the local) '
+(network. MeshCore Web is started on port 9444 when its image can be pulled. Vaultwarden is) '
+(not installed.) '
 () '
 (This guide is licensed under [CC BY 4.0]\(../../LICENSE-docs\).) '
 () '
 (ham-tools.md) '
 () '
-(Ham and SDR tools) '
-() '
-(Status: stub. This chapter is not written.) '
-() '
-(This chapter will cover the ham and SDR programs included on the image: GQRX, WSJT-X, Fldigi, and CH) '
 ET
 endstream
 endobj
 9 0 obj
-<< /Length 178 >>
+<< /Length 560 >>
 stream
 BT
 /F1 11 Tf
 50 780 Td
 14 TL
+(Ham and SDR tools) '
 () '
-(Requirements: [the specification]\(../SPEC.md\), section 9.) '
+(Status: written for Alpha 3 \(Hatchet\).) '
+() '
+(The full image includes GQRX, WSJT-X, Fldigi, CHIRP, JS8Call, Pat, Dire Wolf, Xastir, and) '
+(gpsd. FoxtrotGPS is not in Debian 13, so it is not installed. Map tiles you add yourself) '
+(belong under /library.) '
+() '
+(Serial consoles for radios and boards use minicom, picocom, or screen. Arduino IDE and) '
+(PlatformIO install with the Alpha 3 extras. KiCad does too.) '
 () '
 (This guide is licensed under [CC BY 4.0]\(../../LICENSE-docs\).) '
 () '
@@ -338,18 +346,18 @@ xref
 0000000058 00000 n 
 0000000151 00000 n 
 0000000221 00000 n 
-0000002022 00000 n 
-0000003901 00000 n 
-0000005963 00000 n 
-0000007933 00000 n 
-0000009442 00000 n 
-0000009671 00000 n 
-0000009798 00000 n 
-0000009925 00000 n 
-0000010052 00000 n 
-0000010179 00000 n 
-0000010306 00000 n 
+0000002196 00000 n 
+0000004235 00000 n 
+0000006244 00000 n 
+0000008356 00000 n 
+0000010502 00000 n 
+0000011113 00000 n 
+0000011240 00000 n 
+0000011367 00000 n 
+0000011494 00000 n 
+0000011621 00000 n 
+0000011748 00000 n 
 trailer << /Size 16 /Root 1 0 R >>
 startxref
-10433
+11875
 %%EOF

@@ -1,7 +1,3 @@
 #!/bin/sh
-# Keep the desktop on Daybreak or Nightwatch while the session is open.
-/usr/bin/cyberdeck-theme
-while true; do
-	sleep 600
-	/usr/bin/cyberdeck-theme
-done
+# Re-apply the wallpaper on login and whenever the clock or zone changes.
+exec /usr/bin/cyberdeck-theme --watch

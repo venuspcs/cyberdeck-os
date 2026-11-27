@@ -1,8 +1,11 @@
 NAME="Cyberdeck OS"
-PRETTY_NAME="Cyberdeck OS Version 1 (Alpha)"
-VERSION="1 (Alpha)"
-VERSION_ID="1"
+PRETTY_NAME="Cyberdeck OS Alpha 3 (Hatchet)"
+VERSION="Alpha 3 (Hatchet)"
+VERSION_ID=alpha3
 VERSION_CODENAME=trixie
+VARIANT="Alpha 3"
+VARIANT_ID=alpha3
+BUILD_ID=3
 ID=cyberdeck
 ID_LIKE=debian
 HOME_URL="https://github.com/venuspcs/cyberdeck-os"

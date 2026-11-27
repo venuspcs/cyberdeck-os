@@ -1,48 +1,35 @@
 # Maintaining the OS and Nomad
 
-**Status: stub, except the Wi-Fi note.** The rest of this chapter is not written.
+**Status: written for Alpha 3 (Hatchet).**
 
 ## Wi-Fi
 
-Two separate problems showed up on an Asus Vivobook S16 with a MediaTek MT7922 (`mt7921e`).
+The image turns Wi-Fi power saving off (`wifi.powersave = 2`) and sets `options mt7921e disable_aspm=1` for the MediaTek MT7922. Scans and connections use one stable MAC (`wifi.scan-rand-mac-address=no` and `wifi.cloned-mac-address=stable`). MediaTek firmware stays on Debian 13, not backports.
 
-The connection dropped every few minutes on kernel `7.3.4+deb13`.
-The image turns power saving off and disables ASPM for that driver:
+On a WPA2/WPA3 mixed router such as Starlink, if the link drops after it associates, edit the connection and set security to WPA2 (`wpa-psk`). Forget the network once after upgrading so the stable MAC is saved.
 
-`/etc/NetworkManager/conf.d/default-wifi-powersave-off.conf` sets `wifi.powersave = 2`
+If the backports kernel still cannot join, boot the menu line that contains `6.12`.
 
-`/etc/modprobe.d/mt7921e.conf` sets `options mt7921e disable_aspm=1`
+## Clock and wallpaper
 
-A Starlink Mini SSID then failed immediately on 5 GHz.
-Ethernet was plugged into that same router.
-The log line is `CTRL-EVENT-SSID-TEMP-DISABLED` with `reason=CONN_FAILED` at 802.11 authenticate.
-Another router's SSID worked. The same laptop worked on Zorin OS and Linux Mint.
-Those systems are Ubuntu-based.
-Zorin 17 is 22.04. Mint 22 is 24.04. Both use Ubuntu `linux-firmware`.
-This image had been using Linux 7.3.4 and MediaTek firmware `20260916` from Debian backports.
-The MT7922 patch file in that package is dated `20260724`.
+Daybreak (light) runs from 06:30 until 18:30 in the timezone the desktop is using. Nightwatch is every other time. The switch runs at login, again within 15 seconds of a clock or timezone change, and after the machine resumes. The choice is logged in `~/.local/share/cyberdeck-theme.log`.
 
-Debian's NetworkManager also scanned with a random MAC and connected with the permanent MAC.
-`mt7921e` is not in the driver list that skips MAC changes.
-The image now scans and connects with one stable MAC:
+9:00 America/Chicago is Daybreak. 21:00 America/Chicago is Nightwatch.
 
-`/etc/NetworkManager/conf.d/wifi-stable-mac.conf`
+## Time sync
 
-`wifi.scan-rand-mac-address=no` and `wifi.cloned-mac-address=stable`
+`systemd-timesyncd` is installed and enabled. System Settings can turn NTP on. If it still says it cannot change NTP, run `timedatectl set-ntp true`.
 
-MediaTek firmware stays on Debian 13 `firmware-mediatek` (`20250410-2`), not backports.
-Wi-Fi still uses `wpa_supplicant`. iwd is not installed. WPA3 is not turned off for every network.
+## Manual
 
-On a WPA2/WPA3 mixed router, such as Starlink, WPA3 (SAE) can still drop after it connects.
-Open the connection and set security to WPA2 (`wpa-psk`).
-Forget the network once after this image update so the stable MAC is used.
+The desktop icon **Cyberdeck OS Manual** opens the PDF in Okular. Okular is the default PDF application.
 
-The boot menu lists the Debian 13 stock kernel, `6.12`, next to `7.3.4`.
-Choose the `6.12` entry if the backports kernel still cannot join the Starlink SSID.
-AMD graphics firmware stays on backports. Only `firmware-mediatek` is held back.
+## Snapshots
 
-This chapter will cover routine care of Cyberdeck OS and Project Nomad through the Cyberdeck Control Panel: update, repair, backup, drive health, restarting Nomad, and the theme and display-mode controls (Daybreak, Nightwatch, night vision, sunlight mode, low-power/solar). It will also point at the support-the-creator link inside that panel.
+Snapper keeps the 4 newest numbered snapshots (`NUMBER_LIMIT=4`), which is two pre/post pairs from apt. Apt takes a snapshot before it changes packages.
 
-Requirements: [the specification](../SPEC.md), sections 7 and 12 through 14.
+## Support
+
+**Support Cyberdeck OS** in the menu opens X Money, Cash App, and Venmo. Nothing is charged from that window.
 
 This guide is licensed under [CC BY 4.0](../../LICENSE-docs).

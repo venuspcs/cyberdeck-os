@@ -1,9 +1,7 @@
 # Meshtastic
 
-**Status: stub.** This chapter is not written.
+**Status: written for Alpha 3 (Hatchet).**
 
-This chapter will cover the Meshtastic tools included on the image (`meshtasticd` and the Meshtastic web client) and Meshtastic Web as a Project Nomad container.
-
-Requirements: [the specification](../SPEC.md), sections 1 and 9.
+`meshtasticd` is installed from the Meshtastic repository configured for Debian 13. Meshtastic Web is one of the Supply Depot containers, published on port 9443 for the local network. MeshCore Web is started on port 9444 when its image can be pulled. Vaultwarden is not installed.
 
 This guide is licensed under [CC BY 4.0](../../LICENSE-docs).

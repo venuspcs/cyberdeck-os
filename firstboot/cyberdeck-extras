@@ -1,0 +1,99 @@
+#!/bin/sh
+# Install Alpha 3 software that is too large for the ISO, or not redistributable.
+# Safe to run again. A missing package is logged and does not stop the rest.
+set -u
+LOG=/var/log/cyberdeck-extras.log
+DONE=/var/lib/cyberdeck/extras.done
+mkdir -p /var/lib/cyberdeck /etc/apt/keyrings /etc/apt/sources.list.d
+exec >>"$LOG" 2>&1
+echo "=== cyberdeck-extras $(date -Is) ==="
+if ! curl -fsS --max-time 20 -o /dev/null https://deb.debian.org/debian/; then
+	echo "offline, will try again later"
+	exit 0
+fi
+export DEBIAN_FRONTEND=noninteractive
+
+add_key() {
+	url="$1"
+	dest="$2"
+	if [ -s "$dest" ]; then
+		return 0
+	fi
+	tmp=$(mktemp)
+	if curl -fsSL "$url" | gpg --dearmor >"$tmp"; then
+		install -m 0644 "$tmp" "$dest"
+	fi
+	rm -f "$tmp"
+}
+
+write_src() {
+	path="$1"
+	body="$2"
+	printf '%s\n' "$body" > "$path"
+}
+
+add_key https://downloads.cursor.com/keys/anysphere.asc /etc/apt/keyrings/grok-bot.gpg
+write_src /etc/apt/sources.list.d/grok-bot.sources "Types: deb
+URIs: https://downloads.cursor.com/aptrepo
+Suites: grok-bot
+Components: main
+Architectures: amd64
+Signed-By: /etc/apt/keyrings/grok-bot.gpg"
+
+add_key https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg /etc/apt/keyrings/brave-browser.gpg
+write_src /etc/apt/sources.list.d/brave.sources "Types: deb
+URIs: https://brave-browser-apt-release.s3.brave.com/
+Suites: stable
+Components: main
+Architectures: amd64
+Signed-By: /etc/apt/keyrings/brave-browser.gpg"
+
+add_key https://updates.signal.org/desktop/apt/keys.asc /etc/apt/keyrings/signal-desktop.gpg
+write_src /etc/apt/sources.list.d/signal.sources "Types: deb
+URIs: https://updates.signal.org/desktop/apt
+Suites: xenial
+Components: main
+Architectures: amd64
+Signed-By: /etc/apt/keyrings/signal-desktop.gpg"
+
+add_key https://packages.microsoft.com/keys/microsoft.asc /etc/apt/keyrings/microsoft.gpg
+write_src /etc/apt/sources.list.d/vscode.sources "Types: deb
+URIs: https://packages.microsoft.com/repos/code
+Suites: stable
+Components: main
+Architectures: amd64
+Signed-By: /etc/apt/keyrings/microsoft.gpg"
+
+add_key https://www.virtualbox.org/download/oracle_vbox_2016.asc /etc/apt/keyrings/virtualbox.gpg
+write_src /etc/apt/sources.list.d/virtualbox.sources "Types: deb
+URIs: https://download.virtualbox.org/virtualbox/debian
+Suites: trixie
+Components: contrib
+Architectures: amd64
+Signed-By: /etc/apt/keyrings/virtualbox.gpg"
+
+apt-get update || true
+for pkg in gimp krita kdenlive audacity obs-studio calibre kicad arduino platformio kdegames grok-bot brave-browser signal-desktop code virtualbox-7.2; do
+	if apt-get install -y "$pkg"; then
+		echo "installed $pkg"
+	else
+		echo "skipped $pkg"
+	fi
+done
+echo "VirtualBox needs its kernel module signed when Secure Boot is on. This image expects Secure Boot off."
+
+if command -v flatpak >/dev/null 2>&1; then
+	flatpak remote-add --if-not-exists --system flathub https://dl.flathub.org/repo/flathub.flatpakrepo || true
+	for app in org.libretro.RetroArch io.github.peazip.PeaZip io.github.shiftey.Desktop; do
+		if flatpak install -y --noninteractive --system flathub "$app"; then
+			echo "installed $app"
+		else
+			echo "skipped $app"
+		fi
+	done
+fi
+
+echo "Not in Debian 13, and no signed package is shipped: kismet, speedcrunch, foxtrotgps, briar, veracrypt."
+echo "Debian already provides rustc, cargo, and rust-analyzer. rustup is optional."
+date -Is > "$DONE"
+echo "extras finished"

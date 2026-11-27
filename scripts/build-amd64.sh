@@ -43,8 +43,8 @@ do
 		exit 1
 	fi
 done
-if ! grep -q 'Cyberdeck OS Version 1 (Alpha)' chroot/usr/lib/os-release; then
-	echo "os-release is not Cyberdeck OS Version 1 (Alpha)." >&2
+if ! grep -q 'Cyberdeck OS Alpha 3 (Hatchet)' chroot/usr/lib/os-release; then
+	echo "os-release is not Cyberdeck OS Alpha 3 (Hatchet)." >&2
 	exit 1
 fi
 if grep -q '^deb ' chroot/etc/apt/sources.list; then

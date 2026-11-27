@@ -1,11 +1,15 @@
 # Adding software
 
-**Status: stub.** This chapter is not written.
+**Status: written for Alpha 3 (Hatchet).**
 
-This chapter will cover the three ways to install more software: the terminal (Debian packages), Project Nomad, and Flatpak with Flathub. It will also describe the offline package cache stored on `/library`.
+Debian packages install with apt. The host sources are Debian 13 (main, contrib, non-free, non-free-firmware), updates, security, and backports. Do not add Ubuntu, Sid, or Testing.
 
-The image baseline stays as specified: Firefox ESR, Google Chrome (from Google's repository, when online), full media codecs, VLC, a Jellyfin client, LibreOffice, Flatpak with Flathub, firmware, Mesa/Vulkan, Meshtastic tools, the ham and SDR tools, the Field Dashboard, an OpenStreetMap viewer with tiles under `/library/maps`, and a host firewall. Other distributions' packages belong in Distrobox, not in the host apt sources. Other packages are ones the user adds.
+These are already in the full image: the network tools (nmap, zenmap, Wireshark, tcpdump, and the rest of that set except Kismet), qBittorrent, Tor Browser launcher, KeePassXC, Syncthing, GParted, Okular, BleachBit, Remmina, FileZilla, Ark, 7-Zip, Xarchiver, KCalc, Qalculate!, Galculator, the build tools, Git, Rust from Debian, Node, Go, the radio tools that Debian ships (JS8Call, Pat, Dire Wolf, Xastir, gpsd), WireGuard, ClamAV, Lynis, cool-retro-term, btop, Conky, and Foliate.
 
-Requirements: [the specification](../SPEC.md), sections 1, 9, and 11.
+GIMP, Krita, Kdenlive, Audacity, OBS Studio, Calibre, KiCad, Arduino, PlatformIO, the KDE games set, RetroArch, PeaZip, GitHub Desktop, Brave, Signal, VS Code, VirtualBox, and Grok Bot install when the machine is online. Open **Install Alpha 3 extras** or wait for its timer. They are not copied into the ISO because of size or license.
+
+Kismet, SpeedCrunch, FoxtrotGPS, Briar, and VeraCrypt are not in Debian 13 and this image does not add an unsigned repository for them.
+
+Chrome and Grok Bot come from their publishers' apt repositories. The packages are not stored in the ISO.
 
 This guide is licensed under [CC BY 4.0](../../LICENSE-docs).

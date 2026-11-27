@@ -149,7 +149,8 @@ After=local-fs.target
 EOF
 systemctl daemon-reload || true
 
-mkdir -p /library/nomad/storage /library/nomad/mysql /library/nomad/redis /library/ollama /library/open-webui
+mkdir -p /library/nomad/storage/qdrant /library/nomad/storage/zim /library/nomad/storage/kolibri 	/library/nomad/storage/notes /library/nomad/storage/stirling /library/nomad/storage/filebrowser 	/library/nomad/storage/calibre /library/nomad/storage/books /library/nomad/storage/homebox 	/library/nomad/storage/jellyfin /library/nomad/storage/media 	/library/nomad/mysql /library/nomad/redis /library/ollama /library/open-webui
+chmod 777 /library/nomad/storage/qdrant
 app_key="$(openssl rand -hex 24)"
 db_pass="$(openssl rand -hex 18)"
 root_pass="$(openssl rand -hex 18)"
@@ -157,7 +158,8 @@ sed -e "s/__APP_KEY__/${app_key}/" \
 	-e "s/__DB_PASSWORD__/${db_pass}/" \
 	-e "s/__MYSQL_ROOT__/${root_pass}/" \
 	/usr/share/cyberdeck/nomad-compose.yml.in > /library/nomad/compose.yml
-chmod 600 /library/nomad/compose.yml
+cp /usr/share/cyberdeck/nomad-supply.yml.in /library/nomad/supply.yml
+chmod 600 /library/nomad/compose.yml /library/nomad/supply.yml
 
 display_pci() {
 	lspci -nn 2>/dev/null | grep -Ei 'VGA compatible controller|3D controller|Display controller' || true
@@ -195,6 +197,27 @@ if ask_yes "Pull and start Nomad, Open WebUI, and Ollama now? This needs a netwo
 		echo "Docker Compose is not installed." >&2
 		exit 1
 	fi
+	warn_text_model() {
+		case "$1" in
+			*-text-*)
+				echo "Refusing $1. Tags with -text- are base models and answer with gibberish. Use llama3.2:3b." >&2
+				return 1
+				;;
+		esac
+		return 0
+	}
+	if warn_text_model "llama3.2:3b"; then
+		docker exec nomad_ollama ollama pull llama3.2:3b || echo "Could not pull llama3.2:3b yet." >&2
+		docker exec nomad_ollama ollama show llama3.2:3b || true
+	fi
+	docker compose -f /library/nomad/supply.yml pull || true
+	docker compose -f /library/nomad/supply.yml up -d || echo "Some Supply Depot apps did not start. Vaultwarden is not installed." >&2
+	if curl -fsS --max-time 20 http://127.0.0.1:6333/healthz >/dev/null; then
+		echo "Qdrant is answering on 127.0.0.1:6333."
+	else
+		echo "Qdrant did not answer /healthz yet." >&2
+	fi
+	curl -fsS --max-time 20 -H 'Content-Type: application/json' 		-d '{"model":"llama3.2:3b"}' http://127.0.0.1:8080/api/ollama/models || true
 fi
 
 date -Is > /var/lib/cyberdeck/nomad.done

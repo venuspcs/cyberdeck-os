@@ -1,9 +1,11 @@
 # Updates
 
-**Status: stub.** This chapter is not written.
+**Status: written for Alpha 3 (Hatchet).**
 
-This chapter will cover updating Cyberdeck OS and Project Nomad, the Btrfs snapshot taken before every update, and how that snapshot shows up for rollback.
+`unattended-upgrades` installs Debian security and stable updates. It does not reboot the machine for you. Backports stay available for the kernel, Mesa, and most firmware. `firmware-mediatek` stays on Debian 13.
 
-Requirements: [the specification](../SPEC.md), section 7.
+Flatpak updates run from a daily timer. Discover shows package and Flatpak updates. Apt takes a Snapper snapshot before it changes packages.
+
+Google Chrome, Docker CE, Brave, Signal, VS Code, VirtualBox, and Grok Bot update from their own signed repositories after **Install Alpha 3 extras** has added those repositories.
 
 This guide is licensed under [CC BY 4.0](../../LICENSE-docs).

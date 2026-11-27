@@ -1,0 +1,62 @@
+#!/usr/bin/env python3
+"""Support Cyberdeck OS. Three donation buttons. Nothing is charged from here."""
+
+import subprocess
+import tkinter as tk
+from tkinter import font as tkfont
+
+LINKS = (
+    ("X Money", "https://x.com/VeteranPrepper"),
+    ("Cash App", "https://cash.app/$richardcolbert72"),
+    ("Venmo", "https://venmo.com/u/Richard-Colbert-17"),
+)
+
+
+def open_url(url):
+    subprocess.Popen(["xdg-open", url], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+
+def main():
+    root = tk.Tk()
+    root.title("Support Cyberdeck OS")
+    root.configure(bg="#1c3140")
+    root.resizable(False, False)
+    title = tkfont.Font(family="Sans", size=16, weight="bold")
+    body = tkfont.Font(family="Sans", size=11)
+    tk.Label(
+        root,
+        text="Support Cyberdeck OS",
+        fg="#f4f7f8",
+        bg="#1c3140",
+        font=title,
+        padx=24,
+        pady=16,
+    ).pack()
+    tk.Label(
+        root,
+        text="Alpha 3 (Hatchet) is free. These links open in the browser.\n"
+        "X Money is the $ icon on @VeteranPrepper.",
+        fg="#d5e2e8",
+        bg="#1c3140",
+        font=body,
+        justify="center",
+        padx=24,
+    ).pack()
+    for label, url in LINKS:
+        tk.Button(
+            root,
+            text=label,
+            command=lambda url=url: open_url(url),
+            bg="#f4f7f8",
+            fg="#1c3140",
+            font=body,
+            padx=12,
+            pady=8,
+            width=22,
+        ).pack(pady=6)
+    tk.Button(root, text="Close", command=root.destroy, padx=12, pady=6).pack(pady=14)
+    root.mainloop()
+
+
+if __name__ == "__main__":
+    main()
