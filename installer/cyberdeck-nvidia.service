@@ -1,0 +1,10 @@
+[Unit]
+Description=Enable the NVIDIA driver when a GPU is present
+After=systemd-modules-load.service
+ConditionPathExists=/usr/sbin/cyberdeck-nvidia-enable
+[Service]
+Type=oneshot
+ExecStart=/usr/sbin/cyberdeck-nvidia-enable
+RemainAfterExit=yes
+[Install]
+WantedBy=multi-user.target

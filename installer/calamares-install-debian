@@ -1,0 +1,29 @@
+#!/bin/sh
+# Live installer launcher.
+# Plasma runs on Wayland. Calamares needs root, and Qt refuses a Wayland
+# socket whose runtime directory is owned by another user, so the window
+# is drawn on Xwayland instead. The live user has passwordless sudo.
+set -u
+
+if [ -f /etc/fstab ]; then
+	sudo -n mv /etc/fstab /etc/fstab.orig.calamares || true
+fi
+
+DISPLAY="${DISPLAY:-:0}"
+XAUTHORITY="${XAUTHORITY:-${HOME}/.Xauthority}"
+export DISPLAY XAUTHORITY
+xhost +si:localuser:root || true
+
+sudo -n env \
+	DISPLAY="$DISPLAY" \
+	XAUTHORITY="$XAUTHORITY" \
+	QT_QPA_PLATFORM=xcb \
+	QT_AUTO_SCREEN_SCALE_FACTOR=1 \
+	calamares
+rc=$?
+
+xhost -si:localuser:root || true
+if [ -f /etc/fstab.orig.calamares ]; then
+	sudo -n mv /etc/fstab.orig.calamares /etc/fstab || true
+fi
+exit "$rc"

@@ -1,0 +1,142 @@
+#!/bin/sh
+# Configure the Cyberdeck OS AMD64 live-build tree.
+# CYBERDECK_PROFILE=ci   (default) plasma, Calamares, snapper, docker, firewall
+# CYBERDECK_PROFILE=full ci packages plus the rest of the spec package set
+
+set -eu
+
+ROOT="$(CDPATH= cd -- "$(dirname "$0")/../../.." && pwd)"
+HERE="$(CDPATH= cd -- "$(dirname "$0")/.." && pwd)"
+cd "${HERE}"
+
+PROFILE="${CYBERDECK_PROFILE:-ci}"
+case "${PROFILE}" in
+	ci|full) ;;
+	*)
+		echo "Unknown CYBERDECK_PROFILE=${PROFILE} (use ci or full)" >&2
+		exit 1
+		;;
+esac
+
+mkdir -p config/package-lists \
+	config/includes.chroot_after_packages/etc/cyberdeck \
+	config/includes.chroot_after_packages/usr/sbin \
+	config/includes.chroot_after_packages/usr/bin \
+	config/includes.chroot_after_packages/usr/lib/live/config \
+	config/includes.chroot_after_packages/usr/share/cyberdeck \
+	config/includes.chroot_after_packages/usr/share/applications \
+	config/includes.chroot_after_packages/etc/xdg/autostart \
+	config/includes.chroot_after_packages/etc/calamares/branding/cyberdeck \
+	config/includes.chroot_after_packages/etc/calamares/modules \
+	config/includes.chroot_after_packages/etc/apt/apt.conf.d \
+	config/includes.chroot_after_packages/etc/apt/sources.list.d \
+	config/includes.chroot_after_packages/etc/apt/preferences.d \
+	config/includes.chroot_after_packages/etc/systemd/system \
+	config/includes.chroot_after_packages/etc/polkit-1/rules.d \
+	config/includes.chroot_after_packages/usr/share/doc/cyberdeck-os \
+	config/archives \
+	config/preseed \
+	config/hooks/normal
+
+printf '%s\n' "${PROFILE}" > config/includes.chroot_after_packages/etc/cyberdeck/profile
+
+cp "${ROOT}/packages/amd64/ci.list.chroot" config/package-lists/ci.list.chroot
+rm -f config/archives/meshtastic.list.chroot config/archives/meshtastic.key.chroot
+rm -f config/includes.chroot_after_packages/etc/apt/sources.list.d/meshtastic.list
+rm -f config/includes.chroot_after_packages/etc/apt/trusted.gpg.d/meshtastic-obs.asc
+if [ "${PROFILE}" = "full" ]; then
+	cp "${ROOT}/packages/amd64/full.list.chroot" config/package-lists/full.list.chroot
+	cp "${ROOT}/installer/meshtastic.list" config/archives/meshtastic.list.chroot
+	cp "${ROOT}/installer/meshtastic-obs.key" config/archives/meshtastic.key.chroot
+	mkdir -p config/includes.chroot_after_packages/etc/apt/trusted.gpg.d
+	cp "${ROOT}/installer/meshtastic.list" config/includes.chroot_after_packages/etc/apt/sources.list.d/meshtastic.list
+	cp "${ROOT}/installer/meshtastic-obs.key" config/includes.chroot_after_packages/etc/apt/trusted.gpg.d/meshtastic-obs.asc
+else
+	rm -f config/package-lists/full.list.chroot
+fi
+
+# Installer, first-boot, and image overlays. Source of truth is the repo
+# directories; this copy is what live-build puts in the squashfs.
+cp "${ROOT}/installer/cyberdeck-autoinstall" config/includes.chroot_after_packages/usr/sbin/cyberdeck-autoinstall
+cp "${ROOT}/installer/cyberdeck-snapper-setup" config/includes.chroot_after_packages/usr/sbin/cyberdeck-snapper-setup
+cp "${ROOT}/installer/cyberdeck-snap-pre" config/includes.chroot_after_packages/usr/sbin/cyberdeck-snap-pre
+cp "${ROOT}/installer/cyberdeck-nvidia-enable" config/includes.chroot_after_packages/usr/sbin/cyberdeck-nvidia-enable
+cp "${ROOT}/firstboot/cyberdeck-nomad-setup" config/includes.chroot_after_packages/usr/sbin/cyberdeck-nomad-setup
+cp "${ROOT}/firstboot/cyberdeck-welcome" config/includes.chroot_after_packages/usr/bin/cyberdeck-welcome
+cp "${ROOT}/firstboot/cyberdeck-control-panel" config/includes.chroot_after_packages/usr/bin/cyberdeck-control-panel
+cp "${ROOT}/firstboot/nomad-compose.yml.in" config/includes.chroot_after_packages/usr/share/cyberdeck/nomad-compose.yml.in
+cp "${ROOT}/firstboot/live-sddm-autologin" config/includes.chroot_after_packages/usr/lib/live/config/9990-cyberdeck-sddm
+cp "${ROOT}/installer/calamares/settings.conf" config/includes.chroot_after_packages/etc/calamares/settings.conf
+cp "${ROOT}/installer/calamares/modules/"*.conf config/includes.chroot_after_packages/etc/calamares/modules/
+cp "${ROOT}/installer/calamares/branding.desc" config/includes.chroot_after_packages/etc/calamares/branding/cyberdeck/branding.desc
+cp "${ROOT}/installer/install-cyberdeck-os.desktop" config/includes.chroot_after_packages/usr/share/applications/calamares-install-debian.desktop
+install -m 0755 "${ROOT}/installer/calamares-install-debian" config/includes.chroot_after_packages/usr/bin/calamares-install-debian
+cp "${ROOT}/installer/49-cyberdeck-calamares.rules" config/includes.chroot_after_packages/etc/polkit-1/rules.d/49-cyberdeck-calamares.rules
+cp "${ROOT}/firstboot/cyberdeck-welcome.desktop" config/includes.chroot_after_packages/usr/share/applications/cyberdeck-welcome.desktop
+cp "${ROOT}/firstboot/cyberdeck-control-panel.desktop" config/includes.chroot_after_packages/usr/share/applications/cyberdeck-control-panel.desktop
+cp "${ROOT}/firstboot/cyberdeck-welcome-autostart.desktop" config/includes.chroot_after_packages/etc/xdg/autostart/cyberdeck-welcome.desktop
+cp "${ROOT}/installer/80cyberdeck-snapper" config/includes.chroot_after_packages/etc/apt/apt.conf.d/80cyberdeck-snapper
+cp "${ROOT}/installer/cyberdeck-backports.list" config/includes.chroot_after_packages/etc/apt/sources.list.d/cyberdeck-backports.list
+cp "${ROOT}/installer/cyberdeck-kernel.pref" config/includes.chroot_after_packages/etc/apt/preferences.d/cyberdeck-kernel
+cp "${ROOT}/installer/cyberdeck-autoinstall.service" config/includes.chroot_after_packages/etc/systemd/system/cyberdeck-autoinstall.service
+cp "${ROOT}/installer/cyberdeck-nvidia.service" config/includes.chroot_after_packages/etc/systemd/system/cyberdeck-nvidia.service
+cp "${ROOT}/branding/TODO-themes.txt" config/includes.chroot_after_packages/usr/share/doc/cyberdeck-os/TODO-themes.txt
+cp "${ROOT}/dashboard/TODO-dashboard.txt" config/includes.chroot_after_packages/usr/share/doc/cyberdeck-os/TODO-dashboard.txt
+rm -rf config/includes.chroot_after_packages/usr/share/cyberdeck/branding
+mkdir -p config/includes.chroot_after_packages/usr/share/cyberdeck/branding
+cp -a "${ROOT}/branding/image/." config/includes.chroot_after_packages/usr/share/cyberdeck/branding/
+cp "${ROOT}/installer/cyberdeck-apply-image" config/includes.chroot_after_packages/usr/sbin/cyberdeck-apply-image
+cp "${ROOT}/installer/cyberdeck-chrome-install" config/includes.chroot_after_packages/usr/sbin/cyberdeck-chrome-install
+cp "${ROOT}/firstboot/cyberdeck-theme" config/includes.chroot_after_packages/usr/bin/cyberdeck-theme
+cp "${ROOT}/firstboot/cyberdeck-theme-daemon" config/includes.chroot_after_packages/usr/bin/cyberdeck-theme-daemon
+cp "${ROOT}/firstboot/cyberdeck-nomad-launch" config/includes.chroot_after_packages/usr/bin/cyberdeck-nomad-launch
+cp "${ROOT}/firstboot/cyberdeck-theme.desktop" config/includes.chroot_after_packages/etc/xdg/autostart/cyberdeck-theme.desktop
+chmod 755 config/includes.chroot_after_packages/usr/sbin/* \
+	config/includes.chroot_after_packages/usr/bin/* \
+	config/includes.chroot_after_packages/usr/lib/live/config/9990-cyberdeck-sddm
+
+cp "${ROOT}/installer/cyberdeck-backports.list" config/archives/backports.list.chroot
+cp "${ROOT}/installer/cyberdeck-kernel.pref" config/archives/backports.pref.chroot
+cp "${ROOT}/installer/preseed.cfg" config/preseed/cyberdeck.cfg.chroot
+
+lb config noauto \
+	--mode debian \
+	--distribution trixie \
+	--parent-distribution trixie \
+	--archive-areas "main contrib non-free-firmware non-free" \
+	--parent-archive-areas "main contrib non-free-firmware non-free" \
+	--mirror-bootstrap "http://deb.debian.org/debian" \
+	--mirror-chroot "http://deb.debian.org/debian" \
+	--mirror-binary "http://deb.debian.org/debian" \
+	--mirror-chroot-security "http://deb.debian.org/debian-security" \
+	--mirror-binary-security "http://deb.debian.org/debian-security" \
+	--security true \
+	--updates true \
+	--binary-images iso-hybrid \
+	--bootloaders "syslinux grub-efi" \
+	--debian-installer none \
+	--memtest none \
+	--win32-loader false \
+	--checksums sha256 \
+	--compression gzip \
+	--apt-recommends true \
+	--firmware-chroot false \
+	--firmware-binary false \
+	--zsync false \
+	--source false \
+	--linux-packages "linux-image" \
+	--linux-flavours amd64 \
+	--iso-application "Cyberdeck OS" \
+	--iso-preparer "Cyberdeck OS live-build" \
+	--iso-publisher "Richard Colbert" \
+	--iso-volume "CYBERDECKOS" \
+	--image-name "cyberdeck-os-amd64" \
+	--bootappend-live "boot=live components username=cyberdeck console=tty0 console=ttyS0,115200" \
+	--bootappend-live-failsafe "boot=live components memtest noapic noapm nodma nomce nosplash username=cyberdeck console=tty0 console=ttyS0,115200" \
+	"${@}"
+
+mkdir -p config/bootloaders/grub-pc/live-theme
+cp "${ROOT}/branding/grub-theme.txt" config/bootloaders/grub-pc/live-theme/theme.txt
+cp "${ROOT}/branding/splash.svg" config/bootloaders/splash.svg
+
+echo "Cyberdeck OS live-build config ready (profile ${PROFILE})."

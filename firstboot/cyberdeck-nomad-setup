@@ -1,0 +1,201 @@
+#!/bin/sh
+# First-boot Project Nomad installer.
+# Picks the /library drive, mounts it by UUID, holds Docker until that
+# mount exists, writes the Nomad compose file, and offers ROCm or CUDA.
+set -eu
+
+if [ "$(id -u)" -ne 0 ]; then
+	exec sudo /usr/sbin/cyberdeck-nomad-setup "$@"
+fi
+
+if grep -q 'cyberdeck.skip-nomad' /proc/cmdline 2>/dev/null; then
+	exit 0
+fi
+
+if [ -e /var/lib/cyberdeck/nomad.done ]; then
+	exit 0
+fi
+
+# On a live boot, leave the wizard to the menu. The autostart entry
+# calls this script; exiting here keeps the live desktop usable.
+if [ -d /run/live/medium ] && [ "${CYBERDECK_SETUP_FORCE:-}" != 1 ]; then
+	exit 0
+fi
+
+# A graphical launch without a terminal cannot show the sudo or whiptail
+# prompts. The desktop entry opens konsole itself. If we are already in
+# a terminal, stay there.
+if [ ! -t 0 ] && { [ -n "${DISPLAY:-}" ] || [ -n "${WAYLAND_DISPLAY:-}" ]; }; then
+	if command -v konsole >/dev/null 2>&1; then
+		exec konsole -e sudo /usr/sbin/cyberdeck-nomad-setup --force
+	fi
+fi
+
+ask_yes() {
+	whiptail --title "Cyberdeck OS" --yesno "$1" 12 70
+}
+
+disk_backing() {
+	src="$(findmnt -no SOURCE "$1" 2>/dev/null || true)"
+	[ -n "${src}" ] || return 0
+	pk="$(lsblk -no PKNAME "${src}" 2>/dev/null | head -1 || true)"
+	if [ -n "${pk}" ]; then
+		printf '/dev/%s\n' "${pk}"
+	else
+		printf '%s\n' "${src}"
+	fi
+}
+
+is_system_disk() {
+	dev="$1"
+	pk="$(lsblk -no PKNAME "${dev}" 2>/dev/null | head -1 || true)"
+	if [ -n "${pk}" ]; then
+		whole="/dev/${pk}"
+	else
+		whole="${dev}"
+	fi
+	for mountpoint in / /boot /boot/efi /run/live/medium; do
+		sys="$(disk_backing "${mountpoint}")"
+		[ -n "${sys}" ] || continue
+		if [ "${whole}" = "${sys}" ] || [ "${dev}" = "${sys}" ]; then
+			return 0
+		fi
+	done
+	return 1
+}
+
+choose_disk() {
+	set -- boot "Folder on the boot drive"
+	# Never offer the disk that holds the running system or the live medium.
+	while IFS= read -r line; do
+		name="$(printf '%s\n' "${line}" | sed -n 's/.*NAME="\([^"]*\)".*/\1/p')"
+		size="$(printf '%s\n' "${line}" | sed -n 's/.*SIZE="\([^"]*\)".*/\1/p')"
+		fstype="$(printf '%s\n' "${line}" | sed -n 's/.*FSTYPE="\([^"]*\)".*/\1/p')"
+		typ="$(printf '%s\n' "${line}" | sed -n 's/.*TYPE="\([^"]*\)".*/\1/p')"
+		[ -n "${name}" ] || continue
+		case "${name}" in
+			/dev/sr*|/dev/fd*|/dev/zram*|/dev/loop*) continue ;;
+		esac
+		if is_system_disk "${name}"; then
+			continue
+		fi
+		case "${typ}" in
+			disk)
+				if [ -n "${fstype}" ]; then
+					label="${size} ${fstype}"
+				else
+					label="${size} empty disk"
+				fi
+				;;
+			part)
+				[ -n "${fstype}" ] || continue
+				label="${size} ${fstype} partition"
+				;;
+			*) continue ;;
+		esac
+		set -- "$@" "${name}" "${label}"
+	done <<EOF
+$(lsblk -P -p -o NAME,SIZE,FSTYPE,TYPE)
+EOF
+	whiptail --title "Project Nomad" --menu "Where should /library live?" 20 72 8 "$@" 3>&1 1>&2 2>&3
+}
+
+mkdir -p /var/lib/cyberdeck /etc/cyberdeck /library
+
+choice="$(choose_disk || true)"
+if [ -z "${choice}" ]; then
+	echo "No drive chosen."
+	exit 0
+fi
+
+if [ "${choice}" = "boot" ]; then
+	mkdir -p /library
+	# /library is a directory on the root filesystem. Docker's
+	# RequiresMountsFor=/library is satisfied with the root mount.
+else
+	dev="${choice}"
+	if [ ! -b "${dev}" ]; then
+		echo "Not a disk: ${dev}" >&2
+		exit 1
+	fi
+	action="$(whiptail --title "Project Nomad" --menu "Disk ${dev}" 15 70 4 \
+		format "Format it as Btrfs and use it for /library" \
+		asis "Use the filesystem that is already on it" \
+		3>&1 1>&2 2>&3)" || exit 0
+	if [ "${action}" = "format" ]; then
+		mkfs.btrfs -f -L library "${dev}"
+		fstype=btrfs
+	else
+		fstype="$(blkid -s TYPE -o value "${dev}" || true)"
+		if [ -z "${fstype}" ]; then
+			echo "No filesystem on ${dev}. Format it, or pick another disk." >&2
+			exit 1
+		fi
+	fi
+	uuid="$(blkid -s UUID -o value "${dev}")"
+	grep -v '[[:space:]]/library[[:space:]]' /etc/fstab > /etc/fstab.cyberdeck || true
+	mv /etc/fstab.cyberdeck /etc/fstab
+	printf 'UUID=%s /library %s defaults,nofail,x-systemd.device-timeout=30 0 2\n' \
+		"${uuid}" "${fstype}" >> /etc/fstab
+	mkdir -p /library
+	mount /library || mount "${dev}" /library
+fi
+
+mkdir -p /etc/systemd/system/docker.service.d
+cat > /etc/systemd/system/docker.service.d/library.conf <<'EOF'
+[Unit]
+RequiresMountsFor=/library
+After=local-fs.target
+EOF
+systemctl daemon-reload || true
+
+mkdir -p /library/nomad/storage /library/nomad/mysql /library/nomad/redis /library/ollama /library/open-webui
+app_key="$(openssl rand -hex 24)"
+db_pass="$(openssl rand -hex 18)"
+root_pass="$(openssl rand -hex 18)"
+sed -e "s/__APP_KEY__/${app_key}/" \
+	-e "s/__DB_PASSWORD__/${db_pass}/" \
+	-e "s/__MYSQL_ROOT__/${root_pass}/" \
+	/usr/share/cyberdeck/nomad-compose.yml.in > /library/nomad/compose.yml
+chmod 600 /library/nomad/compose.yml
+
+display_pci() {
+	lspci -nn 2>/dev/null | grep -Ei 'VGA compatible controller|3D controller|Display controller' || true
+}
+
+if display_pci | grep -qi nvidia; then
+	if ask_yes "An NVIDIA GPU is present. Install nvidia-driver and nvidia-cuda-toolkit, and let Ollama use the GPU?"; then
+		apt-get update
+		apt-get install -y nvidia-driver nvidia-cuda-toolkit || apt-get install -y nvidia-driver || true
+		echo "NVIDIA driver install was requested. Ollama stays bound to 127.0.0.1:11434. Give the container GPUs after nvidia-container-toolkit is installed." > /var/lib/cyberdeck/gpu.txt
+	fi
+fi
+if display_pci | grep -Eqi 'amd/ati|advanced micro devices'; then
+	if ask_yes "An AMD display device is present. Install the Debian ROCm packages that exist in this release (rocminfo) and keep Ollama ready for a GPU?"; then
+		apt-get update
+		if apt-get install -y rocminfo; then
+			echo "Installed rocminfo. A full ROCm stack is not in the Debian 13 image; Ollama stays on the CPU build until that stack is installed." | tee /var/lib/cyberdeck/gpu.txt
+		else
+			echo "rocminfo is not installable from the configured apt sources." | tee /var/lib/cyberdeck/gpu.txt
+		fi
+	fi
+fi
+
+cat > /etc/cyberdeck/ollama.env <<'EOF'
+OLLAMA_HOST=127.0.0.1:11434
+EOF
+
+if ask_yes "Pull and start Nomad, Open WebUI, and Ollama now? This needs a network. Nomad admin is port 8080, Open WebUI is port 3000, Ollama listens on 127.0.0.1:11434."; then
+	systemctl enable --now docker.service || true
+	if docker compose version >/dev/null 2>&1; then
+		docker compose -f /library/nomad/compose.yml up -d
+	elif command -v docker-compose >/dev/null 2>&1; then
+		docker-compose -f /library/nomad/compose.yml up -d
+	else
+		echo "Docker Compose is not installed." >&2
+		exit 1
+	fi
+fi
+
+date -Is > /var/lib/cyberdeck/nomad.done
+echo "Nomad installer finished. Compose file: /library/nomad/compose.yml"

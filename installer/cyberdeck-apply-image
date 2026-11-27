@@ -1,0 +1,125 @@
+#!/bin/sh
+# Apply Cyberdeck OS identity, apt sources, and artwork.
+# Safe to run again after live-build restores its sources.list.
+set -eu
+
+B=/usr/share/cyberdeck/branding
+export DEBIAN_FRONTEND=noninteractive
+
+install -d -m 0755 /etc/apt/keyrings /etc/apt/sources.list.d /etc/apt/preferences.d \
+	/etc/default/grub.d /etc/cyberdeck /etc/sddm.conf.d /etc/xdg \
+	/etc/NetworkManager/conf.d /etc/modprobe.d \
+	/usr/share/plymouth/themes/cyberdeck \
+	/usr/share/cyberdeck /etc/skel/Desktop /usr/share/applications \
+	/etc/systemd/system
+
+install -m 0644 "$B/keyrings/docker.asc" /etc/apt/keyrings/docker.asc
+install -m 0644 "$B/keyrings/google-chrome.gpg" /etc/apt/keyrings/google-chrome.gpg
+
+install -m 0644 "$B/debian.sources" /etc/apt/sources.list.d/debian.sources
+install -m 0644 "$B/google-chrome.sources" /etc/apt/sources.list.d/google-chrome.sources
+install -m 0644 "$B/docker.sources" /etc/apt/sources.list.d/docker.sources
+install -m 0644 "$B/cyberdeck-hardware.pref" /etc/apt/preferences.d/cyberdeck-hardware
+install -m 0644 "$B/default-wifi-powersave-off.conf" /etc/NetworkManager/conf.d/default-wifi-powersave-off.conf
+install -m 0644 "$B/wifi-stable-mac.conf" /etc/NetworkManager/conf.d/wifi-stable-mac.conf
+install -m 0644 "$B/mt7921e.conf" /etc/modprobe.d/mt7921e.conf
+rm -f /etc/apt/sources.list.d/cyberdeck-backports.list \
+	/etc/apt/sources.list.d/backports.list \
+	/etc/apt/preferences.d/cyberdeck-kernel \
+	/etc/apt/preferences.d/backports.pref
+printf '%s\n' '# Cyberdeck OS apt sources live in /etc/apt/sources.list.d/debian.sources' \
+	> /etc/apt/sources.list
+
+divert() {
+	file="$1"
+	if ! dpkg-divert --list "$file" 2>/dev/null | grep -q "$file"; then
+		dpkg-divert --local --rename --divert "$file.debian" --add "$file"
+	fi
+}
+
+divert /usr/lib/os-release
+divert /etc/issue
+divert /etc/issue.net
+if [ -f /etc/lsb-release ] || dpkg -S /etc/lsb-release >/dev/null 2>&1; then
+	divert /etc/lsb-release || true
+fi
+install -m 0644 "$B/os-release" /usr/lib/os-release
+ln -sfn ../usr/lib/os-release /etc/os-release
+install -m 0644 "$B/issue" /etc/issue
+install -m 0644 "$B/issue.net" /etc/issue.net
+install -m 0644 "$B/lsb-release" /etc/lsb-release
+install -m 0644 "$B/kcm-about-distrorc" /etc/xdg/kcm-about-distrorc
+install -m 0644 "$B/grub-cyberdeck.cfg" /etc/default/grub.d/cyberdeck.cfg
+install -m 0644 "$B/52unattended-upgrades-cyberdeck" /etc/apt/apt.conf.d/52unattended-upgrades-cyberdeck
+install -m 0644 "$B/sddm-cyberdeck.conf" /etc/sddm.conf.d/cyberdeck.conf
+install -m 0644 "$B/kscreenlockerrc" /etc/xdg/kscreenlockerrc
+install -m 0644 "$B/theme.conf" /etc/cyberdeck/theme.conf
+
+install -d -m 0755 /usr/share/wallpapers/cyberdeck
+install -m 0644 "$B/wallpapers/daybreak.png" /usr/share/wallpapers/cyberdeck/daybreak.png
+install -m 0644 "$B/wallpapers/nightwatch.png" /usr/share/wallpapers/cyberdeck/nightwatch.png
+ln -sfn /usr/share/wallpapers/cyberdeck/daybreak.png /usr/share/images/desktop-base/desktop-background || true
+
+if [ -f /usr/share/sddm/themes/breeze/theme.conf ]; then
+	divert /usr/share/sddm/themes/breeze/theme.conf || true
+	if [ ! -f /usr/share/sddm/themes/breeze/theme.conf ]; then
+		cp /usr/share/sddm/themes/breeze/theme.conf.debian /usr/share/sddm/themes/breeze/theme.conf
+	fi
+	sed -i 's|^background=.*|background=/usr/share/wallpapers/cyberdeck/daybreak.png|' \
+		/usr/share/sddm/themes/breeze/theme.conf
+	sed -i 's|^logo=.*|logo=/usr/share/cyberdeck/branding/logo.png|' \
+		/usr/share/sddm/themes/breeze/theme.conf || true
+fi
+
+install -m 0644 "$B/plymouth/cyberdeck.plymouth" /usr/share/plymouth/themes/cyberdeck/cyberdeck.plymouth
+install -m 0644 "$B/plymouth/cyberdeck.script" /usr/share/plymouth/themes/cyberdeck/cyberdeck.script
+install -m 0644 "$B/logo.png" /usr/share/plymouth/themes/cyberdeck/logo.png
+if [ "${1:-}" = "--packages" ] && command -v plymouth-set-default-theme >/dev/null 2>&1; then
+	plymouth-set-default-theme cyberdeck || true
+	update-initramfs -u || true
+fi
+
+if [ -d /etc/calamares/branding/cyberdeck ]; then
+	install -m 0644 "$B/logo.png" /etc/calamares/branding/cyberdeck/logo.png
+	install -m 0644 "$B/slide.png" /etc/calamares/branding/cyberdeck/slide.png
+	install -m 0644 "$B/show.qml" /etc/calamares/branding/cyberdeck/show.qml
+fi
+
+install -d -m 0755 /usr/share/doc/cyberdeck-os
+if [ -f "$B/Cyberdeck-OS-Manual.pdf" ]; then
+	install -m 0644 "$B/Cyberdeck-OS-Manual.pdf" /usr/share/doc/cyberdeck-os/Cyberdeck-OS-Manual.pdf
+	install -m 0644 "$B/Cyberdeck-OS-Manual.odt" /usr/share/doc/cyberdeck-os/Cyberdeck-OS-Manual.odt
+	install -m 0644 "$B/cyberdeck-manual.desktop" /usr/share/applications/cyberdeck-manual.desktop
+	install -m 0644 "$B/cyberdeck-manual.desktop" /etc/skel/Desktop/Cyberdeck-OS-Manual.desktop
+fi
+
+install -m 0644 "$B/cyberdeck-flatpak-update.service" /etc/systemd/system/cyberdeck-flatpak-update.service
+install -m 0644 "$B/cyberdeck-flatpak-update.timer" /etc/systemd/system/cyberdeck-flatpak-update.timer
+install -m 0644 "$B/cyberdeck-chrome.service" /etc/systemd/system/cyberdeck-chrome.service
+install -m 0644 "$B/cyberdeck-chrome.timer" /etc/systemd/system/cyberdeck-chrome.timer
+
+if [ "${1:-}" = "--packages" ]; then
+	apt-get update
+	apt-get remove -y docker.io docker-cli docker-compose docker-buildx podman-docker 2>/dev/null || true
+	apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+	# containerd.io replaces Debian containerd. Put Podman back if that removal took it.
+	apt-get install -y podman distrobox crun
+	# MT7922 firmware from trixie, not the backports snapshot.
+	# 1001 allows this to replace a newer backports package already installed.
+	apt-get install -y --allow-downgrades firmware-mediatek
+	# Debian 13 stock kernel as a GRUB fallback beside the backports kernel.
+	stock_pkg=$(apt-cache show linux-image-amd64 | awk '
+		$1 == "Version:" { ver = $2; next }
+		$1 == "Depends:" && ver ~ /^6\.12\./ { print $2; exit }
+	')
+	if [ -n "${stock_pkg}" ]; then
+		apt-get install -y "${stock_pkg}"
+	fi
+	systemctl enable docker.service || true
+	if command -v flatpak >/dev/null 2>&1; then
+		flatpak remote-add --if-not-exists --system flathub https://dl.flathub.org/repo/flathub.flatpakrepo || true
+	fi
+	systemctl enable cyberdeck-flatpak-update.timer || true
+	systemctl enable cyberdeck-chrome.timer || true
+	systemctl enable unattended-upgrades.service || true
+fi

@@ -1,0 +1,52 @@
+#!/bin/sh
+# Image customizations that depend on packages already being installed.
+set -eu
+
+export DEBIAN_FRONTEND=noninteractive
+
+if [ -d /etc/calamares/branding/debian ]; then
+	mkdir -p /etc/calamares/branding/cyberdeck
+	cp -n /etc/calamares/branding/debian/*.png /etc/calamares/branding/cyberdeck/ 2>/dev/null || true
+	cp -n /etc/calamares/branding/debian/*.qml /etc/calamares/branding/cyberdeck/ 2>/dev/null || true
+fi
+
+if [ -f /etc/ufw/ufw.conf ]; then
+	sed -i 's/^ENABLED=.*/ENABLED=yes/' /etc/ufw/ufw.conf
+fi
+if [ -f /etc/default/ufw ]; then
+	sed -i 's/^DEFAULT_INPUT_POLICY=.*/DEFAULT_INPUT_POLICY="DROP"/' /etc/default/ufw
+	sed -i 's/^DEFAULT_OUTPUT_POLICY=.*/DEFAULT_OUTPUT_POLICY="ACCEPT"/' /etc/default/ufw
+	sed -i 's/^DEFAULT_FORWARD_POLICY=.*/DEFAULT_FORWARD_POLICY="DROP"/' /etc/default/ufw
+fi
+systemctl enable ufw.service 2>/dev/null || true
+systemctl enable docker.service 2>/dev/null || true
+systemctl enable cyberdeck-autoinstall.service 2>/dev/null || true
+systemctl enable cyberdeck-nvidia.service 2>/dev/null || true
+
+if command -v flatpak >/dev/null 2>&1; then
+	flatpak remote-add --if-not-exists --system flathub \
+		https://dl.flathub.org/repo/flathub.flatpakrepo
+	if [ -f /etc/cyberdeck/profile ] && grep -qx full /etc/cyberdeck/profile; then
+		flatpak install -y --noninteractive --system flathub org.jellyfin.JellyfinDesktop
+	fi
+fi
+
+# grub-btrfs is not packaged in Debian 13. Install the upstream scripts.
+if [ ! -x /usr/bin/grub-btrfsd ]; then
+	apt-get update
+	apt-get install -y --no-install-recommends git make ca-certificates
+	rm -rf /tmp/grub-btrfs
+	git clone --depth 1 https://github.com/Antynea/grub-btrfs.git /tmp/grub-btrfs
+	make -C /tmp/grub-btrfs install
+	rm -rf /tmp/grub-btrfs
+fi
+systemctl enable grub-btrfsd.service 2>/dev/null || true
+
+if [ -x /usr/bin/grub-btrfsd ]; then
+	echo "grub-btrfs: installed" > /etc/cyberdeck/grub-btrfs.txt
+else
+	echo "grub-btrfs: missing" > /etc/cyberdeck/grub-btrfs.txt
+fi
+
+dpkg-query -W linux-image-amd64 > /etc/cyberdeck/kernel.txt 2>/dev/null || true
+uname -r > /etc/cyberdeck/uname.txt 2>/dev/null || true

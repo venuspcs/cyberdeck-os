@@ -1,0 +1,40 @@
+---
+componentName: cyberdeck
+welcomeStyleCalamares: true
+welcomeExpandingLogo: true
+windowExpanding: normal
+windowSize: 800px,580px
+windowPlacement: center
+
+strings:
+    productName: "Cyberdeck OS"
+    shortProductName: "Cyberdeck OS"
+    version: "1 (Alpha)"
+    shortVersion: "1"
+    versionedName: "Cyberdeck OS Version 1 (Alpha)"
+    shortVersionedName: "Cyberdeck OS"
+    bootloaderEntryName: "Cyberdeck OS"
+    productUrl: "https://github.com/venuspcs/cyberdeck-os"
+    supportUrl: "https://github.com/venuspcs/cyberdeck-os"
+    knownIssuesUrl: "https://github.com/venuspcs/cyberdeck-os/issues"
+    releaseNotesUrl: "https://github.com/venuspcs/cyberdeck-os"
+    donateUrl: "https://cash.app/$richardcolbert72"
+
+sidebar: widget
+navigation: widget
+
+images:
+    productLogo: "logo.png"
+    productIcon: "logo.png"
+    productWelcome: "slide.png"
+
+slideshow: "show.qml"
+
+# Calamares 3.3 treats a missing style map as a fatal YAML error.
+style:
+    SidebarBackground: "#26475b"
+    SidebarText: "#FFFFFF"
+    SidebarTextCurrent: "#fbfbfb"
+    SidebarBackgroundCurrent: "#265370"
+
+slideshowAPI: 2

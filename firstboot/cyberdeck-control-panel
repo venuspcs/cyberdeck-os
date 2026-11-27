@@ -1,0 +1,15 @@
+#!/bin/sh
+cat <<'EOF'
+Cyberdeck Control Panel is not built yet.
+
+TODO: update, repair, backup, drive health, move /library, restart Nomad,
+Daybreak/Nightwatch, red night-vision, sunlight mode, low-power/solar mode,
+and the support-the-creator link.
+
+Run the Nomad installer again with: sudo cyberdeck-nomad-setup
+EOF
+if [ -t 0 ]; then
+	printf 'Press Enter to close. '
+	read -r _ || true
+fi
+exit 0
