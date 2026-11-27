@@ -6,6 +6,13 @@ set -eu
 B=/usr/share/cyberdeck/branding
 export DEBIAN_FRONTEND=noninteractive
 
+printf '%s\n' cyberdeck > /etc/hostname
+if grep -q '^127\.0\.1\.1' /etc/hosts 2>/dev/null; then
+	sed -i 's/^127\.0\.1\.1.*/127.0.1.1\tcyberdeck/' /etc/hosts
+else
+	printf '%s\n' '127.0.1.1	cyberdeck' >> /etc/hosts
+fi
+
 install -d -m 0755 /etc/apt/keyrings /etc/apt/sources.list.d /etc/apt/preferences.d \
 	/etc/default/grub.d /etc/cyberdeck /etc/sddm.conf.d /etc/xdg \
 	/etc/NetworkManager/conf.d /etc/modprobe.d \

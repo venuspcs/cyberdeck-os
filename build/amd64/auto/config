@@ -139,8 +139,8 @@ lb config noauto \
 	--iso-publisher "Richard Colbert" \
 	--iso-volume "CYBERDECKOS" \
 	--image-name "cyberdeck-os-amd64" \
-	--bootappend-live "boot=live components username=cyberdeck console=tty0 console=ttyS0,115200" \
-	--bootappend-live-failsafe "boot=live components memtest noapic noapm nodma nomce nosplash username=cyberdeck console=tty0 console=ttyS0,115200" \
+	--bootappend-live "boot=live components username=cyberdeck hostname=cyberdeck console=tty0 console=ttyS0,115200" \
+	--bootappend-live-failsafe "boot=live components memtest noapic noapm nodma nomce nosplash username=cyberdeck hostname=cyberdeck console=tty0 console=ttyS0,115200" \
 	"${@}"
 
 mkdir -p config/bootloaders/grub-pc/live-theme
