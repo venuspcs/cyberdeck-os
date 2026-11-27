@@ -15,7 +15,7 @@ Pin-Priority: 500
 
 Package: firmware-mediatek
 Pin: release n=trixie
-Pin-Priority: 990
+Pin-Priority: 1001
 
 Package: mesa mesa-* libgl1-mesa-* libglx-mesa* libegl-mesa* libgbm1 libgl1-mesa-dri mesa-vulkan-drivers mesa-va-drivers mesa-vdpau-drivers
 Pin: release n=trixie-backports

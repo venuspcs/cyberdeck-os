@@ -105,7 +105,8 @@ if [ "${1:-}" = "--packages" ]; then
 	# containerd.io replaces Debian containerd. Put Podman back if that removal took it.
 	apt-get install -y podman distrobox crun
 	# MT7922 firmware from trixie, not the backports snapshot.
-	apt-get install -y firmware-mediatek
+	# 1001 allows this to replace a newer backports package already installed.
+	apt-get install -y --allow-downgrades firmware-mediatek
 	# Debian 13 stock kernel as a GRUB fallback beside the backports kernel.
 	stock_pkg=$(apt-cache show linux-image-amd64 | awk '
 		$1 == "Version:" { ver = $2; next }
