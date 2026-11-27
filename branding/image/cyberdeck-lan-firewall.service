@@ -1,0 +1,12 @@
+[Unit]
+Description=Limit Nomad ports to the local network
+After=docker.service ufw.service
+Wants=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/sbin/cyberdeck-lan-firewall
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

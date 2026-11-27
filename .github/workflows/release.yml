@@ -1,0 +1,156 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Release tag
+        required: true
+        default: v0.3.0-alpha3
+        type: string
+      title:
+        description: Release title
+        required: true
+        default: Cyberdeck OS Alpha 3 (Hatchet)
+        type: string
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: amd64-release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Free disk space
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache /usr/share/swift /usr/local/share/powershell /usr/local/.ghcup /usr/share/miniconda /opt/az /usr/lib/jvm || true
+          sudo docker image prune -af || true
+          sudo apt-get clean
+          df -h
+
+      - name: Resolve tag and title
+        id: rel
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            tag="${{ github.event.inputs.tag }}"
+            title="${{ github.event.inputs.title }}"
+          else
+            tag="${GITHUB_REF_NAME}"
+            title="Cyberdeck OS Alpha 3 (Hatchet)"
+          fi
+          echo "tag=${tag}" >> "$GITHUB_OUTPUT"
+          echo "title=${title}" >> "$GITHUB_OUTPUT"
+
+      - name: Download the ISO built for this commit
+        id: download
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -eu
+          run_id="$(gh run list --workflow build-amd64.yml --commit "${GITHUB_SHA}" --status success --limit 1 --json databaseId --jq '.[0].databaseId')"
+          if [ -z "${run_id}" ] || [ "${run_id}" = "null" ]; then
+            echo "found=false" >> "$GITHUB_OUTPUT"
+            echo "No successful Build AMD64 ISO run for ${GITHUB_SHA}. Building here."
+            exit 0
+          fi
+          rm -rf iso-download
+          if gh run download "${run_id}" --name cyberdeck-os-amd64-full --dir iso-download; then
+            echo "found=true" >> "$GITHUB_OUTPUT"
+            find iso-download -name '*.iso' -printf '%p\n'
+          else
+            echo "found=false" >> "$GITHUB_OUTPUT"
+            echo "Artifact download failed. Building here."
+          fi
+
+      - name: Install Debian live-build
+        if: steps.download.outputs.found != 'true'
+        run: |
+          sudo apt-get update
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y debootstrap debian-archive-keyring squashfs-tools xorriso grub-efi-amd64-bin grub-pc-bin isolinux syslinux-utils mtools
+          curl -fsSL -o /tmp/live-build.deb https://deb.debian.org/debian/pool/main/l/live-build/live-build_20250505+deb13u1_all.deb
+          sudo apt-get install -y /tmp/live-build.deb
+          lb --version
+
+      - name: Build ISO
+        if: steps.download.outputs.found != 'true'
+        run: |
+          chmod +x scripts/build-amd64.sh build/amd64/auto/* build/amd64/config/hooks/normal/*.hook.chroot
+          sudo -E env CYBERDECK_PROFILE=full scripts/build-amd64.sh full
+
+      - name: Split the ISO and write SHA256SUMS
+        id: split
+        run: |
+          set -eu
+          if [ "${{ steps.download.outputs.found }}" = "true" ]; then
+            iso="$(find iso-download -type f -name '*.iso' | head -n 1)"
+          else
+            iso="$(find build/amd64 -maxdepth 1 -type f -name '*.iso' | head -n 1)"
+          fi
+          if [ -z "${iso}" ]; then
+            echo "No ISO to publish." >&2
+            exit 1
+          fi
+          work="${RUNNER_TEMP}/cyberdeck-release"
+          rm -rf "${work}"
+          mkdir -p "${work}"
+          cp -a "${iso}" "${work}/cyberdeck-os-amd64-amd64.hybrid.iso"
+          cd "${work}"
+          split -b 1900M cyberdeck-os-amd64-amd64.hybrid.iso cyberdeck-os-amd64-amd64.hybrid.iso.part-
+          sha256sum cyberdeck-os-amd64-amd64.hybrid.iso cyberdeck-os-amd64-amd64.hybrid.iso.part-* | tee SHA256SUMS
+          # The whole ISO is over GitHub's 2 GB asset limit. The sums file still
+          # records it so a joined download can be checked.
+          rm -f cyberdeck-os-amd64-amd64.hybrid.iso
+          ls -lh
+          echo "dir=${work}" >> "$GITHUB_OUTPUT"
+
+      - name: Create the tag on this commit
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ steps.rel.outputs.tag }}
+        run: |
+          set -eu
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin --tags
+          if git rev-parse -q --verify "refs/tags/${TAG}" >/dev/null; then
+            have="$(git rev-parse "refs/tags/${TAG}^{}")"
+            if [ "${have}" != "${GITHUB_SHA}" ]; then
+              echo "Tag ${TAG} already points at ${have}, not ${GITHUB_SHA}." >&2
+              exit 1
+            fi
+            echo "Tag ${TAG} already points at this commit."
+          else
+            git tag "${TAG}" "${GITHUB_SHA}"
+            git push origin "refs/tags/${TAG}"
+          fi
+
+      - name: Publish the pre-release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ steps.rel.outputs.tag }}
+          TITLE: ${{ steps.rel.outputs.title }}
+          DIR: ${{ steps.split.outputs.dir }}
+        run: |
+          set -eu
+          cd "${DIR}"
+          assets=(cyberdeck-os-amd64-amd64.hybrid.iso.part-* SHA256SUMS)
+          if gh release view "${TAG}" >/dev/null 2>&1; then
+            gh release edit "${TAG}" --prerelease --title "${TITLE}" --notes-file "${GITHUB_WORKSPACE}/RELEASE.md"
+            gh release upload "${TAG}" "${assets[@]}" --clobber
+          else
+            gh release create "${TAG}" "${assets[@]}" --prerelease --title "${TITLE}" --notes-file "${GITHUB_WORKSPACE}/RELEASE.md"
+          fi
+          gh release view "${TAG}" --json url,isPrerelease,tagName --jq '{url:.url,prerelease:.isPrerelease,tag:.tagName}'

@@ -1,0 +1,13 @@
+#!/bin/sh
+# Open Project Nomad Setup in a terminal so sudo can ask for the password.
+# Autostart calls this with no arguments. The menu passes --force.
+set -eu
+if [ "${1:-}" != "--force" ]; then
+	if [ -d /run/live/medium ]; then
+		exit 0
+	fi
+	if [ -e /var/lib/cyberdeck/nomad.done ]; then
+		exit 0
+	fi
+fi
+exec konsole -e sudo /usr/sbin/cyberdeck-nomad-setup --force

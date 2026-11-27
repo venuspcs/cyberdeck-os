@@ -2,7 +2,7 @@
 
 Cyberdeck OS is a Debian 13 live system for 64-bit PCs (AMD64). The image file is one hybrid ISO, `cyberdeck-os-amd64-amd64.hybrid.iso`. It boots on UEFI and on legacy BIOS, and it can install to a disk with Calamares. The desktop icon is **Install Cyberdeck OS**.
 
-The built image calls itself **Cyberdeck OS Version 1 (Alpha)**. That name is not a GitHub Release tag. No numbered release has been published. The ISO filename does not contain a version. Where this guide means the future release tag, it writes `` `<version>` ``.
+Alpha 3 is tag `v0.3.0-alpha3`, titled **Cyberdeck OS Alpha 3 (Hatchet)**. The ISO filename is still `cyberdeck-os-amd64-amd64.hybrid.iso`. GitHub Release files are limited to 2 GB, so the release splits the ISO into parts named `cyberdeck-os-amd64-amd64.hybrid.iso.part-aa`, `part-ab`, and so on. `SHA256SUMS` covers the joined ISO and each part.
 
 This ISO is about 4 GB. Use a USB drive of **8 GB or larger**. Writing the USB erases that drive.
 
@@ -27,9 +27,24 @@ Check the hash before you write the USB. If it does not match, download again. D
 
 Open [the Releases page](https://github.com/venuspcs/cyberdeck-os/releases).
 
-Nothing is published there yet. The project plan is to attach the ISO and `SHA256SUMS` to a GitHub Release, and to mirror a file larger than 2 GB on SourceForge. That mirror has no URL in this repository. When a release exists, use the file names and the SourceForge link printed on that release. The release tag is `` `<version>` ``. Do not guess a filename that puts `` `<version>` `` into the ISO name. The build writes `cyberdeck-os-amd64-amd64.hybrid.iso`.
+Alpha 3 is published there as a pre-release, tag `v0.3.0-alpha3`. Download every `part-*` file and `SHA256SUMS`. The build writes `cyberdeck-os-amd64-amd64.hybrid.iso`; the release splits that file because GitHub allows 2 GB per asset.
 
-GitHub's limit for one Release file is 2 GB. This ISO is larger than that, so a Release may link out to the mirror instead of hosting the ISO itself.
+Join the parts before you check the ISO hash or write the USB.
+
+Linux:
+
+```sh
+cat cyberdeck-os-amd64-amd64.hybrid.iso.part-* > cyberdeck-os-amd64-amd64.hybrid.iso
+sha256sum -c SHA256SUMS
+```
+
+Windows Command Prompt, in the folder that contains the parts:
+
+```bat
+copy /b cyberdeck-os-amd64-amd64.hybrid.iso.part-aa+cyberdeck-os-amd64-amd64.hybrid.iso.part-ab cyberdeck-os-amd64-amd64.hybrid.iso
+```
+
+Add further `+part-ac` names if the release has more than two parts. Then compare `Get-FileHash` with the ISO line in `SHA256SUMS`. Also check each part's own line in `SHA256SUMS` before joining if a download was interrupted.
 
 ### What you can download today
 
@@ -318,7 +333,7 @@ Booting the USB does not install anything. It starts a live desktop. Your intern
 
 **Back up first.** Copy personal files off the computer before you confirm the install. Erase disk deletes every partition on the drive you select. Install alongside keeps the other system and resizes its partition, and that resize can still leave the other system unable to boot. If Windows is encrypted, save the BitLocker recovery key before you start.
 
-1. At the menu titled **Cyberdeck OS Version 1 (Alpha)**, choose a **Live system** line. The current image lists two kernels on that menu: `Live system, kernel 7.3.4+deb13-amd64` and `Live system, kernel 6.12.118+deb13-amd64`. Either line is a valid start. The 6.12 line is the fallback when the newer kernel misbehaves (including some Wi-Fi chips). A later image may print different version numbers. Use the lines that menu shows.
+1. At the menu titled **Cyberdeck OS Alpha 3 (Hatchet)**, choose a **Live system** line. The current image lists two kernels on that menu: `Live system, kernel 7.3.4+deb13-amd64` and `Live system, kernel 6.12.118+deb13-amd64`. Either line is a valid start. The 6.12 line is the fallback when the newer kernel misbehaves (including some Wi-Fi chips). A later image may print different version numbers. Use the lines that menu shows.
 2. Wait for the desktop. The live session logs in by itself as the user `cyberdeck`, password `cyberdeck`, on KDE Plasma (Wayland). That account can use `sudo`. This password is only for the live session.
 3. Open **Install Cyberdeck OS** on the desktop or in the application menu. That starts Calamares.
 4. Walk through Welcome, location, keyboard, partitions, and the user account for the **installed** system. Read the summary. The disk is written when you confirm.

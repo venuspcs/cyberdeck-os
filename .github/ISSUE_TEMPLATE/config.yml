@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Security report
+    url: https://github.com/venuspcs/cyberdeck-os/security/advisories/new
+    about: Report a vulnerability in private. Please do not open a public issue for an unfixed flaw.
+  - name: Project specification
+    url: https://github.com/venuspcs/cyberdeck-os/blob/main/docs/SPEC.md
+    about: Cyberdeck OS is in planning. Read the spec before requesting a feature.

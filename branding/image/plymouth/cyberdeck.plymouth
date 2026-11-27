@@ -1,0 +1,8 @@
+[Plymouth Theme]
+Name=Cyberdeck OS
+Description=Cyberdeck OS Alpha 3 (Hatchet)
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/cyberdeck
+ScriptFile=/usr/share/plymouth/themes/cyberdeck/cyberdeck.script

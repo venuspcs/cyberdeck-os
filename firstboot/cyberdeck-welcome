@@ -1,0 +1,29 @@
+#!/bin/sh
+# TODO: full Welcome app (theme, Wi-Fi, password) is a later milestone.
+# Calamares already asks for the account password. NetworkManager is
+# available for Wi-Fi. This stub opens the Nomad installer when that
+# installer will actually run.
+cat <<'EOF'
+Cyberdeck Welcome is not finished.
+
+TODO for a later milestone:
+  - choose Daybreak or Nightwatch
+  - turn sunrise/sunset switching on or off
+  - join Wi-Fi from this screen
+  - set the account password here (Calamares asks for it today)
+EOF
+
+if [ "${1:-}" = "--autostart" ]; then
+	if [ -e /var/lib/cyberdeck/nomad.done ]; then
+		exit 0
+	fi
+	if grep -q 'cyberdeck.skip-nomad' /proc/cmdline 2>/dev/null; then
+		exit 0
+	fi
+	if [ -d /run/live/medium ]; then
+		exit 0
+	fi
+fi
+
+echo "Opening the Project Nomad installer."
+exec /usr/sbin/cyberdeck-nomad-setup

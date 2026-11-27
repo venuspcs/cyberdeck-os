@@ -1,0 +1,176 @@
+#!/usr/bin/env python3
+"""Apply Daybreak or Nightwatch from the clock the desktop is showing."""
+
+import os
+import sys
+import time
+from datetime import datetime
+from pathlib import Path
+
+try:
+    from zoneinfo import ZoneInfo
+except ImportError:  # pragma: no cover
+    ZoneInfo = None
+
+DAY_WALL = "/usr/share/wallpapers/cyberdeck/daybreak.png"
+NIGHT_WALL = "/usr/share/wallpapers/cyberdeck/nightwatch.png"
+CONF = Path("/etc/cyberdeck/theme.conf")
+
+
+def parse_hm(text):
+    hour, minute = text.strip().split(":", 1)
+    return int(hour), int(minute)
+
+
+def slot(hour, minute, day="06:30", night="18:30"):
+    """Daytime includes the start minute and stops before night."""
+    day_h, day_m = parse_hm(day)
+    night_h, night_m = parse_hm(night)
+    now = hour * 60 + minute
+    if day_h * 60 + day_m <= now < night_h * 60 + night_m:
+        return "day"
+    return "night"
+
+
+def load_bounds():
+    day, night = "06:30", "18:30"
+    if CONF.exists():
+        for raw in CONF.read_text(encoding="utf-8").splitlines():
+            line = raw.split("#", 1)[0].strip()
+            if line.startswith("DAY_START="):
+                day = line.split("=", 1)[1].strip()
+            elif line.startswith("NIGHT_START="):
+                night = line.split("=", 1)[1].strip()
+    return day, night
+
+
+def kde_zone():
+    path = Path.home() / ".config" / "ktimezonedrc"
+    if not path.exists():
+        return None
+    zone = None
+    for raw in path.read_text(encoding="utf-8", errors="replace").splitlines():
+        line = raw.strip()
+        if line.startswith(("Zone=", "LocalZone=", "Timezone=")):
+            zone = line.split("=", 1)[1].strip()
+    return zone or None
+
+
+def system_zone():
+    try:
+        import subprocess
+
+        out = subprocess.check_output(
+            ["timedatectl", "show", "-p", "Timezone", "--value"],
+            text=True,
+            stderr=subprocess.DEVNULL,
+        ).strip()
+        if out and out != "n/a":
+            return out
+    except (OSError, subprocess.CalledProcessError):
+        pass
+    tz = Path("/etc/timezone")
+    if tz.exists():
+        text = tz.read_text(encoding="utf-8").strip()
+        if text:
+            return text
+    return None
+
+
+def current_clock():
+    if os.environ.get("CYBERDECK_THEME_HOUR") and os.environ.get("CYBERDECK_THEME_MINUTE"):
+        return (
+            int(os.environ["CYBERDECK_THEME_HOUR"]),
+            int(os.environ["CYBERDECK_THEME_MINUTE"]),
+            os.environ.get("CYBERDECK_THEME_ZONE", "test"),
+        )
+    zone_name = kde_zone() or system_zone()
+    if zone_name and ZoneInfo is not None:
+        try:
+            now = datetime.now(ZoneInfo(zone_name))
+            return now.hour, now.minute, zone_name
+        except Exception:
+            pass
+    now = datetime.now().astimezone()
+    return now.hour, now.minute, str(now.tzinfo)
+
+
+def choice():
+    day, night = load_bounds()
+    hour, minute, zone = current_clock()
+    which = slot(hour, minute, day, night)
+    wall = DAY_WALL if which == "day" else NIGHT_WALL
+    scheme = "BreezeLight" if which == "day" else "BreezeDark"
+    return which, wall, scheme, hour, minute, zone
+
+
+def apply_desktop(wall, scheme):
+    import subprocess
+
+    if not (os.environ.get("WAYLAND_DISPLAY") or os.environ.get("DISPLAY")):
+        return
+    subprocess.run(["plasma-apply-wallpaperimage", wall], check=False)
+    subprocess.run(["plasma-apply-colorscheme", scheme], check=False)
+    lock = Path.home() / ".config" / "kscreenlockerrc"
+    lock.parent.mkdir(parents=True, exist_ok=True)
+    lock.write_text(
+        "[Greeter]\nWallpaperPlugin=org.kde.image\n\n"
+        "[Greeter][Wallpaper][org.kde.image][General]\n"
+        f"Image={wall}\nFillMode=2\n",
+        encoding="utf-8",
+    )
+    if os.path.exists("/usr/bin/google-chrome-stable"):
+        try:
+            current = subprocess.check_output(
+                ["xdg-settings", "get", "default-web-browser"],
+                text=True,
+                stderr=subprocess.DEVNULL,
+            ).strip()
+        except (OSError, subprocess.CalledProcessError):
+            current = ""
+        if current in ("", "firefox-esr.desktop", "firefox.desktop"):
+            subprocess.run(
+                ["xdg-settings", "set", "default-web-browser", "google-chrome.desktop"],
+                check=False,
+            )
+
+
+def once():
+    which, wall, scheme, hour, minute, zone = choice()
+    print(f"{which} {hour:02d}:{minute:02d} {zone} {wall}")
+    if os.environ.get("CYBERDECK_THEME_DRY") == "1":
+        return which
+    log = Path.home() / ".local" / "share" / "cyberdeck-theme.log"
+    try:
+        log.parent.mkdir(parents=True, exist_ok=True)
+        with log.open("a", encoding="utf-8") as handle:
+            handle.write(f"{hour:02d}:{minute:02d} {zone} -> {which}\n")
+    except OSError:
+        pass
+    apply_desktop(wall, scheme)
+    return which
+
+
+def watch():
+    last_key = None
+    while True:
+        which, _wall, _scheme, hour, minute, zone = choice()
+        key = (which, hour, minute, zone)
+        if key != last_key or os.environ.get("CYBERDECK_THEME_FORCE") == "1":
+            once()
+            last_key = key
+        else:
+            # Still refresh after a zone-file change even if the slot is unchanged.
+            once()
+        time.sleep(15)
+
+
+def main():
+    if "--watch" in sys.argv:
+        watch()
+    else:
+        once()
+
+
+if __name__ == "__main__":
+    main()

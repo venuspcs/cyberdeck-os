@@ -1,0 +1,3 @@
+#!/bin/sh
+# Re-apply the wallpaper on login and whenever the clock or zone changes.
+exec /usr/bin/cyberdeck-theme --watch

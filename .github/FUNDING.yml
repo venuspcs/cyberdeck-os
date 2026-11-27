@@ -1,0 +1,6 @@
+# Custom donation links only.
+# GitHub Sponsors is intentionally omitted until Richard Colbert enrolls.
+# Do not add a github: key before that.
+custom:
+  - "https://cash.app/$richardcolbert72"
+  - "https://venmo.com/u/Richard-Colbert-17"

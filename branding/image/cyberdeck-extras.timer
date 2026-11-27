@@ -1,0 +1,10 @@
+[Unit]
+Description=Retry Alpha 3 extra applications
+
+[Timer]
+OnBootSec=5min
+OnUnitActiveSec=1d
+Persistent=true
+
+[Install]
+WantedBy=timers.target

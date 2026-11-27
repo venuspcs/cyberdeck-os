@@ -1,0 +1,26 @@
+#!/bin/sh
+# Allow Nomad services from RFC1918 LAN only. Docker published ports
+# skip ufw, so the same limits are applied on DOCKER-USER.
+set -u
+ports="8080,8490,8090,9443"
+if command -v ufw >/dev/null 2>&1; then
+	for net in 192.168.0.0/16 10.0.0.0/8; do
+		for port in 8080 8490 8090 9443; do
+			ufw allow from "$net" to any port "$port" proto tcp comment "cyberdeck-lan" >/dev/null 2>&1 || true
+		done
+	done
+fi
+if ! command -v iptables >/dev/null 2>&1; then
+	exit 0
+fi
+iptables -C DOCKER-USER -m comment --comment cyberdeck-lan-drop -j DROP 2>/dev/null && exit 0
+iptables -N CYBERDECK-LAN 2>/dev/null || true
+iptables -F CYBERDECK-LAN
+iptables -A CYBERDECK-LAN -m conntrack --ctstate ESTABLISHED,RELATED -j RETURN
+iptables -A CYBERDECK-LAN -s 127.0.0.0/8 -j RETURN
+iptables -A CYBERDECK-LAN -s 192.168.0.0/16 -j RETURN
+iptables -A CYBERDECK-LAN -s 10.0.0.0/8 -j RETURN
+iptables -A CYBERDECK-LAN -s 172.16.0.0/12 -j RETURN
+iptables -A CYBERDECK-LAN -p tcp -m multiport --dports "$ports" -j DROP
+iptables -C DOCKER-USER -j CYBERDECK-LAN 2>/dev/null || iptables -I DOCKER-USER -j CYBERDECK-LAN
+exit 0

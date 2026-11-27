@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Project Nomad Setup
+Comment=Choose the /library drive and start Project Nomad
+Exec=cyberdeck-nomad-launch --force
+Icon=system-installer
+Terminal=false
+Categories=System;
+StartupNotify=true

@@ -1,0 +1,8 @@
+#!/bin/sh
+# Identity, apt sources, Docker CE, and artwork. Runs after packages.
+set -eu
+export DEBIAN_FRONTEND=noninteractive
+if [ ! -d /etc/calamares/branding/cyberdeck ]; then
+	mkdir -p /etc/calamares/branding/cyberdeck
+fi
+/usr/sbin/cyberdeck-apply-image --packages

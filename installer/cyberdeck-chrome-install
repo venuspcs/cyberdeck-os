@@ -1,0 +1,16 @@
+#!/bin/sh
+# Google Chrome is not redistributed in the ISO. When the machine is online,
+# install the stable package from Google's apt repository.
+set -u
+if [ -x /usr/bin/google-chrome-stable ]; then
+	exit 0
+fi
+if ! curl -fsS --max-time 20 -o /dev/null https://dl.google.com/linux/chrome/deb/dists/stable/Release; then
+	echo "cyberdeck-chrome-install: offline, will try again later" >&2
+	exit 0
+fi
+export DEBIAN_FRONTEND=noninteractive
+apt-get update
+apt-get install -y google-chrome-stable
+update-alternatives --set x-www-browser /usr/bin/google-chrome-stable || true
+exit 0

@@ -1,0 +1,104 @@
+# Project Nomad services for Cyberdeck OS.
+# Secrets marked __NAME__ are filled in by cyberdeck-nomad-setup.
+# Storage is /library. Ollama is published only on 127.0.0.1:11434.
+name: project-nomad
+
+services:
+  admin:
+    image: ghcr.io/crosstalk-solutions/project-nomad:latest
+    container_name: nomad_admin
+    restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "8080:8080"
+    volumes:
+      - /library/nomad/storage:/app/storage
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - NODE_ENV=production
+      - NOMAD_STORAGE_PATH=/library/nomad/storage
+      - PORT=8080
+      - HOST=0.0.0.0
+      - URL=http://localhost:8080
+      - APP_KEY=__APP_KEY__
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_DATABASE=nomad
+      - DB_USER=nomad_user
+      - DB_PASSWORD=__DB_PASSWORD__
+      - DB_NAME=nomad
+      - DB_SSL=false
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - LOG_LEVEL=info
+    depends_on:
+      - mysql
+      - redis
+
+  mysql:
+    image: mysql:8.0
+    container_name: nomad_mysql
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=__MYSQL_ROOT__
+      - MYSQL_DATABASE=nomad
+      - MYSQL_USER=nomad_user
+      - MYSQL_PASSWORD=__DB_PASSWORD__
+    volumes:
+      - /library/nomad/mysql:/var/lib/mysql
+
+  redis:
+    image: redis:7-alpine
+    container_name: nomad_redis
+    restart: unless-stopped
+    volumes:
+      - /library/nomad/redis:/data
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: nomad_ollama
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:11434:11434"
+    environment:
+      - OLLAMA_HOST=0.0.0.0:11434
+    volumes:
+      - /library/ollama:/root/.ollama
+
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: nomad_open_webui
+    restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "127.0.0.1:3000:8080"
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - DEFAULT_MODELS=llama3.2:3b
+    volumes:
+      - /library/open-webui:/app/backend/data
+    depends_on:
+      - ollama
+
+  dozzle:
+    image: amir20/dozzle:v10.0
+    container_name: nomad_dozzle
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:9999:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - DOZZLE_ENABLE_ACTIONS=false
+      - DOZZLE_ENABLE_SHELL=false
+
+  qdrant:
+    image: qdrant/qdrant:v1.16
+    container_name: nomad_qdrant
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:6333:6333"
+    volumes:
+      - /library/nomad/storage/qdrant:/qdrant/storage

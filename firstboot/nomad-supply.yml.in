@@ -1,0 +1,122 @@
+# Supply Depot apps other than Vaultwarden. Data lives under /library.
+# Nomad admin can also manage these names. Vaultwarden is intentionally absent.
+name: project-nomad-supply
+
+services:
+  kiwix:
+    image: ghcr.io/kiwix/kiwix-serve:3.8.1
+    container_name: nomad_kiwix_server
+    restart: unless-stopped
+    ports:
+      - "8090:8080"
+    volumes:
+      - /library/nomad/storage/zim:/data
+    command: ["*.zim"]
+
+  kolibri:
+    image: learningequality/kolibri:latest
+    container_name: nomad_kolibri
+    restart: unless-stopped
+    ports:
+      - "8088:8080"
+    volumes:
+      - /library/nomad/storage/kolibri:/kolibri
+
+  notes:
+    image: dullage/flatnotes:latest
+    container_name: nomad_flatnotes
+    restart: unless-stopped
+    ports:
+      - "8085:8080"
+    volumes:
+      - /library/nomad/storage/notes:/data
+
+  cyberchef:
+    image: mpepping/cyberchef:latest
+    container_name: nomad_cyberchef
+    restart: unless-stopped
+    ports:
+      - "8086:8000"
+
+  stirling:
+    image: stirlingtools/stirling-pdf:latest
+    container_name: nomad_stirling_pdf
+    restart: unless-stopped
+    ports:
+      - "8087:8080"
+    volumes:
+      - /library/nomad/storage/stirling:/configs
+
+  filebrowser:
+    image: filebrowser/filebrowser:latest
+    container_name: nomad_filebrowser
+    restart: unless-stopped
+    ports:
+      - "8089:80"
+    volumes:
+      - /library:/srv
+      - /library/nomad/storage/filebrowser:/config
+
+  calibre:
+    image: lscr.io/linuxserver/calibre-web:latest
+    container_name: nomad_calibre_web
+    restart: unless-stopped
+    ports:
+      - "8083:8083"
+    volumes:
+      - /library/nomad/storage/calibre:/config
+      - /library/nomad/storage/books:/books
+
+  ittools:
+    image: corentinth/it-tools:latest
+    container_name: nomad_it_tools
+    restart: unless-stopped
+    ports:
+      - "8084:80"
+
+  excalidraw:
+    image: excalidraw/excalidraw:latest
+    container_name: nomad_excalidraw
+    restart: unless-stopped
+    ports:
+      - "8082:80"
+
+  homebox:
+    image: ghcr.io/sysadminsmedia/homebox:latest
+    container_name: nomad_homebox
+    restart: unless-stopped
+    ports:
+      - "3100:7745"
+    volumes:
+      - /library/nomad/storage/homebox:/data
+
+  jellyfin:
+    image: jellyfin/jellyfin:latest
+    container_name: nomad_jellyfin
+    restart: unless-stopped
+    ports:
+      - "8490:8096"
+    volumes:
+      - /library/nomad/storage/jellyfin:/config
+      - /library/nomad/storage/media:/media
+
+  libretranslate:
+    image: libretranslate/libretranslate:latest
+    container_name: nomad_libretranslate
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+
+  meshtastic:
+    image: ghcr.io/meshtastic/web:latest
+    container_name: nomad_meshtastic_web
+    restart: unless-stopped
+    ports:
+      - "9443:8080"
+
+  meshcore:
+    image: ghcr.io/meshcore-dev/meshcore-web:latest
+    container_name: nomad_meshcore_web
+    restart: unless-stopped
+    ports:
+      - "9444:8080"

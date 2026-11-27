@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Cyberdeck HUD
+Comment=Battery, CPU temperature, and network
+Exec=conky -c /etc/cyberdeck/conky.conf
+Terminal=false
+OnlyShowIn=KDE;
+X-GNOME-Autostart-enabled=true
