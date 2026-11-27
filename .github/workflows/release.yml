@@ -58,6 +58,7 @@ jobs:
         id: download
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
         run: |
           set -eu
           run_id="$(gh run list --workflow build-amd64.yml --commit "${GITHUB_SHA}" --status success --limit 1 --json databaseId --jq '.[0].databaseId')"
@@ -140,6 +141,8 @@ jobs:
       - name: Publish the pre-release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # This step cds into the split directory, which is not a git checkout.
+          GH_REPO: ${{ github.repository }}
           TAG: ${{ steps.rel.outputs.tag }}
           TITLE: ${{ steps.rel.outputs.title }}
           DIR: ${{ steps.split.outputs.dir }}
@@ -151,6 +154,6 @@ jobs:
             gh release edit "${TAG}" --prerelease --title "${TITLE}" --notes-file "${GITHUB_WORKSPACE}/RELEASE.md"
             gh release upload "${TAG}" "${assets[@]}" --clobber
           else
-            gh release create "${TAG}" "${assets[@]}" --prerelease --title "${TITLE}" --notes-file "${GITHUB_WORKSPACE}/RELEASE.md"
+            gh release create "${TAG}" "${assets[@]}" --prerelease --target "${{ github.sha }}" --title "${TITLE}" --notes-file "${GITHUB_WORKSPACE}/RELEASE.md"
           fi
           gh release view "${TAG}" --json url,isPrerelease,tagName --jq '{url:.url,prerelease:.isPrerelease,tag:.tagName}'
