@@ -1,6 +1,6 @@
 # Cyberdeck OS How-To guide
 
-**Status: outline only.** The chapters linked below are stubs. They are not instructions, and following them will not install or repair a system. There is no image yet.
+**Status: outline only.** The chapters linked below are stubs, except the Wi-Fi drop note in maintenance. They are not a full install or repair guide.
 
 When the guide is written, it will ship offline as a PDF, a Kiwix ZIM, and an ODT file, so it can be read from Project Nomad without the network. Those editions are not built yet. Generated copies belong on a release or under `docs/guide/dist/` (gitignored), not next to the chapter source.
 
@@ -28,9 +28,11 @@ Choosing a snapshot from the boot menu, returning to the previous root, and what
 
 ### 5. [Maintenance](maintenance.md)
 
-Day-to-day care of the OS and of Project Nomad: the Cyberdeck Control Panel (update, repair, backup, drive health, restart Nomad), disk space, and logs worth keeping.
+Day-to-day care of the OS and of Project Nomad: the Cyberdeck Control Panel (update, repair, backup, drive health, restart Nomad), disk space, and logs worth keeping. The written note covers Wi-Fi drops on the MediaTek MT7922 and WPA2/WPA3 mixed routers.
 
 ### 6. [Adding software](adding-software.md)
+
+### 6b. [Other systems with Distrobox](containers.md)
 
 The three supported ways to add software: the terminal, Project Nomad, and Flatpak with Flathub. The offline package cache on `/library`.
 

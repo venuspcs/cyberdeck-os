@@ -1,0 +1,11 @@
+NAME="Cyberdeck OS"
+PRETTY_NAME="Cyberdeck OS Version 1 (Alpha)"
+VERSION="1 (Alpha)"
+VERSION_ID="1"
+VERSION_CODENAME=trixie
+ID=cyberdeck
+ID_LIKE=debian
+HOME_URL="https://github.com/venuspcs/cyberdeck-os"
+SUPPORT_URL="https://github.com/venuspcs/cyberdeck-os"
+BUG_REPORT_URL="https://github.com/venuspcs/cyberdeck-os/issues"
+LOGO=/usr/share/cyberdeck/branding/logo.png

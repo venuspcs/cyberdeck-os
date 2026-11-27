@@ -22,10 +22,12 @@ if [ -d /run/live/medium ] && [ "${CYBERDECK_SETUP_FORCE:-}" != 1 ]; then
 	exit 0
 fi
 
-if [ -z "${CYBERDECK_SETUP_INNER:-}" ] && { [ -n "${DISPLAY:-}" ] || [ -n "${WAYLAND_DISPLAY:-}" ]; }; then
+# A graphical launch without a terminal cannot show the sudo or whiptail
+# prompts. The desktop entry opens konsole itself. If we are already in
+# a terminal, stay there.
+if [ ! -t 0 ] && { [ -n "${DISPLAY:-}" ] || [ -n "${WAYLAND_DISPLAY:-}" ]; }; then
 	if command -v konsole >/dev/null 2>&1; then
-		CYBERDECK_SETUP_INNER=1 CYBERDECK_SETUP_FORCE=1 \
-			exec konsole -e /usr/sbin/cyberdeck-nomad-setup
+		exec konsole -e sudo /usr/sbin/cyberdeck-nomad-setup --force
 	fi
 fi
 

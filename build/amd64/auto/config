@@ -82,7 +82,15 @@ cp "${ROOT}/installer/cyberdeck-autoinstall.service" config/includes.chroot_afte
 cp "${ROOT}/installer/cyberdeck-nvidia.service" config/includes.chroot_after_packages/etc/systemd/system/cyberdeck-nvidia.service
 cp "${ROOT}/branding/TODO-themes.txt" config/includes.chroot_after_packages/usr/share/doc/cyberdeck-os/TODO-themes.txt
 cp "${ROOT}/dashboard/TODO-dashboard.txt" config/includes.chroot_after_packages/usr/share/doc/cyberdeck-os/TODO-dashboard.txt
-cp "${ROOT}/installer/os-release" config/includes.chroot_after_packages/etc/os-release
+rm -rf config/includes.chroot_after_packages/usr/share/cyberdeck/branding
+mkdir -p config/includes.chroot_after_packages/usr/share/cyberdeck/branding
+cp -a "${ROOT}/branding/image/." config/includes.chroot_after_packages/usr/share/cyberdeck/branding/
+cp "${ROOT}/installer/cyberdeck-apply-image" config/includes.chroot_after_packages/usr/sbin/cyberdeck-apply-image
+cp "${ROOT}/installer/cyberdeck-chrome-install" config/includes.chroot_after_packages/usr/sbin/cyberdeck-chrome-install
+cp "${ROOT}/firstboot/cyberdeck-theme" config/includes.chroot_after_packages/usr/bin/cyberdeck-theme
+cp "${ROOT}/firstboot/cyberdeck-theme-daemon" config/includes.chroot_after_packages/usr/bin/cyberdeck-theme-daemon
+cp "${ROOT}/firstboot/cyberdeck-nomad-launch" config/includes.chroot_after_packages/usr/bin/cyberdeck-nomad-launch
+cp "${ROOT}/firstboot/cyberdeck-theme.desktop" config/includes.chroot_after_packages/etc/xdg/autostart/cyberdeck-theme.desktop
 chmod 755 config/includes.chroot_after_packages/usr/sbin/* \
 	config/includes.chroot_after_packages/usr/bin/* \
 	config/includes.chroot_after_packages/usr/lib/live/config/9990-cyberdeck-sddm
@@ -126,5 +134,9 @@ lb config noauto \
 	--bootappend-live "boot=live components username=cyberdeck console=tty0 console=ttyS0,115200" \
 	--bootappend-live-failsafe "boot=live components memtest noapic noapm nodma nomce nosplash username=cyberdeck console=tty0 console=ttyS0,115200" \
 	"${@}"
+
+mkdir -p config/bootloaders/grub-pc/live-theme
+cp "${ROOT}/branding/grub-theme.txt" config/bootloaders/grub-pc/live-theme/theme.txt
+cp "${ROOT}/branding/splash.svg" config/bootloaders/splash.svg
 
 echo "Cyberdeck OS live-build config ready (profile ${PROFILE})."
