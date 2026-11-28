@@ -2,7 +2,7 @@
 Type=Application
 Name=Cyberdeck OS Manual
 Comment=Open the Cyberdeck OS guide in Okular
-Exec=okular /usr/share/doc/cyberdeck-os/Cyberdeck-OS-Manual.pdf
+Exec=/usr/bin/okular /usr/share/doc/cyberdeck-os/Cyberdeck-OS-Manual.pdf
 Icon=help-contents
 Terminal=false
 Categories=Documentation;System;

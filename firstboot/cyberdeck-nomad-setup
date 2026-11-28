@@ -181,11 +181,26 @@ fi
 cred=/library/nomad/credentials
 mysql_declined=0
 if [ -f "$cred" ]; then
-	# shellcheck disable=SC1090
-	. "$cred"
-	app_key="${NOMAD_APP_KEY:?}"
-	db_pass="${NOMAD_DB_PASSWORD:?}"
-	root_pass="${NOMAD_MYSQL_ROOT:?}"
+	app_key=""
+	db_pass=""
+	root_pass=""
+	while IFS='=' read -r key value; do
+		case "$key" in
+			NOMAD_APP_KEY) app_key="$value" ;;
+			NOMAD_DB_PASSWORD) db_pass="$value" ;;
+			NOMAD_MYSQL_ROOT) root_pass="$value" ;;
+		esac
+	done < "$cred"
+	case "${app_key}:${db_pass}:${root_pass}" in
+		*[!0123456789abcdef:]*)
+			echo "ERROR: $cred is not a saved Nomad password file. Refusing to use it." >&2
+			exit 1
+			;;
+		:*|*::*|*:)
+			echo "ERROR: $cred is missing a saved Nomad password. Refusing to use it." >&2
+			exit 1
+			;;
+	esac
 	echo "Reusing saved Nomad database credentials from $cred"
 else
 	app_key="$(openssl rand -hex 24)"
@@ -260,13 +275,14 @@ EOF
 if ask_yes "Pull and start Nomad, Open WebUI, and Ollama now? This needs a network. Nomad admin is port 8080, Open WebUI is port 3000, Ollama listens on 127.0.0.1:11434."; then
 	systemctl enable --now docker.service || true
 	if docker compose version >/dev/null 2>&1; then
-		docker compose -f /library/nomad/compose.yml up -d
+		compose() { docker compose "$@"; }
 	elif command -v docker-compose >/dev/null 2>&1; then
-		docker-compose -f /library/nomad/compose.yml up -d
+		compose() { docker-compose "$@"; }
 	else
 		echo "Docker Compose is not installed." >&2
 		exit 1
 	fi
+	compose -f /library/nomad/compose.yml up -d
 	warn_text_model() {
 		case "$1" in
 			*-text-*)
@@ -284,13 +300,17 @@ if ask_yes "Pull and start Nomad, Open WebUI, and Ollama now? This needs a netwo
 	echo "Pulling each image on its own. One failure does not cancel the rest."
 	supply=/library/nomad/supply.yml
 	supply_failed=""
-	services="$(docker compose -f "$supply" config --services)"
+	services="$(compose -f "$supply" config --services || true)"
+	if [ -z "$services" ]; then
+		supply_failed=" compose-config"
+		echo "ERROR: could not read the Supply Depot service list."
+	fi
 	for svc in $services; do
 		echo "-------- pull $svc --------"
 		ok=0
 		try=1
 		while [ "$try" -le 3 ]; do
-			if docker compose -f "$supply" pull "$svc"; then
+			if compose -f "$supply" pull "$svc"; then
 				ok=1
 				break
 			fi
@@ -303,7 +323,7 @@ if ask_yes "Pull and start Nomad, Open WebUI, and Ollama now? This needs a netwo
 			continue
 		fi
 		echo "-------- start $svc --------"
-		if ! docker compose -f "$supply" up -d --no-deps "$svc"; then
+		if ! compose -f "$supply" up -d --no-deps "$svc"; then
 			echo "Start of $svc failed."
 			supply_failed="$supply_failed $svc"
 		fi
@@ -343,12 +363,12 @@ if ask_yes "Pull and start Nomad, Open WebUI, and Ollama now? This needs a netwo
 		echo "One-line fix: $mysql_fix_line"
 		if [ "$mysql_declined" != 1 ] && ask_yes "Move the old MySQL data aside now and create a new database?"; then
 			stamp="$(date +%Y%m%d%H%M%S)"
-			docker compose -f /library/nomad/compose.yml stop admin mysql || true
+			compose -f /library/nomad/compose.yml stop admin mysql || true
 			docker rm -f nomad_admin nomad_mysql || true
 			mv /library/nomad/mysql "/library/nomad/mysql.bak-${stamp}"
 			mkdir -p /library/nomad/mysql
 			echo "Old database is /library/nomad/mysql.bak-${stamp}"
-			docker compose -f /library/nomad/compose.yml up -d
+			compose -f /library/nomad/compose.yml up -d
 			admin_ready=0
 			i=0
 			while [ "$i" -lt 36 ]; do

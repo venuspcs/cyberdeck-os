@@ -2,7 +2,7 @@
 Type=Application
 Name=Support Cyberdeck OS
 Comment=X Money, Cash App, and Venmo links for Richard Colbert
-Exec=cyberdeck-support
+Exec=/usr/bin/cyberdeck-support
 Icon=help-donate
 Terminal=false
 Categories=System;

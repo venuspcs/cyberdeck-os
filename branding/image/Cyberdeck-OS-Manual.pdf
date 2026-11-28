@@ -241,7 +241,7 @@ ET
 endstream
 endobj
 8 0 obj
-<< /Length 2245 >>
+<< /Length 2210 >>
 stream
 BT
 /F1 11 Tf
@@ -292,19 +292,20 @@ BT
 () '
 (meshtasticd is installed from the Meshtastic repository configured for Debian 13.) '
 (Meshtastic Web is one of the Supply Depot containers, published on port 9443 for the local) '
-(network. MeshCore Web is published on port 9444. Vaultwarden is not installed.) '
+(network. MeshCore Web is published on port 9444 when its image can be pulled. Vaultwarden) '
+(is not installed.) '
 () '
-(This guide is licensed under [CC BY 4.0]\(../../LICENSE-docs\).) '
 ET
 endstream
 endobj
 9 0 obj
-<< /Length 583 >>
+<< /Length 651 >>
 stream
 BT
 /F1 11 Tf
 50 780 Td
 14 TL
+(This guide is licensed under [CC BY 4.0]\(../../LICENSE-docs\).) '
 () '
 (ham-tools.md) '
 () '
@@ -353,14 +354,14 @@ xref
 0000004221 00000 n 
 0000006324 00000 n 
 0000008498 00000 n 
-0000010795 00000 n 
-0000011429 00000 n 
-0000011556 00000 n 
-0000011683 00000 n 
-0000011810 00000 n 
-0000011937 00000 n 
-0000012064 00000 n 
+0000010760 00000 n 
+0000011462 00000 n 
+0000011589 00000 n 
+0000011716 00000 n 
+0000011843 00000 n 
+0000011970 00000 n 
+0000012097 00000 n 
 trailer << /Size 16 /Root 1 0 R >>
 startxref
-12191
+12224
 %%EOF

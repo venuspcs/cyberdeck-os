@@ -2,7 +2,7 @@
 Type=Application
 Name=Project Nomad Setup
 Comment=Choose the /library drive and start Project Nomad
-Exec=cyberdeck-nomad-launch --force
+Exec=konsole --hold -e pkexec /usr/sbin/cyberdeck-nomad-setup --force
 Icon=preferences-system
 Terminal=false
 Categories=System;

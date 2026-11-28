@@ -2,7 +2,7 @@
 Type=Application
 Name=Install Extras
 Comment=Download the large Beta 1 applications
-Exec=cyberdeck-extras
+Exec=konsole --hold -e pkexec /usr/sbin/cyberdeck-extras
 Icon=system-software-install
 Terminal=false
 Categories=System;

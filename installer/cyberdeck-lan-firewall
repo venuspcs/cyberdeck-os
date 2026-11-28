@@ -2,10 +2,10 @@
 # Allow Nomad services from RFC1918 LAN only. Docker published ports
 # skip ufw, so the same limits are applied on DOCKER-USER.
 set -u
-ports="8080,8490,8090,9443"
+ports="8080,8490,8090,9443,9444"
 if command -v ufw >/dev/null 2>&1; then
 	for net in 192.168.0.0/16 10.0.0.0/8; do
-		for port in 8080 8490 8090 9443; do
+		for port in 8080 8490 8090 9443 9444; do
 			ufw allow from "$net" to any port "$port" proto tcp comment "cyberdeck-lan" >/dev/null 2>&1 || true
 		done
 	done
