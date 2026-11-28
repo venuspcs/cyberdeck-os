@@ -189,5 +189,8 @@ if [ "${1:-}" = "--packages" ]; then
 	systemctl enable cyberdeck-lan-firewall.service || true
 	systemctl enable cyberdeck-nomad-gate.service || true
 	systemctl enable cyberdeck-nomad-bind.path || true
+	systemctl enable cyberdeck-nomad-bind.service || true
+	systemctl disable nginx.service || true
+	systemctl mask nginx.service || true
 	systemctl enable fail2ban.service || true
 fi

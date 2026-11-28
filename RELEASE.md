@@ -10,7 +10,7 @@ This is not single-stream bonding. The kernel hashes each connection, including 
 
 ## Security
 
-Nomad admin has the Docker socket and does not have its own password. On the Cyberdeck, http://127.0.0.1:8080 stays open. From another computer on the LAN, the address is https:// and port 8443. Accept the self-signed certificate once. Sign in with a Cyberdeck account that can use sudo, or one in the `cyberdeck-admin` group. That is the same password as the desktop login. The firewall drops this, and the other published services, from the public internet on IPv4 and IPv6.
+Nomad admin has the Docker socket and does not have its own password. On the Cyberdeck, http://127.0.0.1:8080 stays open. From another computer on the LAN, the address is https://&lt;this-computer&gt;:8443. Accept the self-signed certificate once. Sign in with a Cyberdeck account that can use sudo, or one in the `cyberdeck-admin` group. That is the same password as the desktop login. The firewall drops this, and the other published services, from the public internet on IPv4 and IPv6.
 
 Open WebUI uses the same login at https://127.0.0.1:3443, including on this computer, because that is how it learns who you are. The first administrator to open it becomes the WebUI admin. Later accounts wait for approval. The desktop icon opens that address.
 

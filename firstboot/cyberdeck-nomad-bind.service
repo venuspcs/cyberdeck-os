@@ -1,6 +1,12 @@
 [Unit]
 Description=Keep Nomad admin bound to localhost
+Wants=docker.service
+After=docker.service
+RequiresMountsFor=/library
 
 [Service]
 Type=oneshot
 ExecStart=/usr/sbin/cyberdeck-nomad-gate apply-bind
+
+[Install]
+WantedBy=multi-user.target

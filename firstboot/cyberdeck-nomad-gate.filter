@@ -1,3 +1,3 @@
 [Definition]
-failregex = pam_authenticate\(\) failed.*, client: <HOST>
+failregex = PAM: user '.*' - not authenticated:.*, client: <HOST>
 ignoreregex =

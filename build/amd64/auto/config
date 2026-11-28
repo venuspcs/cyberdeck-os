@@ -130,6 +130,7 @@ cp "${ROOT}/branding/image/docker-cyberdeck-firewall.conf" config/includes.chroo
 cp "${ROOT}/firstboot/cyberdeck-nomad-gate.tmpfiles" config/includes.chroot_after_packages/etc/tmpfiles.d/cyberdeck-nomad-gate.conf
 cp "${ROOT}/firstboot/cyberdeck.sysusers" config/includes.chroot_after_packages/usr/lib/sysusers.d/cyberdeck.conf
 ln -sfn ../cyberdeck-nomad-bind.path config/includes.chroot_after_packages/etc/systemd/system/multi-user.target.wants/cyberdeck-nomad-bind.path
+ln -sfn ../cyberdeck-nomad-bind.service config/includes.chroot_after_packages/etc/systemd/system/multi-user.target.wants/cyberdeck-nomad-bind.service
 ln -sfn ../cyberdeck-nomad-gate.service config/includes.chroot_after_packages/etc/systemd/system/multi-user.target.wants/cyberdeck-nomad-gate.service
 cp "${ROOT}/firstboot/90-cyberdeck-multiwan" config/includes.chroot_after_packages/etc/NetworkManager/dispatcher.d/90-cyberdeck-multiwan
 cp "${ROOT}/firstboot/cyberdeck-multiwan.service" config/includes.chroot_after_packages/etc/systemd/system/cyberdeck-multiwan.service

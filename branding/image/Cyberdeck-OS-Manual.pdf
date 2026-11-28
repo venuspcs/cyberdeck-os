@@ -241,7 +241,7 @@ ET
 endstream
 endobj
 8 0 obj
-<< /Length 2406 >>
+<< /Length 2379 >>
 stream
 BT
 /F1 11 Tf
@@ -266,11 +266,12 @@ BT
 () '
 (Project Nomad Setup asks where /library lives, writes it to fstab by UUID, and orders) '
 (Docker after that mount. It then starts Nomad admin on port 8080 of this computer, with no) '
-(password. From another computer on the local network the address is https:// and port) '
-(8443. Accept the certificate once and sign in with a Cyberdeck administrator account. Open) '
-(WebUI is https://127.0.0.1:3443 and uses that same login. The desktop icon opens it. Open) '
-(WebUI is on 127.0.0.1:3000, Ollama on 127.0.0.1:11434, Dozzle logs on 127.0.0.1:9999, and) '
-(Qdrant on 127.0.0.1:6333.) '
+(password. From another computer on the local network, use) '
+(https://&lt;this-computer&gt;:8443. Accept the certificate once and sign in with a) '
+(Cyberdeck administrator account. Open WebUI for people is https://127.0.0.1:3443 here and) '
+(https://&lt;this-computer&gt;:3443 on the LAN. The desktop icon opens the local address.) '
+(Port 3000 is only the internal backend. Ollama is on 127.0.0.1:11434, Dozzle on) '
+(127.0.0.1:9999, and Qdrant on 127.0.0.1:6333.) '
 () '
 (It also starts the Supply Depot apps except Vaultwarden: Kiwix \(8090\), Kolibri, Flatnotes,) '
 (CyberChef, Stirling PDF, File Browser, Calibre Web, IT Tools, Excalidraw, Homebox,) '
@@ -294,17 +295,17 @@ BT
 () '
 (Status: written for Beta 1 \(Plow\).) '
 () '
-(meshtasticd is installed from the Meshtastic repository configured for Debian 13. Its web) '
 ET
 endstream
 endobj
 9 0 obj
-<< /Length 1205 >>
+<< /Length 1299 >>
 stream
 BT
 /F1 11 Tf
 50 780 Td
 14 TL
+(meshtasticd is installed from the Meshtastic repository configured for Debian 13. Its web) '
 (server listens on port 9443 with a self-signed certificate that is created the first time) '
 (the service starts. Open https://localhost:9443 and accept that certificate once. The TCP) '
 (API listens on port 4403. Both ports are reachable from this computer and from the local) '
@@ -361,14 +362,14 @@ xref
 0000004221 00000 n 
 0000006324 00000 n 
 0000008498 00000 n 
-0000010956 00000 n 
-0000012213 00000 n 
-0000012340 00000 n 
-0000012467 00000 n 
-0000012594 00000 n 
-0000012721 00000 n 
-0000012848 00000 n 
+0000010929 00000 n 
+0000012280 00000 n 
+0000012407 00000 n 
+0000012534 00000 n 
+0000012661 00000 n 
+0000012788 00000 n 
+0000012915 00000 n 
 trailer << /Size 16 /Root 1 0 R >>
 startxref
-12975
+13042
 %%EOF

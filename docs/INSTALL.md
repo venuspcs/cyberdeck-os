@@ -377,9 +377,9 @@ On this computer, open http://127.0.0.1:8080. That address does not ask for a pa
 
 From another computer on the same network, open https:// and this computer's address, port 8443. Accept the self-signed certificate once. The login is a Cyberdeck account that can use sudo, or an account in the `cyberdeck-admin` group. It is the same password as signing in to the desktop. The password is not sent in cleartext. The public internet cannot reach this port.
 
-`cyberdeck-nomad-gate status` prints that choice. `sudo cyberdeck-nomad-gate off` closes remote access and leaves the local Nomad page working.
+`cyberdeck-nomad-gate status` prints that choice. `sudo cyberdeck-nomad-gate off` closes remote Nomad and also stops Open WebUI on port 3443. The local Nomad page at http://127.0.0.1:8080 keeps working.
 
-Open WebUI is https://127.0.0.1:3443 on this computer, and the same port on the LAN address from another computer. It uses that same Cyberdeck login. The first administrator to open it becomes the WebUI admin. Later accounts wait until that admin approves them. The desktop icon opens this address. Nothing else on the computer can talk to the WebUI container directly, and the account created at install is not in the `docker` group. Docker commands ask for the administrator password.
+Open WebUI is https://127.0.0.1:3443 on this computer, and https://&lt;this-computer&gt;:3443 from the LAN. It uses that same Cyberdeck login. The first administrator to open it becomes the WebUI admin. Later accounts wait until that admin approves them. The desktop icon opens this address. Ordinary programs on this computer cannot open the WebUI backend on port 3000. The nginx gate and root can. The account created at install is not in the `docker` group. Docker commands ask for the administrator password.
 
 ### Meshtastic
 
