@@ -172,9 +172,48 @@ systemctl daemon-reload || true
 
 mkdir -p /library/nomad/storage/qdrant /library/nomad/storage/zim /library/nomad/storage/kolibri 	/library/nomad/storage/notes /library/nomad/storage/stirling /library/nomad/storage/filebrowser 	/library/nomad/storage/calibre /library/nomad/storage/books /library/nomad/storage/homebox 	/library/nomad/storage/jellyfin /library/nomad/storage/media 	/library/nomad/mysql /library/nomad/redis /library/ollama /library/open-webui
 chmod 777 /library/nomad/storage/qdrant
-app_key="$(openssl rand -hex 24)"
-db_pass="$(openssl rand -hex 18)"
-root_pass="$(openssl rand -hex 18)"
+# One physical line. A wrapped command gets pasted as several lines in Konsole.
+mysql_fix_line='sudo mv /library/nomad/mysql /library/nomad/mysql.bak-$(date +%Y%m%d%H%M%S) && sudo /usr/sbin/cyberdeck-nomad-setup --force'
+mysql_initialized=0
+if [ -f /library/nomad/mysql/ibdata1 ] || [ -f /library/nomad/mysql/auto.cnf ] || [ -d /library/nomad/mysql/mysql ]; then
+	mysql_initialized=1
+fi
+cred=/library/nomad/credentials
+mysql_declined=0
+if [ -f "$cred" ]; then
+	# shellcheck disable=SC1090
+	. "$cred"
+	app_key="${NOMAD_APP_KEY:?}"
+	db_pass="${NOMAD_DB_PASSWORD:?}"
+	root_pass="${NOMAD_MYSQL_ROOT:?}"
+	echo "Reusing saved Nomad database credentials from $cred"
+else
+	app_key="$(openssl rand -hex 24)"
+	db_pass="$(openssl rand -hex 18)"
+	root_pass="$(openssl rand -hex 18)"
+	if [ "$mysql_initialized" = 1 ]; then
+		echo "MySQL data already exists at /library/nomad/mysql, and no saved password was found."
+		echo "nomad_admin will log: Access denied for user 'nomad_user' and keep restarting."
+		echo "One-line fix: $mysql_fix_line"
+		if ask_yes "Move the old MySQL data aside now and create a new database?"; then
+			stamp="$(date +%Y%m%d%H%M%S)"
+			mv /library/nomad/mysql "/library/nomad/mysql.bak-${stamp}"
+			mkdir -p /library/nomad/mysql
+			echo "Old database is /library/nomad/mysql.bak-${stamp}"
+		else
+			mysql_declined=1
+			echo "Leaving the old database in place."
+			echo "One-line fix: $mysql_fix_line"
+		fi
+	fi
+	umask 077
+	cat > "$cred" <<EOF
+NOMAD_APP_KEY=${app_key}
+NOMAD_DB_PASSWORD=${db_pass}
+NOMAD_MYSQL_ROOT=${root_pass}
+EOF
+	chmod 600 "$cred"
+fi
 sed -e "s/__APP_KEY__/${app_key}/" \
 	-e "s/__DB_PASSWORD__/${db_pass}/" \
 	-e "s/__MYSQL_ROOT__/${root_pass}/" \
@@ -241,14 +280,97 @@ if ask_yes "Pull and start Nomad, Open WebUI, and Ollama now? This needs a netwo
 		docker exec nomad_ollama ollama pull llama3.2:3b || echo "Could not pull llama3.2:3b yet." >&2
 		docker exec nomad_ollama ollama show llama3.2:3b || true
 	fi
-	docker compose -f /library/nomad/supply.yml pull || true
-	docker compose -f /library/nomad/supply.yml up -d || echo "Some Supply Depot apps did not start. Vaultwarden is not installed." >&2
+	echo "-------- Supply Depot --------"
+	echo "Pulling each image on its own. One failure does not cancel the rest."
+	supply=/library/nomad/supply.yml
+	supply_failed=""
+	services="$(docker compose -f "$supply" config --services)"
+	for svc in $services; do
+		echo "-------- pull $svc --------"
+		ok=0
+		try=1
+		while [ "$try" -le 3 ]; do
+			if docker compose -f "$supply" pull "$svc"; then
+				ok=1
+				break
+			fi
+			echo "Pull of $svc failed (try $try of 3)."
+			try=$((try + 1))
+			sleep 5
+		done
+		if [ "$ok" != 1 ]; then
+			supply_failed="$supply_failed $svc"
+			continue
+		fi
+		echo "-------- start $svc --------"
+		if ! docker compose -f "$supply" up -d --no-deps "$svc"; then
+			echo "Start of $svc failed."
+			supply_failed="$supply_failed $svc"
+		fi
+	done
+	echo
+	if [ -n "$supply_failed" ]; then
+		echo "ERROR: Supply Depot apps that failed:$supply_failed"
+	else
+		echo "DONE: every Supply Depot app started."
+	fi
+	echo "Vaultwarden is not installed."
 	if curl -fsS --max-time 20 http://127.0.0.1:6333/healthz >/dev/null; then
 		echo "Qdrant is answering on 127.0.0.1:6333."
 	else
 		echo "Qdrant did not answer /healthz yet." >&2
 	fi
-	curl -fsS --max-time 20 -H 'Content-Type: application/json' 		-d '{"model":"llama3.2:3b"}' http://127.0.0.1:8080/api/ollama/models || true
+	echo "-------- Nomad admin --------"
+	echo "Waiting up to 3 minutes for http://127.0.0.1:8080"
+	admin_ready=0
+	i=0
+	while [ "$i" -lt 36 ]; do
+		code="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 5 http://127.0.0.1:8080/ || true)"
+		if [ -n "$code" ] && [ "$code" != "000" ]; then
+			echo "Nomad admin answered HTTP $code"
+			admin_ready=1
+			break
+		fi
+		if docker logs --since 3m nomad_admin 2>&1 | grep -q "Access denied for user 'nomad_user'"; then
+			echo "nomad_admin is running, but MySQL rejected nomad_user."
+			break
+		fi
+		i=$((i + 1))
+		sleep 5
+	done
+	if docker logs --since 3m nomad_admin 2>&1 | grep -q "Access denied for user 'nomad_user'"; then
+		echo "The MySQL data in /library/nomad/mysql was created with a different password."
+		echo "One-line fix: $mysql_fix_line"
+		if [ "$mysql_declined" != 1 ] && ask_yes "Move the old MySQL data aside now and create a new database?"; then
+			stamp="$(date +%Y%m%d%H%M%S)"
+			docker compose -f /library/nomad/compose.yml stop admin mysql || true
+			docker rm -f nomad_admin nomad_mysql || true
+			mv /library/nomad/mysql "/library/nomad/mysql.bak-${stamp}"
+			mkdir -p /library/nomad/mysql
+			echo "Old database is /library/nomad/mysql.bak-${stamp}"
+			docker compose -f /library/nomad/compose.yml up -d
+			admin_ready=0
+			i=0
+			while [ "$i" -lt 36 ]; do
+				code="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 5 http://127.0.0.1:8080/ || true)"
+				if [ -n "$code" ] && [ "$code" != "000" ]; then
+					echo "Nomad admin answered HTTP $code"
+					admin_ready=1
+					break
+				fi
+				i=$((i + 1))
+				sleep 5
+			done
+		fi
+	fi
+	if [ "$admin_ready" = 1 ]; then
+		echo "-------- register llama3.2:3b --------"
+		curl -fsS --max-time 30 -H 'Content-Type: application/json' \
+			-d '{"model":"llama3.2:3b"}' http://127.0.0.1:8080/api/ollama/models \
+			|| echo "Nomad admin is up. The model registration call failed. Retry it from the Nomad page."
+	else
+		echo "ERROR: Nomad admin did not become ready on 127.0.0.1:8080 within 3 minutes."
+	fi
 fi
 
 date -Is > /var/lib/cyberdeck/nomad.done

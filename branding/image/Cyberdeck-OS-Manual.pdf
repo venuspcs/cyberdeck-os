@@ -9,7 +9,7 @@ endobj
 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
 endobj
 4 0 obj
-<< /Length 1911 >>
+<< /Length 1909 >>
 stream
 BT
 /F1 11 Tf
@@ -52,22 +52,22 @@ BT
 (Status: written for Beta 1 \(Plow\).) '
 () '
 (Download the ISO from GitHub Releases. Join the parts if the release split the file, check) '
-(SHA256, then write the USB. Secure Boot stays off. The full walk-through is) '
+(SHA256, then write the USB. Secure Boot can stay on. The full walk-through is) '
 ([docs/INSTALL.md]\(../INSTALL.md\).) '
 () '
 (On the live desktop, open Install Cyberdeck OS. Erase disk replaces the disk with GPT, an) '
 (EFI system partition, and a Btrfs root. Install alongside needs a GPT disk with free) '
 (space. Manual partitioning is the advanced path. Calamares asks for the account password.) '
 () '
-(The boot menu title is Cyberdeck OS Alpha 3 \(Hatchet\). It lists the 7.3 backports kernel) '
-(and the Debian 13 6.12 kernel.) '
+(The boot menu title is Cyberdeck OS Beta 1 \(Plow\). It lists the 7.3 backports kernel and) '
+(the Debian 13 6.12 kernel.) '
 () '
 (This guide is licensed under [CC BY 4.0]\(../../LICENSE-docs\).) '
 ET
 endstream
 endobj
 5 0 obj
-<< /Length 1959 >>
+<< /Length 2020 >>
 stream
 BT
 /F1 11 Tf
@@ -86,7 +86,8 @@ BT
 () '
 (The desktop uses Daybreak or Nightwatch from the clock. The manual icon is on the desktop.) '
 (Support Cyberdeck OS is in the application menu. The Conky HUD shows CPU, battery, and) '
-(network when those devices exist.) '
+(network when those devices exist. System sounds use the Ocean theme. On AC the power) '
+(profile is Performance, on battery it is Balanced, and on low battery it is Power Saver.) '
 () '
 (The live firewall drops incoming traffic and allows outgoing traffic. Chrome installs) '
 (itself when the network is up. The larger Alpha 3 apps install from Install Extras or the) '
@@ -120,17 +121,17 @@ BT
 () '
 (At the installed GRUB menu, the advanced or main list includes snapshot entries from) '
 (grub-btrfs after apt has taken a snapshot. Booting a snapshot returns the Btrfs root to) '
-(that moment. Data you stored only on /library is not inside the root snapshot.) '
 ET
 endstream
 endobj
 6 0 obj
-<< /Length 1953 >>
+<< /Length 1967 >>
 stream
 BT
 /F1 11 Tf
 50 780 Td
 14 TL
+(that moment. Data you stored only on /library is not inside the root snapshot.) '
 () '
 (If the 7.3 kernel will not boot or Wi-Fi will not associate, choose the 6.12 kernel line) '
 (instead of a snapshot. That kernel stays installed next to the backports kernel.) '
@@ -178,17 +179,17 @@ BT
 (Snapshots) '
 () '
 (Snapper keeps the 4 newest numbered snapshots \(NUMBER_LIMIT=4\), which is two pre/post) '
-(pairs from apt. Apt takes a snapshot before it changes packages.) '
 ET
 endstream
 endobj
 7 0 obj
-<< /Length 2044 >>
+<< /Length 2086 >>
 stream
 BT
 /F1 11 Tf
 50 780 Td
 14 TL
+(pairs from apt. Apt takes a snapshot before it changes packages.) '
 () '
 (Support) '
 () '
@@ -236,17 +237,17 @@ BT
 (Arch.) '
 () '
 (distrobox create --name ubuntu --image ubuntu:24.04) '
-(distrobox enter ubuntu) '
 ET
 endstream
 endobj
 8 0 obj
-<< /Length 2086 >>
+<< /Length 2206 >>
 stream
 BT
 /F1 11 Tf
 50 780 Td
 14 TL
+(distrobox enter ubuntu) '
 () '
 (Ollama has no apt repository. Project Nomad runs the ollama/ollama container on) '
 (127.0.0.1:11434. The first-boot installer pulls llama3.2:3b. Tags containing -text- are) '
@@ -268,9 +269,10 @@ BT
 () '
 (It also starts the Supply Depot apps except Vaultwarden: Kiwix \(8090\), Kolibri, Flatnotes,) '
 (CyberChef, Stirling PDF, File Browser, Calibre Web, IT Tools, Excalidraw, Homebox,) '
-(Jellyfin \(8490\), LibreTranslate, Meshtastic Web \(9443\), and MeshCore Web. Their data) '
-(directories are under /library/nomad/storage. Qdrant's directory is mode 777 so the) '
-(container can write it.) '
+(Jellyfin \(8490\), LibreTranslate, Meshtastic Web \(9443\), and MeshCore Web \(9444\). Each) '
+(image is pulled on its own, with retries, and a failure is listed at the end instead of) '
+(cancelling the others. Their data directories are under /library/nomad/storage. Qdrant's) '
+(directory is mode 777 so the container can write it.) '
 () '
 (The firewall allows those published LAN ports only from 192.168.0.0/16 and 10.0.0.0/8.) '
 (Ollama, Open WebUI, Dozzle, and Qdrant stay on localhost.) '
@@ -288,23 +290,22 @@ BT
 () '
 (meshtasticd is installed from the Meshtastic repository configured for Debian 13.) '
 (Meshtastic Web is one of the Supply Depot containers, published on port 9443 for the local) '
-(network. MeshCore Web is started on port 9444 when its image can be pulled. Vaultwarden is) '
-(not installed.) '
+(network. MeshCore Web is published on port 9444. Vaultwarden is not installed.) '
 () '
 (This guide is licensed under [CC BY 4.0]\(../../LICENSE-docs\).) '
 () '
 (ham-tools.md) '
-() '
 ET
 endstream
 endobj
 9 0 obj
-<< /Length 556 >>
+<< /Length 561 >>
 stream
 BT
 /F1 11 Tf
 50 780 Td
 14 TL
+() '
 (Ham and SDR tools) '
 () '
 (Status: written for Beta 1 \(Plow\).) '
@@ -346,18 +347,18 @@ xref
 0000000058 00000 n 
 0000000151 00000 n 
 0000000221 00000 n 
-0000002184 00000 n 
-0000004195 00000 n 
-0000006200 00000 n 
-0000008296 00000 n 
-0000010434 00000 n 
-0000011041 00000 n 
-0000011168 00000 n 
-0000011295 00000 n 
-0000011422 00000 n 
-0000011549 00000 n 
-0000011676 00000 n 
+0000002182 00000 n 
+0000004254 00000 n 
+0000006273 00000 n 
+0000008411 00000 n 
+0000010669 00000 n 
+0000011281 00000 n 
+0000011408 00000 n 
+0000011535 00000 n 
+0000011662 00000 n 
+0000011789 00000 n 
+0000011916 00000 n 
 trailer << /Size 16 /Root 1 0 R >>
 startxref
-11803
+12043
 %%EOF
