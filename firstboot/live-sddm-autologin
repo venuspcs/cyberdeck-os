@@ -55,5 +55,16 @@ Autolock=false
 LockOnResume=false
 Timeout=0
 EOF
+	# The live home is created before Plasma. Put Ocean and the power
+	# profiles in that home even when skel dotfiles were not copied.
+	if [ ! -f "${home}/.config/kdeglobals" ]; then
+		cp /etc/skel/.config/kdeglobals "${home}/.config/kdeglobals" 2>/dev/null || \
+			printf '%s\n' '[Sounds]' 'Enable=true' 'Theme=ocean' > "${home}/.config/kdeglobals"
+	elif ! awk '/^\[Sounds\]/{s=1} /^\[/{if(!/^\[Sounds\]/)s=0} s&&/^Theme=/{found=1} END{exit !found}' "${home}/.config/kdeglobals"; then
+		printf '\n%s\n' '[Sounds]' 'Enable=true' 'Theme=ocean' >> "${home}/.config/kdeglobals"
+	fi
+	if [ ! -f "${home}/.config/powerdevilrc" ]; then
+		cp /etc/skel/.config/powerdevilrc "${home}/.config/powerdevilrc" 2>/dev/null || true
+	fi
 	chown -R "${USER_NAME}:${USER_NAME}" "${home}/Desktop" "${home}/.config"
 fi
