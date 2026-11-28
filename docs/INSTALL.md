@@ -279,6 +279,8 @@ Secure Boot can stay on. On the ASUS Vivobook S16 test, firmware reported Secure
 
 Leave Secure Boot enabled and choose the USB from the boot menu. If a machine's firmware refuses the USB, that is a firmware quirk on that machine, not a requirement to turn Secure Boot off for Cyberdeck OS.
 
+On the ASUS Vivobook S16, Secure Boot stayed Active with the factory keys, but the USB would not start until the other boot drives were turned off in the firmware boot order. The one-time boot menu (F8 or Esc on that machine) is the other way in. After Cyberdeck OS is installed, the firmware turns those other boot entries back on by itself. If the USB will not boot with Secure Boot on, temporarily disable the other boot entries, or use the F8/Esc boot menu. They come back after install.
+
 ### Fast Boot and Windows Fast Startup
 
 These are two different settings.
@@ -365,7 +367,7 @@ The installed system opens **Project Nomad Setup** once, in a terminal, at first
 
 - Reboot and tap the boot-menu key earlier. Use a USB port on the computer itself, not a hub. On a desktop, try a USB 2.0 port on the back.
 - Turn firmware **Fast Boot** off, and turn off Windows Fast Startup, then shut Windows down fully (hold Shift).
-- Leave Secure Boot on and try the UEFI USB entry. The Vivobook test booted with Secure Boot Active.
+- Leave Secure Boot on and try the UEFI USB entry. The Vivobook test booted with Secure Boot Active. If the USB still will not start, temporarily disable the other boot entries, or open the F8/Esc boot menu. Those entries come back after install.
 - In firmware setup, enable USB boot. On Acer and some Toshiba models, enable the F12 boot menu.
 - Rufus must be in **DD Image mode**, or the stick was written with Etcher or `dd`. A file copy of the ISO does not boot. Ventoy is the exception: the ISO is a file, and the Ventoy installer prepared the stick.
 - Recreate the stick. Then try the other firmware mode (UEFI if you used legacy, or legacy/CSM if you used UEFI).
