@@ -7,12 +7,12 @@ set -u
 
 allow_ufw() {
 	command -v ufw >/dev/null 2>&1 || return 0
-	for net in 127.0.0.0/8 192.168.0.0/16 10.0.0.0/8 172.16.0.0/12; do
+	for net in 192.168.0.0/16 10.0.0.0/8; do
 		for port in 8490 8090 4403 8443 3443 9443 9444 9445; do
 			ufw allow from "$net" to any port "$port" proto tcp comment "cyberdeck-lan" >/dev/null 2>&1 || true
 		done
 	done
-	for net in ::1/128 fe80::/10 fc00::/7; do
+	for net in fe80::/10 fc00::/7; do
 		for port in 8490 8090 4403 8443 3443 9443 9444 9445; do
 			ufw allow from "$net" to any port "$port" proto tcp comment "cyberdeck-lan" >/dev/null 2>&1 || true
 		done
