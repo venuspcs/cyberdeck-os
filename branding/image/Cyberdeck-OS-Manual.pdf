@@ -241,7 +241,7 @@ ET
 endstream
 endobj
 8 0 obj
-<< /Length 2210 >>
+<< /Length 2385 >>
 stream
 BT
 /F1 11 Tf
@@ -271,10 +271,11 @@ BT
 () '
 (It also starts the Supply Depot apps except Vaultwarden: Kiwix \(8090\), Kolibri, Flatnotes,) '
 (CyberChef, Stirling PDF, File Browser, Calibre Web, IT Tools, Excalidraw, Homebox,) '
-(Jellyfin \(8490\), LibreTranslate, Meshtastic Web \(9443\), and MeshCore Web \(9444\). Each) '
-(image is pulled on its own, with retries, and a failure is listed at the end instead of) '
-(cancelling the others. Their data directories are under /library/nomad/storage. Qdrant's) '
-(directory is mode 777 so the container can write it.) '
+(Jellyfin \(8490\), LibreTranslate, Meshtastic Web container \(9445\), and MeshCore Web \(9444\).) '
+(The meshtasticd web page itself is https://localhost:9443. Accept its certificate once.) '
+(Each image is pulled on its own, with retries, and a failure is listed at the end instead) '
+(of cancelling the others. Their data directories are under /library/nomad/storage.) '
+(Qdrant's directory is mode 777 so the container can write it.) '
 () '
 (The firewall allows those published LAN ports only from 192.168.0.0/16 and 10.0.0.0/8.) '
 (Ollama, Open WebUI, Dozzle, and Qdrant stay on localhost.) '
@@ -290,21 +291,24 @@ BT
 () '
 (Status: written for Beta 1 \(Plow\).) '
 () '
-(meshtasticd is installed from the Meshtastic repository configured for Debian 13.) '
-(Meshtastic Web is one of the Supply Depot containers, published on port 9443 for the local) '
-(network. MeshCore Web is published on port 9444 when its image can be pulled. Vaultwarden) '
-(is not installed.) '
-() '
+(meshtasticd is installed from the Meshtastic repository configured for Debian 13. Its web) '
+(server listens on port 9443 with a self-signed certificate that is created the first time) '
+(the service starts. Open https://localhost:9443 and accept that certificate once. The TCP) '
+(API listens on port 4403. Both ports are reachable from this computer and from the local) '
 ET
 endstream
 endobj
 9 0 obj
-<< /Length 651 >>
+<< /Length 924 >>
 stream
 BT
 /F1 11 Tf
 50 780 Td
 14 TL
+(network, and the firewall drops them from the public internet. The Supply Depot Meshtastic) '
+(Web container, if you install it, is on port 9445 so it does not take 9443. MeshCore Web) '
+(is on port 9444 when its image can be pulled. Vaultwarden is not installed.) '
+() '
 (This guide is licensed under [CC BY 4.0]\(../../LICENSE-docs\).) '
 () '
 (ham-tools.md) '
@@ -354,14 +358,14 @@ xref
 0000004221 00000 n 
 0000006324 00000 n 
 0000008498 00000 n 
-0000010760 00000 n 
-0000011462 00000 n 
-0000011589 00000 n 
-0000011716 00000 n 
-0000011843 00000 n 
-0000011970 00000 n 
-0000012097 00000 n 
+0000010935 00000 n 
+0000011910 00000 n 
+0000012037 00000 n 
+0000012164 00000 n 
+0000012291 00000 n 
+0000012418 00000 n 
+0000012545 00000 n 
 trailer << /Size 16 /Root 1 0 R >>
 startxref
-12224
+12672
 %%EOF

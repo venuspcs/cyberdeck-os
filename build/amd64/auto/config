@@ -35,6 +35,7 @@ mkdir -p config/package-lists \
 	config/includes.chroot_after_packages/etc/systemd/system \
 	config/includes.chroot_after_packages/etc/systemd/system/timers.target.wants \
 	config/includes.chroot_after_packages/etc/NetworkManager/dispatcher.d \
+	config/includes.chroot_after_packages/etc/meshtasticd/config.d \
 	config/includes.chroot_after_packages/etc/polkit-1/rules.d \
 	config/includes.chroot_after_packages/usr/share/doc/cyberdeck-os \
 	config/archives \
@@ -106,6 +107,7 @@ cp "${ROOT}/firstboot/cyberdeck-conky-toggle.desktop" config/includes.chroot_aft
 cp "${ROOT}/installer/cyberdeck-install-system" config/includes.chroot_after_packages/usr/bin/cyberdeck-install-system
 cp "${ROOT}/firstboot/cyberdeck-nomad-launch" config/includes.chroot_after_packages/usr/bin/cyberdeck-nomad-launch
 cp "${ROOT}/firstboot/cyberdeck-multiwan" config/includes.chroot_after_packages/usr/sbin/cyberdeck-multiwan
+cp "${ROOT}/firstboot/meshtasticd-cyberdeck-web.yaml" config/includes.chroot_after_packages/etc/meshtasticd/config.d/cyberdeck-web.yaml
 cp "${ROOT}/firstboot/90-cyberdeck-multiwan" config/includes.chroot_after_packages/etc/NetworkManager/dispatcher.d/90-cyberdeck-multiwan
 cp "${ROOT}/firstboot/cyberdeck-multiwan.service" config/includes.chroot_after_packages/etc/systemd/system/cyberdeck-multiwan.service
 cp "${ROOT}/firstboot/cyberdeck-multiwan.timer" config/includes.chroot_after_packages/etc/systemd/system/cyberdeck-multiwan.timer

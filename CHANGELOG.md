@@ -11,3 +11,7 @@ When two or more internet connections are up at once, such as wired Ethernet plu
 This is per-flow ECMP, not single-stream bonding. The kernel hashes each connection, including its ports, so two downloads can use two links. One download is not split across links.
 
 It is on by default. `cyberdeck-multiwan status` shows the links. Set `ENABLED=no` in `/etc/cyberdeck/multiwan.conf`, or run `sudo cyberdeck-multiwan off`, to turn it off.
+
+### Meshtastic web server
+
+`meshtasticd` listens for Meshtastic Web on https://localhost:9443. Accept the self-signed certificate once. The TCP API on port 4403, and port 9443, are open to localhost and the local network only.

@@ -371,6 +371,10 @@ A VPN that takes the default route is left in charge. Split-tunnel VPNs keep the
 
 It is on by default. `cyberdeck-multiwan status` prints the links and the route. To turn it off, set `ENABLED=no` in `/etc/cyberdeck/multiwan.conf`. `sudo cyberdeck-multiwan off` does the same and removes the extra route. `sudo cyberdeck-multiwan on` turns it back on.
 
+### Meshtastic
+
+`meshtasticd` serves Meshtastic Web at https://localhost:9443. The certificate is self-signed and created the first time the service starts. Open that address and accept the certificate once. The TCP API is port 4403. The firewall allows 4403 and 9443 from this computer and from the local network, and drops them from the public internet.
+
 ## 6. Troubleshooting
 
 ### The USB is not in the boot menu
