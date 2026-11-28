@@ -34,8 +34,17 @@ mkdir -p config/package-lists \
 	config/includes.chroot_after_packages/etc/apt/preferences.d \
 	config/includes.chroot_after_packages/etc/systemd/system \
 	config/includes.chroot_after_packages/etc/systemd/system/timers.target.wants \
+	config/includes.chroot_after_packages/etc/systemd/system/multi-user.target.wants \
 	config/includes.chroot_after_packages/etc/NetworkManager/dispatcher.d \
 	config/includes.chroot_after_packages/etc/meshtasticd/config.d \
+	config/includes.chroot_after_packages/etc/cyberdeck/nomad-gate \
+	config/includes.chroot_after_packages/etc/pam.d \
+	config/includes.chroot_after_packages/etc/security \
+	config/includes.chroot_after_packages/etc/fail2ban/jail.d \
+	config/includes.chroot_after_packages/etc/fail2ban/filter.d \
+	config/includes.chroot_after_packages/etc/systemd/system/docker.service.d \
+	config/includes.chroot_after_packages/etc/tmpfiles.d \
+	config/includes.chroot_after_packages/usr/lib/sysusers.d \
 	config/includes.chroot_after_packages/etc/polkit-1/rules.d \
 	config/includes.chroot_after_packages/usr/share/doc/cyberdeck-os \
 	config/archives \
@@ -108,6 +117,20 @@ cp "${ROOT}/installer/cyberdeck-install-system" config/includes.chroot_after_pac
 cp "${ROOT}/firstboot/cyberdeck-nomad-launch" config/includes.chroot_after_packages/usr/bin/cyberdeck-nomad-launch
 cp "${ROOT}/firstboot/cyberdeck-multiwan" config/includes.chroot_after_packages/usr/sbin/cyberdeck-multiwan
 cp "${ROOT}/firstboot/meshtasticd-cyberdeck-web.yaml" config/includes.chroot_after_packages/etc/meshtasticd/config.d/cyberdeck-web.yaml
+cp "${ROOT}/firstboot/cyberdeck-nomad-gate" config/includes.chroot_after_packages/usr/sbin/cyberdeck-nomad-gate
+cp "${ROOT}/firstboot/cyberdeck-nomad-gate.conf" config/includes.chroot_after_packages/etc/cyberdeck/nomad-gate/nginx.conf
+cp "${ROOT}/firstboot/cyberdeck-nomad.pam" config/includes.chroot_after_packages/etc/pam.d/cyberdeck-nomad
+cp "${ROOT}/firstboot/access-cyberdeck-nomad.conf" config/includes.chroot_after_packages/etc/security/access-cyberdeck-nomad.conf
+cp "${ROOT}/firstboot/cyberdeck-nomad-gate.service" config/includes.chroot_after_packages/etc/systemd/system/cyberdeck-nomad-gate.service
+cp "${ROOT}/firstboot/cyberdeck-nomad-bind.service" config/includes.chroot_after_packages/etc/systemd/system/cyberdeck-nomad-bind.service
+cp "${ROOT}/firstboot/cyberdeck-nomad-bind.path" config/includes.chroot_after_packages/etc/systemd/system/cyberdeck-nomad-bind.path
+cp "${ROOT}/firstboot/cyberdeck-nomad-gate.filter" config/includes.chroot_after_packages/etc/fail2ban/filter.d/cyberdeck-nomad-gate.conf
+cp "${ROOT}/firstboot/cyberdeck-nomad-gate.jail" config/includes.chroot_after_packages/etc/fail2ban/jail.d/cyberdeck-nomad-gate.conf
+cp "${ROOT}/branding/image/docker-cyberdeck-firewall.conf" config/includes.chroot_after_packages/etc/systemd/system/docker.service.d/cyberdeck-firewall.conf
+cp "${ROOT}/firstboot/cyberdeck-nomad-gate.tmpfiles" config/includes.chroot_after_packages/etc/tmpfiles.d/cyberdeck-nomad-gate.conf
+cp "${ROOT}/firstboot/cyberdeck.sysusers" config/includes.chroot_after_packages/usr/lib/sysusers.d/cyberdeck.conf
+ln -sfn ../cyberdeck-nomad-bind.path config/includes.chroot_after_packages/etc/systemd/system/multi-user.target.wants/cyberdeck-nomad-bind.path
+ln -sfn ../cyberdeck-nomad-gate.service config/includes.chroot_after_packages/etc/systemd/system/multi-user.target.wants/cyberdeck-nomad-gate.service
 cp "${ROOT}/firstboot/90-cyberdeck-multiwan" config/includes.chroot_after_packages/etc/NetworkManager/dispatcher.d/90-cyberdeck-multiwan
 cp "${ROOT}/firstboot/cyberdeck-multiwan.service" config/includes.chroot_after_packages/etc/systemd/system/cyberdeck-multiwan.service
 cp "${ROOT}/firstboot/cyberdeck-multiwan.timer" config/includes.chroot_after_packages/etc/systemd/system/cyberdeck-multiwan.timer
