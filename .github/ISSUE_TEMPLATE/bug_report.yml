@@ -1,0 +1,54 @@
+name: Bug report
+description: Something in Cyberdeck OS, the installer, or the docs is wrong
+title: "[Bug] "
+labels:
+  - bug
+body:
+  - type: input
+    id: version
+    attributes:
+      label: Cyberdeck OS version
+      description: From `cat /etc/os-release`, or the doc path if you are not on an image.
+      placeholder: Cyberdeck OS Alpha 3 (Hatchet)
+    validations:
+      required: true
+  - type: dropdown
+    id: where
+    attributes:
+      label: Where it happened
+      options:
+        - Live session
+        - Installed system
+        - Installer
+        - Documentation
+        - GitHub Actions build
+    validations:
+      required: true
+  - type: textarea
+    id: happened
+    attributes:
+      label: What happened
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps
+      placeholder: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: Paste only the relevant lines. Remove passwords, keys, serial numbers, and Wi-Fi names.
+      render: shell

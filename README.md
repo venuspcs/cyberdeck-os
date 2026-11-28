@@ -18,6 +18,8 @@ The AMD64 image is a hybrid ISO named `cyberdeck-os-amd64-amd64.hybrid.iso`. Dow
 3. Boot the USB in UEFI or legacy BIOS. Secure Boot is not supported; turn it off.
 4. On the live desktop, open **Install Cyberdeck OS**. Back up your files first.
 
+Tested it? [Tell us how it went](https://github.com/venuspcs/cyberdeck-os/issues/new?template=hardware_report.yml).
+
 Checksum commands, firmware notes, and fixes are in [docs/INSTALL.md](docs/INSTALL.md).
 
 The full locked spec is in [docs/SPEC.md](docs/SPEC.md). The milestone checklist is in [docs/ROADMAP.md](docs/ROADMAP.md).

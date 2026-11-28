@@ -1,0 +1,96 @@
+name: Hardware report
+description: Tell us how Cyberdeck OS ran on your machine
+title: "[Hardware] "
+labels:
+  - hardware
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Tested a Cyberdeck OS image? This form adds your machine to the record. Crop serial numbers out of photos and `inxi` output.
+  - type: input
+    id: version
+    attributes:
+      label: Cyberdeck OS version
+      description: From `cat /etc/os-release`, for example Alpha 3 (Hatchet) or Beta 1 (Plow). Include the ISO SHA256 if you have it.
+      placeholder: Cyberdeck OS Alpha 3 (Hatchet)
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Device make and model
+      placeholder: ASUS Vivobook S16
+    validations:
+      required: true
+  - type: input
+    id: cpu
+    attributes:
+      label: CPU
+      placeholder: AMD Ryzen AI 9 HX 370
+    validations:
+      required: true
+  - type: input
+    id: gpu
+    attributes:
+      label: GPU
+      placeholder: AMD Radeon 890M
+    validations:
+      required: true
+  - type: input
+    id: ram
+    attributes:
+      label: RAM
+      placeholder: 32 GB
+    validations:
+      required: true
+  - type: dropdown
+    id: boot
+    attributes:
+      label: Boot mode
+      options:
+        - UEFI, Secure Boot off
+        - UEFI, Secure Boot on
+        - BIOS (legacy)
+        - Not sure
+    validations:
+      required: true
+  - type: dropdown
+    id: install
+    attributes:
+      label: Install type
+      options:
+        - Live only
+        - Installed
+    validations:
+      required: true
+  - type: checkboxes
+    id: worked
+    attributes:
+      label: What worked
+      options:
+        - label: Boot
+        - label: Wi-Fi
+        - label: Ethernet
+        - label: Bluetooth
+        - label: Audio
+        - label: Suspend and resume
+        - label: Webcam
+        - label: Touchpad
+        - label: Brightness
+        - label: External display
+        - label: Project Nomad setup
+        - label: Install Extras
+  - type: textarea
+    id: issues
+    attributes:
+      label: What failed or felt wrong
+      description: Include what you expected and what happened.
+    validations:
+      required: true
+  - type: textarea
+    id: inxi
+    attributes:
+      label: Optional inxi -Fxz
+      description: Paste the output of `inxi -Fxz`. Remove serial numbers first.
+      render: shell
