@@ -1,5 +1,8 @@
 blank_issues_enabled: true
 contact_links:
+  - name: Tested it? Tell us how it went
+    url: https://github.com/venuspcs/cyberdeck-os/issues/new?template=hardware_report.yml
+    about: Open a Hardware report after you try a Cyberdeck OS image.
   - name: Security report
     url: https://github.com/venuspcs/cyberdeck-os/security/advisories/new
     about: Report a vulnerability in private. Please do not open a public issue for an unfixed flaw.

@@ -6,6 +6,8 @@ Alpha 3 is tag `v0.3.0-alpha3`, titled **Cyberdeck OS Alpha 3 (Hatchet)**. The I
 
 This ISO is about 4 GB. Use a USB drive of **8 GB or larger**. Writing the USB erases that drive.
 
+Tested it? [Tell us how it went](https://github.com/venuspcs/cyberdeck-os/issues/new?template=hardware_report.yml).
+
 Apple Silicon Macs (M1 and later) cannot boot this image. An ARM64 image is planned and is not this download.
 
 ## Contents
