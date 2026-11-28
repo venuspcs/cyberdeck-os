@@ -35,7 +35,6 @@ terminal-font: "Unifont Regular 16"
     width = 64%
     height = 48%
     menu_pixmap_style = "menu_*.png"
-    item_pixmap_style = "item_*.png"
     selected_item_pixmap_style = "select_*.png"
     item_font = "Unifont Regular 16"
     item_color = "#e8eef2"
@@ -57,7 +56,7 @@ terminal-font: "Unifont Regular 16"
     font = "Unifont Regular 16"
     text_color = "#102028"
     fg_color = "#d7e6ee"
-    bg_color = "#1c3a4a"
+    bg_color = "#7d9aa8"
     border_color = "#d7e6ee"
     text = "@TIMEOUT_NOTIFICATION_SHORT@"
 }
