@@ -39,15 +39,18 @@ EOF
 home=$(getent passwd "${USER_NAME}" | cut -d: -f6)
 if [ -n "${home}" ]; then
 	mkdir -p "${home}/Desktop" "${home}/.config"
-	for icon in Cyberdeck-OS-Manual.desktop Install-Extras.desktop Project-Nomad-Setup.desktop; do
-		if [ -f "/etc/skel/Desktop/${icon}" ]; then
-			cp "/etc/skel/Desktop/${icon}" "${home}/Desktop/${icon}"
-			chmod 755 "${home}/Desktop/${icon}"
-		fi
-	done
-	if [ -f /usr/share/applications/cyberdeck-install-system.desktop ]; then
-		cp /usr/share/applications/cyberdeck-install-system.desktop "${home}/Desktop/Install-System.desktop"
-		chmod 755 "${home}/Desktop/Install-System.desktop"
+	# Skel is the installed desktop: Manual, Install Extras, Nomad Setup.
+	# The live desktop keeps the manual and the Calamares icon only.
+	rm -f "${home}/Desktop/Install-Extras.desktop" \
+		"${home}/Desktop/Project-Nomad-Setup.desktop" \
+		"${home}/Desktop/Install-System.desktop"
+	if [ -f /etc/skel/Desktop/Cyberdeck-OS-Manual.desktop ]; then
+		cp /etc/skel/Desktop/Cyberdeck-OS-Manual.desktop "${home}/Desktop/Cyberdeck-OS-Manual.desktop"
+		chmod 755 "${home}/Desktop/Cyberdeck-OS-Manual.desktop"
+	fi
+	if [ -f /usr/share/applications/calamares-install-debian.desktop ]; then
+		cp /usr/share/applications/calamares-install-debian.desktop "${home}/Desktop/Install-Cyberdeck-OS.desktop"
+		chmod 755 "${home}/Desktop/Install-Cyberdeck-OS.desktop"
 	fi
 	cat > "${home}/.config/kscreenlockerrc" <<'EOF'
 [Daemon]

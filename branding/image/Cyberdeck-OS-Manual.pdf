@@ -67,7 +67,7 @@ ET
 endstream
 endobj
 5 0 obj
-<< /Length 2020 >>
+<< /Length 1987 >>
 stream
 BT
 /F1 11 Tf
@@ -81,8 +81,10 @@ BT
 (Status: written for Beta 1 \(Plow\).) '
 () '
 (The live user is cyberdeck with password cyberdeck, and that account can use sudo without) '
-(a password. The installed account cannot. Project Nomad Setup does not auto-start on the) '
-(live desktop. The menu entry still opens it.) '
+(a password. The installed account cannot. The live desktop shows Cyberdeck OS Manual and) '
+(Install Cyberdeck OS. Install Extras and Project Nomad Setup are on the installed desktop,) '
+(and in the menu during the live session. Nomad Setup does not auto-start on the live) '
+(desktop.) '
 () '
 (The desktop uses Daybreak or Nightwatch from the clock. The manual icon is on the desktop.) '
 (Support Cyberdeck OS is in the application menu. The Conky HUD shows CPU, battery, and) '
@@ -119,18 +121,18 @@ BT
 () '
 (Status: written for Beta 1 \(Plow\).) '
 () '
-(At the installed GRUB menu, the advanced or main list includes snapshot entries from) '
-(grub-btrfs after apt has taken a snapshot. Booting a snapshot returns the Btrfs root to) '
 ET
 endstream
 endobj
 6 0 obj
-<< /Length 1967 >>
+<< /Length 2051 >>
 stream
 BT
 /F1 11 Tf
 50 780 Td
 14 TL
+(At the installed GRUB menu, the advanced or main list includes snapshot entries from) '
+(grub-btrfs after apt has taken a snapshot. Booting a snapshot returns the Btrfs root to) '
 (that moment. Data you stored only on /library is not inside the root snapshot.) '
 () '
 (If the 7.3 kernel will not boot or Wi-Fi will not associate, choose the 6.12 kernel line) '
@@ -177,18 +179,18 @@ BT
 (application.) '
 () '
 (Snapshots) '
-() '
-(Snapper keeps the 4 newest numbered snapshots \(NUMBER_LIMIT=4\), which is two pre/post) '
 ET
 endstream
 endobj
 7 0 obj
-<< /Length 2086 >>
+<< /Length 2122 >>
 stream
 BT
 /F1 11 Tf
 50 780 Td
 14 TL
+() '
+(Snapper keeps the 4 newest numbered snapshots \(NUMBER_LIMIT=4\), which is two pre/post) '
 (pairs from apt. Apt takes a snapshot before it changes packages.) '
 () '
 (Support) '
@@ -235,18 +237,18 @@ BT
 () '
 (The image includes Distrobox and Podman. Use them when a program is packaged for Ubuntu or) '
 (Arch.) '
-() '
-(distrobox create --name ubuntu --image ubuntu:24.04) '
 ET
 endstream
 endobj
 8 0 obj
-<< /Length 2206 >>
+<< /Length 2245 >>
 stream
 BT
 /F1 11 Tf
 50 780 Td
 14 TL
+() '
+(distrobox create --name ubuntu --image ubuntu:24.04) '
 (distrobox enter ubuntu) '
 () '
 (Ollama has no apt repository. Project Nomad runs the ollama/ollama container on) '
@@ -293,18 +295,18 @@ BT
 (network. MeshCore Web is published on port 9444. Vaultwarden is not installed.) '
 () '
 (This guide is licensed under [CC BY 4.0]\(../../LICENSE-docs\).) '
-() '
-(ham-tools.md) '
 ET
 endstream
 endobj
 9 0 obj
-<< /Length 561 >>
+<< /Length 583 >>
 stream
 BT
 /F1 11 Tf
 50 780 Td
 14 TL
+() '
+(ham-tools.md) '
 () '
 (Ham and SDR tools) '
 () '
@@ -348,17 +350,17 @@ xref
 0000000151 00000 n 
 0000000221 00000 n 
 0000002182 00000 n 
-0000004254 00000 n 
-0000006273 00000 n 
-0000008411 00000 n 
-0000010669 00000 n 
-0000011281 00000 n 
-0000011408 00000 n 
-0000011535 00000 n 
-0000011662 00000 n 
-0000011789 00000 n 
-0000011916 00000 n 
+0000004221 00000 n 
+0000006324 00000 n 
+0000008498 00000 n 
+0000010795 00000 n 
+0000011429 00000 n 
+0000011556 00000 n 
+0000011683 00000 n 
+0000011810 00000 n 
+0000011937 00000 n 
+0000012064 00000 n 
 trailer << /Size 16 /Root 1 0 R >>
 startxref
-12043
+12191
 %%EOF

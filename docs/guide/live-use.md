@@ -2,7 +2,7 @@
 
 **Status: written for Beta 1 (Plow).**
 
-The live user is `cyberdeck` with password `cyberdeck`, and that account can use sudo without a password. The installed account cannot. Project Nomad Setup does not auto-start on the live desktop. The menu entry still opens it.
+The live user is `cyberdeck` with password `cyberdeck`, and that account can use sudo without a password. The installed account cannot. The live desktop shows **Cyberdeck OS Manual** and **Install Cyberdeck OS**. Install Extras and Project Nomad Setup are on the installed desktop, and in the menu during the live session. Nomad Setup does not auto-start on the live desktop.
 
 The desktop uses Daybreak or Nightwatch from the clock. The manual icon is on the desktop. **Support Cyberdeck OS** is in the application menu. The Conky HUD shows CPU, battery, and network when those devices exist. System sounds use the Ocean theme. On AC the power profile is Performance, on battery it is Balanced, and on low battery it is Power Saver.
 
