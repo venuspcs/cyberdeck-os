@@ -1,26 +1,64 @@
 #!/bin/sh
-# Allow Nomad services from RFC1918 LAN only. Docker published ports
-# skip ufw, so the same limits are applied on DOCKER-USER.
+# Docker published ports skip ufw. This chain allows the local network
+# and drops everyone else, for IPv4 and IPv6. It matches after Docker's
+# port rewrite, so a host port and a container port are covered the same way.
+# Safe to run again after Docker restarts.
 set -u
-ports="8080,8490,8090,4403,9443,9444,9445"
-if command -v ufw >/dev/null 2>&1; then
+
+allow_ufw() {
+	command -v ufw >/dev/null 2>&1 || return 0
 	for net in 127.0.0.0/8 192.168.0.0/16 10.0.0.0/8 172.16.0.0/12; do
-		for port in 8080 8490 8090 4403 9443 9444 9445; do
+		for port in 8490 8090 4403 8443 3443 9443 9444 9445; do
 			ufw allow from "$net" to any port "$port" proto tcp comment "cyberdeck-lan" >/dev/null 2>&1 || true
 		done
 	done
-fi
-if ! command -v iptables >/dev/null 2>&1; then
-	exit 0
-fi
-iptables -C DOCKER-USER -m comment --comment cyberdeck-lan-drop -j DROP 2>/dev/null && exit 0
-iptables -N CYBERDECK-LAN 2>/dev/null || true
-iptables -F CYBERDECK-LAN
-iptables -A CYBERDECK-LAN -m conntrack --ctstate ESTABLISHED,RELATED -j RETURN
-iptables -A CYBERDECK-LAN -s 127.0.0.0/8 -j RETURN
-iptables -A CYBERDECK-LAN -s 192.168.0.0/16 -j RETURN
-iptables -A CYBERDECK-LAN -s 10.0.0.0/8 -j RETURN
-iptables -A CYBERDECK-LAN -s 172.16.0.0/12 -j RETURN
-iptables -A CYBERDECK-LAN -p tcp -m multiport --dports "$ports" -j DROP
-iptables -C DOCKER-USER -j CYBERDECK-LAN 2>/dev/null || iptables -I DOCKER-USER -j CYBERDECK-LAN
+	for net in ::1/128 fe80::/10 fc00::/7; do
+		for port in 8490 8090 4403 8443 3443 9443 9444 9445; do
+			ufw allow from "$net" to any port "$port" proto tcp comment "cyberdeck-lan" >/dev/null 2>&1 || true
+		done
+	done
+}
+
+apply_family() {
+	tool="$1"
+	chain="$2"
+	shift 2
+	command -v "$tool" >/dev/null 2>&1 || return 0
+	"$tool" -N "$chain" 2>/dev/null || true
+	"$tool" -F "$chain"
+	"$tool" -A "$chain" -m conntrack --ctstate ESTABLISHED,RELATED -j RETURN
+	for src in "$@"; do
+		"$tool" -A "$chain" -s "$src" -j RETURN
+	done
+	"$tool" -A "$chain" -j DROP
+	"$tool" -N DOCKER-USER 2>/dev/null || true
+	"$tool" -C DOCKER-USER -j "$chain" 2>/dev/null || "$tool" -I DOCKER-USER -j "$chain"
+}
+
+# Only the gate (nginx, user www-data) and root may open Open WebUI directly.
+lock_webui() {
+	command -v iptables >/dev/null 2>&1 || return 0
+	iptables -N CYBERDECK-WEBUI 2>/dev/null || true
+	iptables -F CYBERDECK-WEBUI
+	iptables -A CYBERDECK-WEBUI -m owner --uid-owner root -j RETURN
+	iptables -A CYBERDECK-WEBUI -m owner --uid-owner www-data -j RETURN
+	iptables -A CYBERDECK-WEBUI -j REJECT
+	iptables -C OUTPUT -d 127.0.0.1/32 -p tcp --dport 3000 -j CYBERDECK-WEBUI 2>/dev/null || \
+		iptables -I OUTPUT -d 127.0.0.1/32 -p tcp --dport 3000 -j CYBERDECK-WEBUI
+	command -v ip6tables >/dev/null 2>&1 || return 0
+	ip6tables -N CYBERDECK-WEBUI6 2>/dev/null || true
+	ip6tables -F CYBERDECK-WEBUI6
+	ip6tables -A CYBERDECK-WEBUI6 -m owner --uid-owner root -j RETURN
+	ip6tables -A CYBERDECK-WEBUI6 -m owner --uid-owner www-data -j RETURN
+	ip6tables -A CYBERDECK-WEBUI6 -j REJECT
+	ip6tables -C OUTPUT -d ::1/128 -p tcp --dport 3000 -j CYBERDECK-WEBUI6 2>/dev/null || \
+		ip6tables -I OUTPUT -d ::1/128 -p tcp --dport 3000 -j CYBERDECK-WEBUI6
+}
+
+allow_ufw
+lock_webui
+apply_family iptables CYBERDECK-LAN \
+	127.0.0.0/8 192.168.0.0/16 10.0.0.0/8 172.16.0.0/12
+apply_family ip6tables CYBERDECK-LAN6 \
+	::1/128 fe80::/10 fc00::/7
 exit 0

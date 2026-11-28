@@ -241,7 +241,7 @@ ET
 endstream
 endobj
 8 0 obj
-<< /Length 2385 >>
+<< /Length 2406 >>
 stream
 BT
 /F1 11 Tf
@@ -265,9 +265,12 @@ BT
 (Status: written for Beta 1 \(Plow\).) '
 () '
 (Project Nomad Setup asks where /library lives, writes it to fstab by UUID, and orders) '
-(Docker after that mount. It then starts Nomad admin on port 8080, Open WebUI on) '
-(127.0.0.1:3000, Ollama on 127.0.0.1:11434, Dozzle logs on 127.0.0.1:9999, and Qdrant on) '
-(127.0.0.1:6333.) '
+(Docker after that mount. It then starts Nomad admin on port 8080 of this computer, with no) '
+(password. From another computer on the local network the address is https:// and port) '
+(8443. Accept the certificate once and sign in with a Cyberdeck administrator account. Open) '
+(WebUI is https://127.0.0.1:3443 and uses that same login. The desktop icon opens it. Open) '
+(WebUI is on 127.0.0.1:3000, Ollama on 127.0.0.1:11434, Dozzle logs on 127.0.0.1:9999, and) '
+(Qdrant on 127.0.0.1:6333.) '
 () '
 (It also starts the Supply Depot apps except Vaultwarden: Kiwix \(8090\), Kolibri, Flatnotes,) '
 (CyberChef, Stirling PDF, File Browser, Calibre Web, IT Tools, Excalidraw, Homebox,) '
@@ -292,19 +295,19 @@ BT
 (Status: written for Beta 1 \(Plow\).) '
 () '
 (meshtasticd is installed from the Meshtastic repository configured for Debian 13. Its web) '
-(server listens on port 9443 with a self-signed certificate that is created the first time) '
-(the service starts. Open https://localhost:9443 and accept that certificate once. The TCP) '
-(API listens on port 4403. Both ports are reachable from this computer and from the local) '
 ET
 endstream
 endobj
 9 0 obj
-<< /Length 924 >>
+<< /Length 1205 >>
 stream
 BT
 /F1 11 Tf
 50 780 Td
 14 TL
+(server listens on port 9443 with a self-signed certificate that is created the first time) '
+(the service starts. Open https://localhost:9443 and accept that certificate once. The TCP) '
+(API listens on port 4403. Both ports are reachable from this computer and from the local) '
 (network, and the firewall drops them from the public internet. The Supply Depot Meshtastic) '
 (Web container, if you install it, is on port 9445 so it does not take 9443. MeshCore Web) '
 (is on port 9444 when its image can be pulled. Vaultwarden is not installed.) '
@@ -358,14 +361,14 @@ xref
 0000004221 00000 n 
 0000006324 00000 n 
 0000008498 00000 n 
-0000010935 00000 n 
-0000011910 00000 n 
-0000012037 00000 n 
-0000012164 00000 n 
-0000012291 00000 n 
-0000012418 00000 n 
-0000012545 00000 n 
+0000010956 00000 n 
+0000012213 00000 n 
+0000012340 00000 n 
+0000012467 00000 n 
+0000012594 00000 n 
+0000012721 00000 n 
+0000012848 00000 n 
 trailer << /Size 16 /Root 1 0 R >>
 startxref
-12672
+12975
 %%EOF

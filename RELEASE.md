@@ -8,6 +8,14 @@ This is not single-stream bonding. The kernel hashes each connection, including 
 
 `cyberdeck-multiwan status` shows the current choice. It is on unless `/etc/cyberdeck/multiwan.conf` says `ENABLED=no`.
 
+## Security
+
+Nomad admin has the Docker socket and does not have its own password. On the Cyberdeck, http://127.0.0.1:8080 stays open. From another computer on the LAN, the address is https:// and port 8443. Accept the self-signed certificate once. Sign in with a Cyberdeck account that can use sudo, or one in the `cyberdeck-admin` group. That is the same password as the desktop login. The firewall drops this, and the other published services, from the public internet on IPv4 and IPv6.
+
+Open WebUI uses the same login at https://127.0.0.1:3443, including on this computer, because that is how it learns who you are. The first administrator to open it becomes the WebUI admin. Later accounts wait for approval. The desktop icon opens that address.
+
+The account created at install is not in the docker group. Nomad Setup, Install Extras, and the other administrator tools ask for that account's password.
+
 ## Join the ISO
 
 GitHub stores each file under 2 GB. The ISO is split into `cyberdeck-os-amd64-amd64.hybrid.iso.part-aa`, `part-ab`, and `part-ac`. Download every part and `SHA256SUMS`.

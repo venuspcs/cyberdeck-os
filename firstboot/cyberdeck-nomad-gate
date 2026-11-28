@@ -1,0 +1,110 @@
+#!/bin/bash
+# Remote Nomad admin asks for a Cyberdeck login. Localhost does not.
+set -u
+
+COMPOSE=/library/nomad/compose.yml
+UNIT=cyberdeck-nomad-gate.service
+
+prepare() {
+	mkdir -p /etc/cyberdeck/nomad-gate /var/log
+	if ! getent group cyberdeck-admin >/dev/null 2>&1; then
+		groupadd --system cyberdeck-admin
+	fi
+	if [ ! -s /etc/cyberdeck/nomad-gate/cert.pem ]; then
+		openssl req -x509 -newkey rsa:2048 -sha256 -days 3650 -nodes \
+			-keyout /etc/cyberdeck/nomad-gate/key.pem \
+			-out /etc/cyberdeck/nomad-gate/cert.pem \
+			-subj "/CN=cyberdeck-nomad" >/dev/null 2>&1
+		chmod 600 /etc/cyberdeck/nomad-gate/key.pem
+	fi
+	touch /var/log/cyberdeck-nomad-gate.log
+}
+
+apply_bind() {
+	[ -f "$COMPOSE" ] || return 0
+	python3 - "$COMPOSE" /library/nomad/supply.yml <<'PY'
+import pathlib, sys
+needed = [
+    "WEBUI_AUTH=true",
+    "ENABLE_SIGNUP=false",
+    "DEFAULT_USER_ROLE=pending",
+    "WEBUI_AUTH_TRUSTED_EMAIL_HEADER=X-Cyberdeck-Email",
+    "WEBUI_AUTH_TRUSTED_NAME_HEADER=X-Cyberdeck-Name",
+]
+changed = False
+for raw in sys.argv[1:]:
+    path = pathlib.Path(raw)
+    if not path.is_file():
+        continue
+    text = path.read_text()
+    old = text
+    text = text.replace('"8080:8080"', '"127.0.0.1:8080:8080"')
+    text = text.replace("'8080:8080'", "'127.0.0.1:8080:8080'")
+    text = text.replace('"3000:8080"', '"127.0.0.1:3000:8080"')
+    text = text.replace("'3000:8080'", "'127.0.0.1:3000:8080'")
+    if "open-webui" in text or "open_webui" in text:
+        for item in needed:
+            if item in text:
+                continue
+            needle = "- OLLAMA_BASE_URL=http://ollama:11434\n"
+            if needle in text:
+                text = text.replace(needle, needle + "      - " + item + "\n", 1)
+            elif "environment:\n" in text:
+                text = text.replace("environment:\n", "environment:\n      - " + item + "\n", 1)
+    if text != old:
+        path.write_text(text)
+        changed = True
+sys.exit(2 if changed else 0)
+PY
+	changed=$?
+	if [ "$changed" -eq 2 ] && docker info >/dev/null 2>&1; then
+		if docker compose version >/dev/null 2>&1; then
+			docker compose -f "$COMPOSE" up -d --no-deps admin open-webui || \
+				docker compose -f "$COMPOSE" up -d --no-deps admin || true
+		elif command -v docker-compose >/dev/null 2>&1; then
+			docker-compose -f "$COMPOSE" up -d --no-deps admin open-webui || \
+				docker-compose -f "$COMPOSE" up -d --no-deps admin || true
+		fi
+	fi
+	return 0
+}
+
+status_cmd() {
+	if systemctl is-active --quiet "$UNIT"; then
+		echo "Nomad gate: on"
+	else
+		echo "Nomad gate: off"
+	fi
+	echo "Nomad on this computer: http://127.0.0.1:8080 (no password)"
+	echo "Nomad from the LAN: https://<this-computer>:8443"
+	echo "Open WebUI, here and on the LAN: https://127.0.0.1:3443 or https://<this-computer>:3443"
+	echo "That login is a Cyberdeck account in the sudo or cyberdeck-admin group."
+	echo "Accept the self-signed certificate once. The password is not sent in cleartext."
+	if [ -f "$COMPOSE" ] && grep -q '127.0.0.1:8080:8080' "$COMPOSE"; then
+		echo "Admin container: localhost only"
+	elif [ -f "$COMPOSE" ]; then
+		echo "Admin container: compose file is not bound to localhost yet"
+	else
+		echo "Admin container: compose file is not written yet"
+	fi
+}
+
+case "${1:-status}" in
+	prepare) prepare ;;
+	apply-bind) apply_bind ;;
+	status) status_cmd ;;
+	on)
+		prepare
+		apply_bind
+		systemctl enable --now "$UNIT"
+		status_cmd
+		;;
+	off)
+		systemctl disable --now "$UNIT" || true
+		status_cmd
+		;;
+	*)
+		echo "Usage: cyberdeck-nomad-gate status|on|off" >&2
+		exit 1
+		;;
+esac

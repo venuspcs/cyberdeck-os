@@ -113,6 +113,8 @@ if [ -f "$B/Cyberdeck-OS-Manual.pdf" ]; then
 	install -m 0755 "$B/desktop/Cyberdeck-OS-Manual.desktop" /etc/skel/Desktop/Cyberdeck-OS-Manual.desktop
 	install -m 0755 "$B/desktop/Install-Extras.desktop" /etc/skel/Desktop/Install-Extras.desktop
 	install -m 0755 "$B/desktop/Project-Nomad-Setup.desktop" /etc/skel/Desktop/Project-Nomad-Setup.desktop
+	install -m 0755 "$B/desktop/Open-WebUI.desktop" /usr/share/applications/cyberdeck-open-webui.desktop
+	install -m 0755 "$B/desktop/Open-WebUI.desktop" /etc/skel/Desktop/Open-WebUI.desktop
 	install -m 0755 "$B/desktop/Install-System.desktop" /usr/share/applications/cyberdeck-install-system.desktop
 fi
 install -m 0644 "$B/kcminputrc" /etc/skel/.config/kcminputrc
@@ -185,4 +187,7 @@ if [ "${1:-}" = "--packages" ]; then
 	systemctl enable unattended-upgrades.service || true
 	systemctl enable systemd-timesyncd.service || true
 	systemctl enable cyberdeck-lan-firewall.service || true
+	systemctl enable cyberdeck-nomad-gate.service || true
+	systemctl enable cyberdeck-nomad-bind.path || true
+	systemctl enable fail2ban.service || true
 fi

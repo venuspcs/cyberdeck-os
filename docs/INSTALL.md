@@ -371,6 +371,16 @@ A VPN that takes the default route is left in charge. Split-tunnel VPNs keep the
 
 It is on by default. `cyberdeck-multiwan status` prints the links and the route. To turn it off, set `ENABLED=no` in `/etc/cyberdeck/multiwan.conf`. `sudo cyberdeck-multiwan off` does the same and removes the extra route. `sudo cyberdeck-multiwan on` turns it back on.
 
+### Project Nomad from another computer
+
+On this computer, open http://127.0.0.1:8080. That address does not ask for a password.
+
+From another computer on the same network, open https:// and this computer's address, port 8443. Accept the self-signed certificate once. The login is a Cyberdeck account that can use sudo, or an account in the `cyberdeck-admin` group. It is the same password as signing in to the desktop. The password is not sent in cleartext. The public internet cannot reach this port.
+
+`cyberdeck-nomad-gate status` prints that choice. `sudo cyberdeck-nomad-gate off` closes remote access and leaves the local Nomad page working.
+
+Open WebUI is https://127.0.0.1:3443 on this computer, and the same port on the LAN address from another computer. It uses that same Cyberdeck login. The first administrator to open it becomes the WebUI admin. Later accounts wait until that admin approves them. The desktop icon opens this address. Nothing else on the computer can talk to the WebUI container directly, and the account created at install is not in the `docker` group. Docker commands ask for the administrator password.
+
 ### Meshtastic
 
 `meshtasticd` serves Meshtastic Web at https://localhost:9443. The certificate is self-signed and created the first time the service starts. Open that address and accept the certificate once. The TCP API is port 4403. The firewall allows 4403 and 9443 from this computer and from the local network, and drops them from the public internet.

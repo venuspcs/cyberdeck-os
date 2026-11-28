@@ -1,0 +1,8 @@
+[Unit]
+Description=Watch the Nomad compose file for a public admin port
+
+[Path]
+PathChanged=/library/nomad/compose.yml
+
+[Install]
+WantedBy=multi-user.target

@@ -235,6 +235,9 @@ sed -e "s/__APP_KEY__/${app_key}/" \
 	/usr/share/cyberdeck/nomad-compose.yml.in > /library/nomad/compose.yml
 cp /usr/share/cyberdeck/nomad-supply.yml.in /library/nomad/supply.yml
 chmod 600 /library/nomad/compose.yml /library/nomad/supply.yml
+if [ -x /usr/sbin/cyberdeck-nomad-gate ]; then
+	/usr/sbin/cyberdeck-nomad-gate apply-bind || true
+fi
 
 display_pci() {
 	lspci -nn 2>/dev/null | grep -Ei 'VGA compatible controller|3D controller|Display controller' || true

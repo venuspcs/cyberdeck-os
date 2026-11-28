@@ -18,8 +18,7 @@ if ! id "${USER_NAME}" >/dev/null 2>&1; then
 fi
 
 echo "${USER_NAME}:${USER_NAME}" | chpasswd || true
-usermod -aG sudo,netdev,plugdev,video,audio,cdrom,docker "${USER_NAME}" 2>/dev/null || \
-	usermod -aG sudo,netdev,plugdev,video,audio,cdrom "${USER_NAME}" || true
+usermod -aG sudo,netdev,plugdev,video,audio,cdrom "${USER_NAME}" || true
 
 printf '%s\n' "${USER_NAME} ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/cyberdeck-live
 chmod 440 /etc/sudoers.d/cyberdeck-live
@@ -43,7 +42,8 @@ if [ -n "${home}" ]; then
 	# The live desktop keeps the manual and the Calamares icon only.
 	rm -f "${home}/Desktop/Install-Extras.desktop" \
 		"${home}/Desktop/Project-Nomad-Setup.desktop" \
-		"${home}/Desktop/Install-System.desktop"
+		"${home}/Desktop/Install-System.desktop" \
+		"${home}/Desktop/Open-WebUI.desktop"
 	if [ -f /etc/skel/Desktop/Cyberdeck-OS-Manual.desktop ]; then
 		cp /etc/skel/Desktop/Cyberdeck-OS-Manual.desktop "${home}/Desktop/Cyberdeck-OS-Manual.desktop"
 		chmod 755 "${home}/Desktop/Cyberdeck-OS-Manual.desktop"

@@ -1,0 +1,10 @@
+[cyberdeck-nomad-gate]
+enabled = true
+port = 8443,3443
+protocol = tcp
+filter = cyberdeck-nomad-gate
+logpath = /var/log/cyberdeck-nomad-gate.log
+maxretry = 8
+findtime = 10m
+bantime = 1h
+backend = auto

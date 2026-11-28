@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Open WebUI
+Comment=Open the local chat page. Sign in with your Cyberdeck account.
+Exec=xdg-open https://127.0.0.1:3443
+Icon=preferences-system-network
+Terminal=false
+Categories=Network;
+StartupNotify=true
