@@ -43,12 +43,12 @@ def main():
 
     root = Path(__file__).resolve().parents[1]
     version = (root / "version" / "cyberdeck-os.version").read_text(encoding="utf-8")
-    expect("CYBERDECK_VERSION_ID=alpha3" in version, "version id")
-    expect('CYBERDECK_VERSION="Alpha 3 (Hatchet)"' in version, "version name")
-    expect("CYBERDECK_BUILD=3" in version, "build number")
+    expect("CYBERDECK_VERSION_ID=beta1" in version, "version id")
+    expect('CYBERDECK_VERSION="Beta 1 (Plow)"' in version, "version name")
+    expect("CYBERDECK_BUILD=5" in version, "build number")
     os_release = (root / "branding" / "image" / "os-release").read_text(encoding="utf-8")
-    expect("VERSION_ID=alpha3" in os_release, "os-release id")
-    expect("Alpha 3 (Hatchet)" in os_release, "os-release pretty")
+    expect("VERSION_ID=beta1" in os_release, "os-release id")
+    expect("Beta 1 (Plow)" in os_release, "os-release pretty")
     expect("SUPPORT_URL=" in os_release, "support url")
     expect("Version 1 (Alpha)" not in os_release, "old version string in os-release")
     identity = [
@@ -60,8 +60,8 @@ def main():
     ]
     blob = "\n".join(path.read_text(encoding="utf-8") for path in identity)
     expect("Version 1 (Alpha)" not in blob, "identity files still say Version 1 (Alpha)")
-    expect("Alpha 3 (Hatchet)" in blob, "identity files missing Alpha 3")
-    print("alpha3 checks passed")
+    expect("Beta 1 (Plow)" in blob, "identity files missing Alpha 3")
+    print("beta1 checks passed")
 
 
 if __name__ == "__main__":

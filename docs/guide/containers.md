@@ -1,6 +1,6 @@
 # Other systems with Distrobox
 
-**Status: written for Alpha 3 (Hatchet).**
+**Status: written for Beta 1 (Plow).**
 
 The image includes Distrobox and Podman. Use them when a program is packaged for Ubuntu or Arch.
 

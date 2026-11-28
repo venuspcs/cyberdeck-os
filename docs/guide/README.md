@@ -1,6 +1,6 @@
 # Cyberdeck OS How-To guide
 
-**Status: written for Alpha 3 (Hatchet).** The chapters below match this image. They are not a substitute for the specification.
+**Status: written for Beta 1 (Plow).** The chapters below match this image. They are not a substitute for the specification.
 
 This guide ships on the desktop as a PDF and an ODT file. Okular opens the PDF.
 

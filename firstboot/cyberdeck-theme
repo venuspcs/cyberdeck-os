@@ -12,8 +12,8 @@ try:
 except ImportError:  # pragma: no cover
     ZoneInfo = None
 
-DAY_WALL = "/usr/share/wallpapers/cyberdeck/daybreak.png"
-NIGHT_WALL = "/usr/share/wallpapers/cyberdeck/nightwatch.png"
+DAY_WALL = "/usr/share/wallpapers/cyberdeck/daybreak.jpg"
+NIGHT_WALL = "/usr/share/wallpapers/cyberdeck/nightwatch.jpg"
 CONF = Path("/etc/cyberdeck/theme.conf")
 
 

@@ -1,0 +1,18 @@
+#!/bin/bash
+# Desktop launcher for the installer. Live session only.
+set -u
+. /usr/lib/cyberdeck/verbose.sh
+cyberdeck_verbose_begin install-system "$@"
+cyberdeck_step "Install System"
+if [ ! -d /run/live/medium ]; then
+	echo "This computer is already running an installed Cyberdeck OS."
+	echo "Install System only works from the live USB."
+	cyberdeck_finish DONE "nothing to install"
+	exit 0
+fi
+cyberdeck_step "Starting Calamares"
+if /usr/bin/calamares-install-debian; then
+	cyberdeck_finish DONE "Calamares finished"
+else
+	cyberdeck_finish ERROR "Calamares exited with an error"
+fi

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Install System
+Comment=Install Cyberdeck OS to a disk
+Exec=/usr/bin/cyberdeck-install-system
+Icon=system-software-install
+Terminal=false
+Categories=System;

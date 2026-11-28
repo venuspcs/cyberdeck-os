@@ -18,8 +18,7 @@ if ! id "${USER_NAME}" >/dev/null 2>&1; then
 fi
 
 echo "${USER_NAME}:${USER_NAME}" | chpasswd || true
-usermod -aG sudo,netdev,plugdev,video,audio,cdrom,docker "${USER_NAME}" 2>/dev/null || \
-	usermod -aG sudo,netdev,plugdev,video,audio,cdrom "${USER_NAME}" || true
+usermod -aG sudo,netdev,plugdev,video,audio,cdrom "${USER_NAME}" || true
 
 printf '%s\n' "${USER_NAME} ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/cyberdeck-live
 chmod 440 /etc/sudoers.d/cyberdeck-live
@@ -33,4 +32,42 @@ Relogin=false
 
 [General]
 DisplayServer=wayland
+Numlock=on
 EOF
+
+home=$(getent passwd "${USER_NAME}" | cut -d: -f6)
+if [ -n "${home}" ]; then
+	mkdir -p "${home}/Desktop" "${home}/.config"
+	# Skel is the installed desktop: Manual, Install Extras, Nomad Setup.
+	# The live desktop keeps the manual and the Calamares icon only.
+	rm -f "${home}/Desktop/Install-Extras.desktop" \
+		"${home}/Desktop/Project-Nomad-Setup.desktop" \
+		"${home}/Desktop/Install-System.desktop" \
+		"${home}/Desktop/Open-WebUI.desktop"
+	if [ -f /etc/skel/Desktop/Cyberdeck-OS-Manual.desktop ]; then
+		cp /etc/skel/Desktop/Cyberdeck-OS-Manual.desktop "${home}/Desktop/Cyberdeck-OS-Manual.desktop"
+		chmod 755 "${home}/Desktop/Cyberdeck-OS-Manual.desktop"
+	fi
+	if [ -f /usr/share/applications/calamares-install-debian.desktop ]; then
+		cp /usr/share/applications/calamares-install-debian.desktop "${home}/Desktop/Install-Cyberdeck-OS.desktop"
+		chmod 755 "${home}/Desktop/Install-Cyberdeck-OS.desktop"
+	fi
+	cat > "${home}/.config/kscreenlockerrc" <<'EOF'
+[Daemon]
+Autolock=false
+LockOnResume=false
+Timeout=0
+EOF
+	# The live home is created before Plasma. Put Ocean and the power
+	# profiles in that home even when skel dotfiles were not copied.
+	if [ ! -f "${home}/.config/kdeglobals" ]; then
+		cp /etc/skel/.config/kdeglobals "${home}/.config/kdeglobals" 2>/dev/null || \
+			printf '%s\n' '[Sounds]' 'Enable=true' 'Theme=ocean' > "${home}/.config/kdeglobals"
+	elif ! awk '/^\[Sounds\]/{s=1} /^\[/{if(!/^\[Sounds\]/)s=0} s&&/^Theme=/{found=1} END{exit !found}' "${home}/.config/kdeglobals"; then
+		printf '\n%s\n' '[Sounds]' 'Enable=true' 'Theme=ocean' >> "${home}/.config/kdeglobals"
+	fi
+	if [ ! -f "${home}/.config/powerdevilrc" ]; then
+		cp /etc/skel/.config/powerdevilrc "${home}/.config/powerdevilrc" 2>/dev/null || true
+	fi
+	chown -R "${USER_NAME}:${USER_NAME}" "${home}/Desktop" "${home}/.config"
+fi

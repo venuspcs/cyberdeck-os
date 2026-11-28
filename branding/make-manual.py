@@ -40,7 +40,7 @@ def wrap(text, width=90):
 
 
 def lines():
-    out = ["Cyberdeck OS Alpha 3 (Hatchet)", "How-To guide", ""]
+    out = ["Cyberdeck OS Beta 1 (Plow)", "How-To guide", ""]
     for name in CHAPTERS:
         path = GUIDE / name
         if not path.exists():

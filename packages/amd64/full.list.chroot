@@ -24,7 +24,6 @@ intel-microcode
 amd64-microcode
 mesa-vulkan-drivers
 nvidia-detect
-nvidia-driver
 gqrx-sdr
 wsjtx
 fldigi

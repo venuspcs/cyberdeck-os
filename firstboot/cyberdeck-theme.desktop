@@ -2,7 +2,7 @@
 Type=Application
 Name=Cyberdeck theme
 Comment=Apply Daybreak or Nightwatch
-Exec=cyberdeck-theme-daemon
+Exec=/usr/bin/cyberdeck-theme-daemon
 Terminal=false
 X-GNOME-Autostart-enabled=true
 OnlyShowIn=KDE;

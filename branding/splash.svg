@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="640" height="480" viewBox="0 0 640 480">
-  <rect width="640" height="480" fill="#1c3a4a"/>
-  <text x="320" y="230" fill="#ffffff" font-size="28" font-family="sans-serif" text-anchor="middle">Cyberdeck OS</text>
-  <text x="320" y="268" fill="#d7e6ee" font-size="18" font-family="sans-serif" text-anchor="middle">Version 1 (Alpha)</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="768" viewBox="0 0 1024 768">
+  <rect width="1024" height="768" fill="#1c3a4a"/>
+  <text x="512" y="72" fill="#ffffff" font-size="40" font-family="sans-serif" text-anchor="middle">Cyberdeck OS</text>
+  <text x="512" y="112" fill="#d7e6ee" font-size="22" font-family="sans-serif" text-anchor="middle">Beta 1 (Plow)</text>
 </svg>

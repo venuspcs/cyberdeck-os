@@ -57,3 +57,10 @@ systemd-timesyncd
 okular
 python3-tk
 inotify-tools
+ocean-sound-theme
+sound-theme-freedesktop
+power-profiles-daemon
+iputils-ping
+nginx
+libnginx-mod-http-auth-pam
+fail2ban

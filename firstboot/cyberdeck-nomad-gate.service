@@ -1,0 +1,13 @@
+[Unit]
+Description=Password gate for remote Project Nomad admin
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStartPre=/usr/sbin/cyberdeck-nomad-gate prepare
+ExecStart=/usr/sbin/nginx -c /etc/cyberdeck/nomad-gate/nginx.conf -g "daemon off;"
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

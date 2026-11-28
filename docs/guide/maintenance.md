@@ -1,6 +1,6 @@
 # Maintaining the OS and Nomad
 
-**Status: written for Alpha 3 (Hatchet).**
+**Status: written for Beta 1 (Plow).**
 
 ## Wi-Fi
 

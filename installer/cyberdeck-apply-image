@@ -29,6 +29,9 @@ install -m 0644 "$B/docker.sources" /etc/apt/sources.list.d/docker.sources
 install -m 0644 "$B/cyberdeck-hardware.pref" /etc/apt/preferences.d/cyberdeck-hardware
 install -m 0644 "$B/default-wifi-powersave-off.conf" /etc/NetworkManager/conf.d/default-wifi-powersave-off.conf
 install -m 0644 "$B/wifi-stable-mac.conf" /etc/NetworkManager/conf.d/wifi-stable-mac.conf
+install -d -m 0755 /etc/cyberdeck
+install -m 0644 "$B/multiwan.conf" /etc/cyberdeck/multiwan.conf
+install -m 0644 "$B/99-cyberdeck-multiwan.conf" /etc/sysctl.d/99-cyberdeck-multiwan.conf
 install -m 0644 "$B/mt7921e.conf" /etc/modprobe.d/mt7921e.conf
 install -d -m 0755 /etc/xdg /etc/skel/.config /etc/cyberdeck
 install -m 0644 "$B/mimeapps.list" /etc/xdg/mimeapps.list
@@ -67,17 +70,22 @@ install -m 0644 "$B/sddm-cyberdeck.conf" /etc/sddm.conf.d/cyberdeck.conf
 install -m 0644 "$B/kscreenlockerrc" /etc/xdg/kscreenlockerrc
 install -m 0644 "$B/theme.conf" /etc/cyberdeck/theme.conf
 
-install -d -m 0755 /usr/share/wallpapers/cyberdeck
-install -m 0644 "$B/wallpapers/daybreak.png" /usr/share/wallpapers/cyberdeck/daybreak.png
-install -m 0644 "$B/wallpapers/nightwatch.png" /usr/share/wallpapers/cyberdeck/nightwatch.png
-ln -sfn /usr/share/wallpapers/cyberdeck/daybreak.png /usr/share/images/desktop-base/desktop-background || true
+install -d -m 0755 /usr/share/wallpapers/cyberdeck /etc/skel/Desktop /etc/skel/.config \
+	/usr/local/share/applications /usr/lib/cyberdeck /etc/xdg
+install -m 0644 "$B/wallpapers/daybreak.jpg" /usr/share/wallpapers/cyberdeck/daybreak.jpg
+install -m 0644 "$B/wallpapers/nightwatch.jpg" /usr/share/wallpapers/cyberdeck/nightwatch.jpg
+if [ -f "$B/wallpapers/daybreak-2560x1600.jpg" ]; then
+	install -m 0644 "$B/wallpapers/daybreak-2560x1600.jpg" /usr/share/wallpapers/cyberdeck/daybreak-2560x1600.jpg
+	install -m 0644 "$B/wallpapers/nightwatch-2560x1600.jpg" /usr/share/wallpapers/cyberdeck/nightwatch-2560x1600.jpg
+fi
+ln -sfn /usr/share/wallpapers/cyberdeck/daybreak.jpg /usr/share/images/desktop-base/desktop-background || true
 
 if [ -f /usr/share/sddm/themes/breeze/theme.conf ]; then
 	divert /usr/share/sddm/themes/breeze/theme.conf || true
 	if [ ! -f /usr/share/sddm/themes/breeze/theme.conf ]; then
 		cp /usr/share/sddm/themes/breeze/theme.conf.debian /usr/share/sddm/themes/breeze/theme.conf
 	fi
-	sed -i 's|^background=.*|background=/usr/share/wallpapers/cyberdeck/daybreak.png|' \
+	sed -i 's|^background=.*|background=/usr/share/wallpapers/cyberdeck/daybreak.jpg|' \
 		/usr/share/sddm/themes/breeze/theme.conf
 	sed -i 's|^logo=.*|logo=/usr/share/cyberdeck/branding/logo.png|' \
 		/usr/share/sddm/themes/breeze/theme.conf || true
@@ -101,9 +109,44 @@ install -d -m 0755 /usr/share/doc/cyberdeck-os
 if [ -f "$B/Cyberdeck-OS-Manual.pdf" ]; then
 	install -m 0644 "$B/Cyberdeck-OS-Manual.pdf" /usr/share/doc/cyberdeck-os/Cyberdeck-OS-Manual.pdf
 	install -m 0644 "$B/Cyberdeck-OS-Manual.odt" /usr/share/doc/cyberdeck-os/Cyberdeck-OS-Manual.odt
-	install -m 0644 "$B/cyberdeck-manual.desktop" /usr/share/applications/cyberdeck-manual.desktop
-	install -m 0644 "$B/cyberdeck-manual.desktop" /etc/skel/Desktop/Cyberdeck-OS-Manual.desktop
+	install -m 0755 "$B/desktop/Cyberdeck-OS-Manual.desktop" /usr/share/applications/cyberdeck-manual.desktop
+	install -m 0755 "$B/desktop/Cyberdeck-OS-Manual.desktop" /etc/skel/Desktop/Cyberdeck-OS-Manual.desktop
+	install -m 0755 "$B/desktop/Install-Extras.desktop" /etc/skel/Desktop/Install-Extras.desktop
+	install -m 0755 "$B/desktop/Project-Nomad-Setup.desktop" /etc/skel/Desktop/Project-Nomad-Setup.desktop
+	install -m 0755 "$B/desktop/Open-WebUI.desktop" /usr/share/applications/cyberdeck-open-webui.desktop
+	install -m 0755 "$B/desktop/Open-WebUI.desktop" /etc/skel/Desktop/Open-WebUI.desktop
+	install -m 0755 "$B/desktop/Install-System.desktop" /usr/share/applications/cyberdeck-install-system.desktop
 fi
+install -m 0644 "$B/kcminputrc" /etc/skel/.config/kcminputrc
+install -m 0644 "$B/kcminputrc" /etc/xdg/kcminputrc
+install -m 0644 "$B/kwalletrc" /etc/skel/.config/kwalletrc
+install -m 0644 "$B/kwalletrc" /etc/xdg/kwalletrc
+install -m 0644 "$B/kdeglobals" /etc/skel/.config/kdeglobals
+install -m 0644 "$B/kdeglobals" /etc/xdg/kdeglobals
+install -m 0644 "$B/powerdevilrc" /etc/skel/.config/powerdevilrc
+install -m 0644 "$B/powerdevilrc" /etc/xdg/powerdevilrc
+install -d -m 0755 /etc/xdg/plasma-workspace/env /usr/share/grub/themes/cyberdeck
+install -m 0755 "$B/plasma-workspace-env-sound.sh" /etc/xdg/plasma-workspace/env/cyberdeck-sound-theme.sh
+if [ -f /usr/share/desktop-base/kf5-settings/kdeglobals ]; then
+	if ! grep -q '^\[Sounds\]' /usr/share/desktop-base/kf5-settings/kdeglobals; then
+		printf '\n[Sounds]\nEnable=true\nTheme=ocean\n' >> /usr/share/desktop-base/kf5-settings/kdeglobals
+	fi
+fi
+for defaults in /usr/share/plasma/look-and-feel/*/contents/defaults; do
+	if [ -f "$defaults" ] && ! grep -q '\[kdeglobals\]\[Sounds\]' "$defaults"; then
+		printf '\n[kdeglobals][Sounds]\nTheme=ocean\nEnable=true\n' >> "$defaults"
+	fi
+done
+if [ -f "$B/grub/theme.txt" ]; then
+	install -m 0644 "$B/grub/theme.txt" /usr/share/grub/themes/cyberdeck/theme.txt
+	install -m 0644 "$B/grub/background.png" /usr/share/grub/themes/cyberdeck/background.png
+	cp -a "$B"/grub/menu_*.png "$B"/grub/select_*.png /usr/share/grub/themes/cyberdeck/
+	if [ -f /usr/share/grub/unicode.pf2 ]; then
+		install -m 0644 /usr/share/grub/unicode.pf2 /usr/share/grub/themes/cyberdeck/unicode.pf2
+	fi
+fi
+install -m 0644 "$B/plasma-welcomerc" /etc/xdg/plasma-welcomerc
+install -m 0644 "$B/applications/code.desktop" /usr/local/share/applications/code.desktop
 
 install -m 0644 "$B/cyberdeck-flatpak-update.service" /etc/systemd/system/cyberdeck-flatpak-update.service
 install -m 0644 "$B/cyberdeck-flatpak-update.timer" /etc/systemd/system/cyberdeck-flatpak-update.timer
@@ -115,9 +158,14 @@ install -m 0644 "$B/cyberdeck-extras.timer" /etc/systemd/system/cyberdeck-extras
 if [ "${1:-}" = "--packages" ]; then
 	apt-get update
 	apt-get remove -y docker.io docker-cli docker-compose docker-buildx podman-docker 2>/dev/null || true
+	# The 550 NVIDIA driver does not build on kernel 7.3 and must not
+	# land on AMD or Intel machines. Install it later only if a GPU is present.
+	apt-get remove -y nvidia-driver nvidia-kernel-dkms nvidia-kernel-support 2>/dev/null || true
 	apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 	# containerd.io replaces Debian containerd. Put Podman back if that removal took it.
 	apt-get install -y podman distrobox crun
+	apt-get install -y power-profiles-daemon
+	systemctl enable power-profiles-daemon.service || true
 	# MT7922 firmware from trixie, not the backports snapshot.
 	# 1001 allows this to replace a newer backports package already installed.
 	apt-get install -y --allow-downgrades firmware-mediatek
@@ -139,4 +187,7 @@ if [ "${1:-}" = "--packages" ]; then
 	systemctl enable unattended-upgrades.service || true
 	systemctl enable systemd-timesyncd.service || true
 	systemctl enable cyberdeck-lan-firewall.service || true
+	systemctl enable cyberdeck-nomad-gate.service || true
+	systemctl enable cyberdeck-nomad-bind.path || true
+	systemctl enable fail2ban.service || true
 fi

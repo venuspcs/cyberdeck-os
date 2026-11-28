@@ -112,7 +112,7 @@ services:
     container_name: nomad_meshtastic_web
     restart: unless-stopped
     ports:
-      - "9443:8080"
+      - "9445:8080"
 
   meshcore:
     image: ghcr.io/meshcore-dev/meshcore-web:latest

@@ -271,20 +271,15 @@ Prefer UEFI when the menu lists both a UEFI USB entry and a legacy USB entry. Th
 
 The same ISO also has a legacy BIOS bootloader (syslinux). Use it when the computer has no UEFI, or when the UEFI entry will not start.
 
-If the USB is missing, open firmware setup and enable CSM or Legacy support. Many PCs hide the legacy entry until CSM is on. Turn Secure Boot off before you enable CSM. Some firmware will not enable both.
+If the USB is missing, open firmware setup and enable CSM or Legacy support. Many PCs hide the legacy entry until CSM is on. Some firmware will not enable CSM and Secure Boot at the same time. Use the UEFI entry when Secure Boot is on.
 
 ### Secure Boot
 
-Secure Boot is **not** supported. The image installs `grub-efi-amd64-bin` and `grub-pc-bin`. It does not install `shim-signed` or a signed GRUB EFI binary, so firmware that requires a signed bootloader will refuse the USB.
+Secure Boot can stay on. On the ASUS Vivobook S16 test, firmware reported Secure Boot Active in User mode with the factory keys, and both the live USB and the installed system booted.
 
-Turn Secure Boot off:
+Leave Secure Boot enabled and choose the USB from the boot menu. If a machine's firmware refuses the USB, that is a firmware quirk on that machine, not a requirement to turn Secure Boot off for Cyberdeck OS.
 
-1. Open firmware setup.
-2. Find **Secure Boot** under Boot or Security.
-3. Set it to **Disabled**. Save and exit.
-4. If the switch is greyed out, the PC may want a supervisor password first, or an OS type set to **Other OS** instead of **Windows UEFI**. Write that password down. Set it only if the firmware will not disable Secure Boot without it.
-
-Then open the boot menu again and choose the USB.
+On the ASUS Vivobook S16, Secure Boot stayed Active with the factory keys, but the USB would not start until the other boot drives were turned off in the firmware boot order. The one-time boot menu (F8 or Esc on that machine) is the other way in. After Cyberdeck OS is installed, the firmware turns those other boot entries back on by itself. If the USB will not boot with Secure Boot on, temporarily disable the other boot entries, or use the F8/Esc boot menu. They come back after install.
 
 ### Fast Boot and Windows Fast Startup
 
@@ -333,7 +328,7 @@ Booting the USB does not install anything. It starts a live desktop. Your intern
 
 **Back up first.** Copy personal files off the computer before you confirm the install. Erase disk deletes every partition on the drive you select. Install alongside keeps the other system and resizes its partition, and that resize can still leave the other system unable to boot. If Windows is encrypted, save the BitLocker recovery key before you start.
 
-1. At the menu titled **Cyberdeck OS Alpha 3 (Hatchet)**, choose a **Live system** line. The current image lists two kernels on that menu: `Live system, kernel 7.3.4+deb13-amd64` and `Live system, kernel 6.12.118+deb13-amd64`. Either line is a valid start. The 6.12 line is the fallback when the newer kernel misbehaves (including some Wi-Fi chips). A later image may print different version numbers. Use the lines that menu shows.
+1. At the menu titled **Cyberdeck OS Beta 1 (Plow)**, choose a **Live system** line. The current image lists two kernels on that menu: `Live system, kernel 7.3.4+deb13-amd64` and `Live system, kernel 6.12.118+deb13-amd64`. Either line is a valid start. The 6.12 line is the fallback when the newer kernel misbehaves (including some Wi-Fi chips). A later image may print different version numbers. Use the lines that menu shows.
 2. Wait for the desktop. The live session logs in by itself as the user `cyberdeck`, password `cyberdeck`, on KDE Plasma (Wayland). That account can use `sudo`. This password is only for the live session.
 3. Open **Install Cyberdeck OS** on the desktop or in the application menu. That starts Calamares.
 4. Walk through Welcome, location, keyboard, partitions, and the user account for the **installed** system. Read the summary. The disk is written when you confirm.
@@ -366,13 +361,37 @@ When Calamares finishes, reboot and remove the USB when the computer asks you to
 
 The installed system opens **Project Nomad Setup** once, in a terminal, at first login. The live desktop does not open that setup by itself. You can start it later from the menu under the same name. It asks where the `/library` drive lives. You can skip the network parts and come back to them.
 
+### Multi-WAN
+
+If more than one internet connection is up (wired Ethernet plus Wi-Fi, or a USB phone tether), Cyberdeck OS spreads new outbound connections across the ones that can actually reach the internet. A link that is connected but has no internet is left out. If a link drops, new connections use the ones that remain. With only one healthy link, routing stays ordinary.
+
+This is not single-stream bonding. The kernel hashes each connection, including its ports, so two downloads can use two links. One download, or one video, is not split across links.
+
+A VPN that takes the default route is left in charge. Split-tunnel VPNs keep their own routes.
+
+It is on by default. `cyberdeck-multiwan status` prints the links and the route. To turn it off, set `ENABLED=no` in `/etc/cyberdeck/multiwan.conf`. `sudo cyberdeck-multiwan off` does the same and removes the extra route. `sudo cyberdeck-multiwan on` turns it back on.
+
+### Project Nomad from another computer
+
+On this computer, open http://127.0.0.1:8080. That address does not ask for a password.
+
+From another computer on the same network, open https:// and this computer's address, port 8443. Accept the self-signed certificate once. The login is a Cyberdeck account that can use sudo, or an account in the `cyberdeck-admin` group. It is the same password as signing in to the desktop. The password is not sent in cleartext. The public internet cannot reach this port.
+
+`cyberdeck-nomad-gate status` prints that choice. `sudo cyberdeck-nomad-gate off` closes remote access and leaves the local Nomad page working.
+
+Open WebUI is https://127.0.0.1:3443 on this computer, and the same port on the LAN address from another computer. It uses that same Cyberdeck login. The first administrator to open it becomes the WebUI admin. Later accounts wait until that admin approves them. The desktop icon opens this address. Nothing else on the computer can talk to the WebUI container directly, and the account created at install is not in the `docker` group. Docker commands ask for the administrator password.
+
+### Meshtastic
+
+`meshtasticd` serves Meshtastic Web at https://localhost:9443. The certificate is self-signed and created the first time the service starts. Open that address and accept the certificate once. The TCP API is port 4403. The firewall allows 4403 and 9443 from this computer and from the local network, and drops them from the public internet.
+
 ## 6. Troubleshooting
 
 ### The USB is not in the boot menu
 
 - Reboot and tap the boot-menu key earlier. Use a USB port on the computer itself, not a hub. On a desktop, try a USB 2.0 port on the back.
 - Turn firmware **Fast Boot** off, and turn off Windows Fast Startup, then shut Windows down fully (hold Shift).
-- Turn **Secure Boot** off. This image is not signed.
+- Leave Secure Boot on and try the UEFI USB entry. The Vivobook test booted with Secure Boot Active. If the USB still will not start, temporarily disable the other boot entries, or open the F8/Esc boot menu. Those entries come back after install.
 - In firmware setup, enable USB boot. On Acer and some Toshiba models, enable the F12 boot menu.
 - Rufus must be in **DD Image mode**, or the stick was written with Etcher or `dd`. A file copy of the ISO does not boot. Ventoy is the exception: the ISO is a file, and the Ventoy installer prepared the stick.
 - Recreate the stick. Then try the other firmware mode (UEFI if you used legacy, or legacy/CSM if you used UEFI).

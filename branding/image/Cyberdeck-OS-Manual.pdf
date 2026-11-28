@@ -9,20 +9,20 @@ endobj
 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
 endobj
 4 0 obj
-<< /Length 1923 >>
+<< /Length 1909 >>
 stream
 BT
 /F1 11 Tf
 50 780 Td
 14 TL
-(Cyberdeck OS Alpha 3 \(Hatchet\)) '
+(Cyberdeck OS Beta 1 \(Plow\)) '
 (How-To guide) '
 () '
 (README.md) '
 () '
 (Cyberdeck OS How-To guide) '
 () '
-(Status: written for Alpha 3 \(Hatchet\). The chapters below match this image. They are not a) '
+(Status: written for Beta 1 \(Plow\). The chapters below match this image. They are not a) '
 (substitute for the specification.) '
 () '
 (This guide ships on the desktop as a PDF and an ODT file. Okular opens the PDF.) '
@@ -49,18 +49,18 @@ BT
 () '
 (Installing) '
 () '
-(Status: written for Alpha 3 \(Hatchet\).) '
+(Status: written for Beta 1 \(Plow\).) '
 () '
 (Download the ISO from GitHub Releases. Join the parts if the release split the file, check) '
-(SHA256, then write the USB. Secure Boot stays off. The full walk-through is) '
+(SHA256, then write the USB. Secure Boot can stay on. The full walk-through is) '
 ([docs/INSTALL.md]\(../INSTALL.md\).) '
 () '
 (On the live desktop, open Install Cyberdeck OS. Erase disk replaces the disk with GPT, an) '
 (EFI system partition, and a Btrfs root. Install alongside needs a GPT disk with free) '
 (space. Manual partitioning is the advanced path. Calamares asks for the account password.) '
 () '
-(The boot menu title is Cyberdeck OS Alpha 3 \(Hatchet\). It lists the 7.3 backports kernel) '
-(and the Debian 13 6.12 kernel.) '
+(The boot menu title is Cyberdeck OS Beta 1 \(Plow\). It lists the 7.3 backports kernel and) '
+(the Debian 13 6.12 kernel.) '
 () '
 (This guide is licensed under [CC BY 4.0]\(../../LICENSE-docs\).) '
 ET
@@ -78,19 +78,22 @@ BT
 () '
 (Live use) '
 () '
-(Status: written for Alpha 3 \(Hatchet\).) '
+(Status: written for Beta 1 \(Plow\).) '
 () '
 (The live user is cyberdeck with password cyberdeck, and that account can use sudo without) '
-(a password. The installed account cannot. Project Nomad Setup does not auto-start on the) '
-(live desktop. The menu entry still opens it.) '
+(a password. The installed account cannot. The live desktop shows Cyberdeck OS Manual and) '
+(Install Cyberdeck OS. Install Extras and Project Nomad Setup are on the installed desktop,) '
+(and in the menu during the live session. Nomad Setup does not auto-start on the live) '
+(desktop.) '
 () '
 (The desktop uses Daybreak or Nightwatch from the clock. The manual icon is on the desktop.) '
 (Support Cyberdeck OS is in the application menu. The Conky HUD shows CPU, battery, and) '
-(network when those devices exist.) '
+(network when those devices exist. System sounds use the Ocean theme. On AC the power) '
+(profile is Performance, on battery it is Balanced, and on low battery it is Power Saver.) '
 () '
 (The live firewall drops incoming traffic and allows outgoing traffic. Chrome installs) '
-(itself when the network is up. The larger Alpha 3 apps install from Install Alpha 3 extras) '
-(or the background timer.) '
+(itself when the network is up. The larger Alpha 3 apps install from Install Extras or the) '
+(background timer.) '
 () '
 (This guide is licensed under [CC BY 4.0]\(../../LICENSE-docs\).) '
 () '
@@ -98,7 +101,7 @@ BT
 () '
 (Updates) '
 () '
-(Status: written for Alpha 3 \(Hatchet\).) '
+(Status: written for Beta 1 \(Plow\).) '
 () '
 (unattended-upgrades installs Debian security and stable updates. It does not reboot the) '
 (machine for you. Backports stay available for the kernel, Mesa, and most firmware.) '
@@ -108,7 +111,7 @@ BT
 (takes a Snapper snapshot before it changes packages.) '
 () '
 (Google Chrome, Docker CE, Brave, Signal, VS Code, VirtualBox, and Grok Bot update from) '
-(their own signed repositories after Install Alpha 3 extras has added those repositories.) '
+(their own signed repositories after Install Extras has added those repositories.) '
 () '
 (This guide is licensed under [CC BY 4.0]\(../../LICENSE-docs\).) '
 () '
@@ -116,21 +119,21 @@ BT
 () '
 (Repair and rollback) '
 () '
-(Status: written for Alpha 3 \(Hatchet\).) '
+(Status: written for Beta 1 \(Plow\).) '
 () '
-(At the installed GRUB menu, the advanced or main list includes snapshot entries from) '
-(grub-btrfs after apt has taken a snapshot. Booting a snapshot returns the Btrfs root to) '
-(that moment. Data you stored only on /library is not inside the root snapshot.) '
 ET
 endstream
 endobj
 6 0 obj
-<< /Length 1957 >>
+<< /Length 2051 >>
 stream
 BT
 /F1 11 Tf
 50 780 Td
 14 TL
+(At the installed GRUB menu, the advanced or main list includes snapshot entries from) '
+(grub-btrfs after apt has taken a snapshot. Booting a snapshot returns the Btrfs root to) '
+(that moment. Data you stored only on /library is not inside the root snapshot.) '
 () '
 (If the 7.3 kernel will not boot or Wi-Fi will not associate, choose the 6.12 kernel line) '
 (instead of a snapshot. That kernel stays installed next to the backports kernel.) '
@@ -141,7 +144,7 @@ BT
 () '
 (Maintaining the OS and Nomad) '
 () '
-(Status: written for Alpha 3 \(Hatchet\).) '
+(Status: written for Beta 1 \(Plow\).) '
 () '
 (Wi-Fi) '
 () '
@@ -176,19 +179,19 @@ BT
 (application.) '
 () '
 (Snapshots) '
-() '
-(Snapper keeps the 4 newest numbered snapshots \(NUMBER_LIMIT=4\), which is two pre/post) '
-(pairs from apt. Apt takes a snapshot before it changes packages.) '
 ET
 endstream
 endobj
 7 0 obj
-<< /Length 2060 >>
+<< /Length 2122 >>
 stream
 BT
 /F1 11 Tf
 50 780 Td
 14 TL
+() '
+(Snapper keeps the 4 newest numbered snapshots \(NUMBER_LIMIT=4\), which is two pre/post) '
+(pairs from apt. Apt takes a snapshot before it changes packages.) '
 () '
 (Support) '
 () '
@@ -201,7 +204,7 @@ BT
 () '
 (Adding software) '
 () '
-(Status: written for Alpha 3 \(Hatchet\).) '
+(Status: written for Beta 1 \(Plow\).) '
 () '
 (Debian packages install with apt. The host sources are Debian 13 \(main, contrib, non-free,) '
 (non-free-firmware\), updates, security, and backports. Do not add Ubuntu, Sid, or Testing.) '
@@ -215,8 +218,8 @@ BT
 () '
 (GIMP, Krita, Kdenlive, Audacity, OBS Studio, Calibre, KiCad, Arduino, PlatformIO, the KDE) '
 (games set, RetroArch, PeaZip, GitHub Desktop, Brave, Signal, VS Code, VirtualBox, and Grok) '
-(Bot install when the machine is online. Open Install Alpha 3 extras or wait for its timer.) '
-(They are not copied into the ISO because of size or license.) '
+(Bot install when the machine is online. Open Install Extras or wait for its timer. They) '
+(are not copied into the ISO because of size or license.) '
 () '
 (Kismet, SpeedCrunch, FoxtrotGPS, Briar, and VeraCrypt are not in Debian 13 and this image) '
 (does not add an unsigned repository for them.) '
@@ -230,23 +233,23 @@ BT
 () '
 (Other systems with Distrobox) '
 () '
-(Status: written for Alpha 3 \(Hatchet\).) '
+(Status: written for Beta 1 \(Plow\).) '
 () '
 (The image includes Distrobox and Podman. Use them when a program is packaged for Ubuntu or) '
 (Arch.) '
-() '
-(distrobox create --name ubuntu --image ubuntu:24.04) '
-(distrobox enter ubuntu) '
 ET
 endstream
 endobj
 8 0 obj
-<< /Length 2094 >>
+<< /Length 2406 >>
 stream
 BT
 /F1 11 Tf
 50 780 Td
 14 TL
+() '
+(distrobox create --name ubuntu --image ubuntu:24.04) '
+(distrobox enter ubuntu) '
 () '
 (Ollama has no apt repository. Project Nomad runs the ollama/ollama container on) '
 (127.0.0.1:11434. The first-boot installer pulls llama3.2:3b. Tags containing -text- are) '
@@ -259,18 +262,23 @@ BT
 () '
 (Drives and Project Nomad) '
 () '
-(Status: written for Alpha 3 \(Hatchet\).) '
+(Status: written for Beta 1 \(Plow\).) '
 () '
 (Project Nomad Setup asks where /library lives, writes it to fstab by UUID, and orders) '
-(Docker after that mount. It then starts Nomad admin on port 8080, Open WebUI on) '
-(127.0.0.1:3000, Ollama on 127.0.0.1:11434, Dozzle logs on 127.0.0.1:9999, and Qdrant on) '
-(127.0.0.1:6333.) '
+(Docker after that mount. It then starts Nomad admin on port 8080 of this computer, with no) '
+(password. From another computer on the local network the address is https:// and port) '
+(8443. Accept the certificate once and sign in with a Cyberdeck administrator account. Open) '
+(WebUI is https://127.0.0.1:3443 and uses that same login. The desktop icon opens it. Open) '
+(WebUI is on 127.0.0.1:3000, Ollama on 127.0.0.1:11434, Dozzle logs on 127.0.0.1:9999, and) '
+(Qdrant on 127.0.0.1:6333.) '
 () '
 (It also starts the Supply Depot apps except Vaultwarden: Kiwix \(8090\), Kolibri, Flatnotes,) '
 (CyberChef, Stirling PDF, File Browser, Calibre Web, IT Tools, Excalidraw, Homebox,) '
-(Jellyfin \(8490\), LibreTranslate, Meshtastic Web \(9443\), and MeshCore Web. Their data) '
-(directories are under /library/nomad/storage. Qdrant's directory is mode 777 so the) '
-(container can write it.) '
+(Jellyfin \(8490\), LibreTranslate, Meshtastic Web container \(9445\), and MeshCore Web \(9444\).) '
+(The meshtasticd web page itself is https://localhost:9443. Accept its certificate once.) '
+(Each image is pulled on its own, with retries, and a failure is listed at the end instead) '
+(of cancelling the others. Their data directories are under /library/nomad/storage.) '
+(Qdrant's directory is mode 777 so the container can write it.) '
 () '
 (The firewall allows those published LAN ports only from 192.168.0.0/16 and 10.0.0.0/8.) '
 (Ollama, Open WebUI, Dozzle, and Qdrant stay on localhost.) '
@@ -284,37 +292,40 @@ BT
 () '
 (Meshtastic) '
 () '
-(Status: written for Alpha 3 \(Hatchet\).) '
+(Status: written for Beta 1 \(Plow\).) '
 () '
-(meshtasticd is installed from the Meshtastic repository configured for Debian 13.) '
-(Meshtastic Web is one of the Supply Depot containers, published on port 9443 for the local) '
-(network. MeshCore Web is started on port 9444 when its image can be pulled. Vaultwarden is) '
-(not installed.) '
-() '
-(This guide is licensed under [CC BY 4.0]\(../../LICENSE-docs\).) '
-() '
-(ham-tools.md) '
-() '
+(meshtasticd is installed from the Meshtastic repository configured for Debian 13. Its web) '
 ET
 endstream
 endobj
 9 0 obj
-<< /Length 560 >>
+<< /Length 1205 >>
 stream
 BT
 /F1 11 Tf
 50 780 Td
 14 TL
+(server listens on port 9443 with a self-signed certificate that is created the first time) '
+(the service starts. Open https://localhost:9443 and accept that certificate once. The TCP) '
+(API listens on port 4403. Both ports are reachable from this computer and from the local) '
+(network, and the firewall drops them from the public internet. The Supply Depot Meshtastic) '
+(Web container, if you install it, is on port 9445 so it does not take 9443. MeshCore Web) '
+(is on port 9444 when its image can be pulled. Vaultwarden is not installed.) '
+() '
+(This guide is licensed under [CC BY 4.0]\(../../LICENSE-docs\).) '
+() '
+(ham-tools.md) '
+() '
 (Ham and SDR tools) '
 () '
-(Status: written for Alpha 3 \(Hatchet\).) '
+(Status: written for Beta 1 \(Plow\).) '
 () '
 (The full image includes GQRX, WSJT-X, Fldigi, CHIRP, JS8Call, Pat, Dire Wolf, Xastir, and) '
 (gpsd. FoxtrotGPS is not in Debian 13, so it is not installed. Map tiles you add yourself) '
 (belong under /library.) '
 () '
 (Serial consoles for radios and boards use minicom, picocom, or screen. Arduino IDE and) '
-(PlatformIO install with the Alpha 3 extras. KiCad does too.) '
+(PlatformIO install with the Install Extras. KiCad does too.) '
 () '
 (This guide is licensed under [CC BY 4.0]\(../../LICENSE-docs\).) '
 () '
@@ -346,18 +357,18 @@ xref
 0000000058 00000 n 
 0000000151 00000 n 
 0000000221 00000 n 
-0000002196 00000 n 
-0000004235 00000 n 
-0000006244 00000 n 
-0000008356 00000 n 
-0000010502 00000 n 
-0000011113 00000 n 
-0000011240 00000 n 
-0000011367 00000 n 
-0000011494 00000 n 
-0000011621 00000 n 
-0000011748 00000 n 
+0000002182 00000 n 
+0000004221 00000 n 
+0000006324 00000 n 
+0000008498 00000 n 
+0000010956 00000 n 
+0000012213 00000 n 
+0000012340 00000 n 
+0000012467 00000 n 
+0000012594 00000 n 
+0000012721 00000 n 
+0000012848 00000 n 
 trailer << /Size 16 /Root 1 0 R >>
 startxref
-11875
+12975
 %%EOF

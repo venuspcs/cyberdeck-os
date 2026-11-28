@@ -1,4 +1,20 @@
-Cyberdeck OS Alpha 3 (Hatchet) is an AMD64 pre-release. Build id 3. Secure Boot is off; turn it off in firmware before you boot the USB.
+Cyberdeck OS Beta 1 (Plow) is an AMD64 pre-release. These notes are the draft the release workflow publishes when this image is tagged. Secure Boot can stay on.
+
+## Headline: automatic multi-WAN load balancing
+
+When two or more internet connections are up at once, such as wired Ethernet plus Wi-Fi or a USB tether, new outbound connections are spread across the healthy links. Each connection keeps its own gateway. A link with no internet is dropped from the route, and traffic fails over when a link goes down. One healthy link uses normal routing. A VPN that takes the default route is left alone.
+
+This is not single-stream bonding. The kernel hashes each connection, including its ports, so two downloads can use two links. One download is not split across links.
+
+`cyberdeck-multiwan status` shows the current choice. It is on unless `/etc/cyberdeck/multiwan.conf` says `ENABLED=no`.
+
+## Security
+
+Nomad admin has the Docker socket and does not have its own password. On the Cyberdeck, http://127.0.0.1:8080 stays open. From another computer on the LAN, the address is https:// and port 8443. Accept the self-signed certificate once. Sign in with a Cyberdeck account that can use sudo, or one in the `cyberdeck-admin` group. That is the same password as the desktop login. The firewall drops this, and the other published services, from the public internet on IPv4 and IPv6.
+
+Open WebUI uses the same login at https://127.0.0.1:3443, including on this computer, because that is how it learns who you are. The first administrator to open it becomes the WebUI admin. Later accounts wait for approval. The desktop icon opens that address.
+
+The account created at install is not in the docker group. Nomad Setup, Install Extras, and the other administrator tools ask for that account's password.
 
 ## Join the ISO
 
@@ -23,7 +39,7 @@ Write the joined ISO to an 8 GB or larger USB. This erases the USB. Rufus in DD 
 
 ## What this image is
 
-The system identifies itself as Cyberdeck OS Alpha 3 (Hatchet). The live account is `cyberdeck` on the host `cyberdeck`. Daybreak runs from 06:30 to 18:30 local time. Nightwatch is the other hours. `systemd-timesyncd` is enabled. The manual opens in Okular. Project Nomad setup starts Dozzle on 127.0.0.1:9999, Qdrant on 127.0.0.1:6333, and the Supply Depot apps except Vaultwarden. The model it pulls is `llama3.2:3b`. Tags that contain `-text-` are refused. The firewall drops incoming traffic, allows outgoing traffic, and opens Nomad 8080, Jellyfin 8490, Kiwix 8090, and Meshtastic Web 9443 only to 192.168.0.0/16 and 10.0.0.0/8. Ollama and Open WebUI stay on localhost. Snapper keeps four numbered snapshots.
+The system identifies itself as Cyberdeck OS Beta 1 (Plow). The live account is `cyberdeck` on the host `cyberdeck`. Daybreak runs from 06:30 to 18:30 local time. Nightwatch is the other hours. `systemd-timesyncd` is enabled. The manual opens in Okular. Project Nomad setup starts Dozzle on 127.0.0.1:9999, Qdrant on 127.0.0.1:6333, and the Supply Depot apps except Vaultwarden. The model it pulls is `llama3.2:3b`. Tags that contain `-text-` are refused. The firewall drops incoming traffic, allows outgoing traffic, and opens Nomad 8080, Jellyfin 8490, Kiwix 8090, Meshtastic Web 9443, and MeshCore Web 9444 only to 192.168.0.0/16 and 10.0.0.0/8. Ollama and Open WebUI stay on localhost. Snapper keeps four numbered snapshots.
 
 GIMP, Krita, Kdenlive, Audacity, OBS, Calibre, KiCad, Arduino, PlatformIO, the KDE games, RetroArch, PeaZip, GitHub Desktop, Brave, Signal, VS Code, VirtualBox, and Grok Bot download on first boot when the network is up. They are not inside the ISO.
 

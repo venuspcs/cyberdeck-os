@@ -1,0 +1,3 @@
+[Definition]
+failregex = pam_authenticate\(\) failed.*, client: <HOST>
+ignoreregex =

@@ -1,0 +1,12 @@
+[Wallet]
+Close When Idle=false
+Enabled=true
+First Use=false
+Launch Manager=false
+Leave Open=true
+Prompt on Open=false
+Use One Wallet=true
+walletType=blowfish
+
+[org.kde.kwalletd]
+Enabled=true

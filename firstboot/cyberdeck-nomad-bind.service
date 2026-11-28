@@ -1,0 +1,6 @@
+[Unit]
+Description=Keep Nomad admin bound to localhost
+
+[Service]
+Type=oneshot
+ExecStart=/usr/sbin/cyberdeck-nomad-gate apply-bind

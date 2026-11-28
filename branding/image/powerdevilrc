@@ -1,0 +1,14 @@
+[AC][Performance]
+PowerProfile=performance
+
+[Battery][Performance]
+PowerProfile=balanced
+
+[LowBattery][Performance]
+PowerProfile=power-saver
+
+[LowBattery][Display]
+UseProfileSpecificDisplayBrightness=true
+DisplayBrightness=30
+DimDisplayIdleTimeoutSec=60
+TurnOffDisplayIdleTimeoutSec=120

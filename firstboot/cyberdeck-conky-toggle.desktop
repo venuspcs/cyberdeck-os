@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Conky HUD On/Off
+Comment=Show or hide the corner status HUD
+Exec=/usr/bin/cyberdeck-conky-toggle
+Icon=utilities-system-monitor
+Terminal=false
+Categories=System;

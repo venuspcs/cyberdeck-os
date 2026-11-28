@@ -10,4 +10,8 @@ if [ "${1:-}" != "--force" ]; then
 		exit 0
 	fi
 fi
-exec konsole -e sudo /usr/sbin/cyberdeck-nomad-setup --force
+if [ ! -t 1 ] && command -v konsole >/dev/null 2>&1; then
+	exec konsole --hold -e pkexec /usr/sbin/cyberdeck-nomad-setup --force
+fi
+echo "Approve the prompt to continue. If it asks in this window, nothing will show as you type."
+exec pkexec /usr/sbin/cyberdeck-nomad-setup --force

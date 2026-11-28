@@ -23,6 +23,7 @@ mkdir -p config/package-lists \
 	config/includes.chroot_after_packages/usr/sbin \
 	config/includes.chroot_after_packages/usr/bin \
 	config/includes.chroot_after_packages/usr/lib/live/config \
+	config/includes.chroot_after_packages/usr/lib/cyberdeck \
 	config/includes.chroot_after_packages/usr/share/cyberdeck \
 	config/includes.chroot_after_packages/usr/share/applications \
 	config/includes.chroot_after_packages/etc/xdg/autostart \
@@ -32,6 +33,18 @@ mkdir -p config/package-lists \
 	config/includes.chroot_after_packages/etc/apt/sources.list.d \
 	config/includes.chroot_after_packages/etc/apt/preferences.d \
 	config/includes.chroot_after_packages/etc/systemd/system \
+	config/includes.chroot_after_packages/etc/systemd/system/timers.target.wants \
+	config/includes.chroot_after_packages/etc/systemd/system/multi-user.target.wants \
+	config/includes.chroot_after_packages/etc/NetworkManager/dispatcher.d \
+	config/includes.chroot_after_packages/etc/meshtasticd/config.d \
+	config/includes.chroot_after_packages/etc/cyberdeck/nomad-gate \
+	config/includes.chroot_after_packages/etc/pam.d \
+	config/includes.chroot_after_packages/etc/security \
+	config/includes.chroot_after_packages/etc/fail2ban/jail.d \
+	config/includes.chroot_after_packages/etc/fail2ban/filter.d \
+	config/includes.chroot_after_packages/etc/systemd/system/docker.service.d \
+	config/includes.chroot_after_packages/etc/tmpfiles.d \
+	config/includes.chroot_after_packages/usr/lib/sysusers.d \
 	config/includes.chroot_after_packages/etc/polkit-1/rules.d \
 	config/includes.chroot_after_packages/usr/share/doc/cyberdeck-os \
 	config/archives \
@@ -97,11 +110,36 @@ cp "${ROOT}/firstboot/cyberdeck-extras.desktop" config/includes.chroot_after_pac
 cp "${ROOT}/firstboot/cyberdeck-conky.desktop" config/includes.chroot_after_packages/etc/xdg/autostart/cyberdeck-conky.desktop
 cp "${ROOT}/installer/cyberdeck-lan-firewall" config/includes.chroot_after_packages/usr/sbin/cyberdeck-lan-firewall
 cp "${ROOT}/firstboot/nomad-supply.yml.in" config/includes.chroot_after_packages/usr/share/cyberdeck/nomad-supply.yml.in
+cp "${ROOT}/firstboot/cyberdeck-verbose.sh" config/includes.chroot_after_packages/usr/lib/cyberdeck/verbose.sh
+cp "${ROOT}/firstboot/cyberdeck-conky-toggle" config/includes.chroot_after_packages/usr/bin/cyberdeck-conky-toggle
+cp "${ROOT}/firstboot/cyberdeck-conky-toggle.desktop" config/includes.chroot_after_packages/usr/share/applications/cyberdeck-conky-toggle.desktop
+cp "${ROOT}/installer/cyberdeck-install-system" config/includes.chroot_after_packages/usr/bin/cyberdeck-install-system
 cp "${ROOT}/firstboot/cyberdeck-nomad-launch" config/includes.chroot_after_packages/usr/bin/cyberdeck-nomad-launch
+cp "${ROOT}/firstboot/cyberdeck-multiwan" config/includes.chroot_after_packages/usr/sbin/cyberdeck-multiwan
+cp "${ROOT}/firstboot/meshtasticd-cyberdeck-web.yaml" config/includes.chroot_after_packages/etc/meshtasticd/config.d/cyberdeck-web.yaml
+cp "${ROOT}/firstboot/cyberdeck-nomad-gate" config/includes.chroot_after_packages/usr/sbin/cyberdeck-nomad-gate
+cp "${ROOT}/firstboot/cyberdeck-nomad-gate.conf" config/includes.chroot_after_packages/etc/cyberdeck/nomad-gate/nginx.conf
+cp "${ROOT}/firstboot/cyberdeck-nomad.pam" config/includes.chroot_after_packages/etc/pam.d/cyberdeck-nomad
+cp "${ROOT}/firstboot/access-cyberdeck-nomad.conf" config/includes.chroot_after_packages/etc/security/access-cyberdeck-nomad.conf
+cp "${ROOT}/firstboot/cyberdeck-nomad-gate.service" config/includes.chroot_after_packages/etc/systemd/system/cyberdeck-nomad-gate.service
+cp "${ROOT}/firstboot/cyberdeck-nomad-bind.service" config/includes.chroot_after_packages/etc/systemd/system/cyberdeck-nomad-bind.service
+cp "${ROOT}/firstboot/cyberdeck-nomad-bind.path" config/includes.chroot_after_packages/etc/systemd/system/cyberdeck-nomad-bind.path
+cp "${ROOT}/firstboot/cyberdeck-nomad-gate.filter" config/includes.chroot_after_packages/etc/fail2ban/filter.d/cyberdeck-nomad-gate.conf
+cp "${ROOT}/firstboot/cyberdeck-nomad-gate.jail" config/includes.chroot_after_packages/etc/fail2ban/jail.d/cyberdeck-nomad-gate.conf
+cp "${ROOT}/branding/image/docker-cyberdeck-firewall.conf" config/includes.chroot_after_packages/etc/systemd/system/docker.service.d/cyberdeck-firewall.conf
+cp "${ROOT}/firstboot/cyberdeck-nomad-gate.tmpfiles" config/includes.chroot_after_packages/etc/tmpfiles.d/cyberdeck-nomad-gate.conf
+cp "${ROOT}/firstboot/cyberdeck.sysusers" config/includes.chroot_after_packages/usr/lib/sysusers.d/cyberdeck.conf
+ln -sfn ../cyberdeck-nomad-bind.path config/includes.chroot_after_packages/etc/systemd/system/multi-user.target.wants/cyberdeck-nomad-bind.path
+ln -sfn ../cyberdeck-nomad-gate.service config/includes.chroot_after_packages/etc/systemd/system/multi-user.target.wants/cyberdeck-nomad-gate.service
+cp "${ROOT}/firstboot/90-cyberdeck-multiwan" config/includes.chroot_after_packages/etc/NetworkManager/dispatcher.d/90-cyberdeck-multiwan
+cp "${ROOT}/firstboot/cyberdeck-multiwan.service" config/includes.chroot_after_packages/etc/systemd/system/cyberdeck-multiwan.service
+cp "${ROOT}/firstboot/cyberdeck-multiwan.timer" config/includes.chroot_after_packages/etc/systemd/system/cyberdeck-multiwan.timer
+ln -sfn ../cyberdeck-multiwan.timer config/includes.chroot_after_packages/etc/systemd/system/timers.target.wants/cyberdeck-multiwan.timer
 cp "${ROOT}/firstboot/cyberdeck-theme.desktop" config/includes.chroot_after_packages/etc/xdg/autostart/cyberdeck-theme.desktop
 chmod 755 config/includes.chroot_after_packages/usr/sbin/* \
 	config/includes.chroot_after_packages/usr/bin/* \
-	config/includes.chroot_after_packages/usr/lib/live/config/9990-cyberdeck-sddm
+	config/includes.chroot_after_packages/usr/lib/live/config/9990-cyberdeck-sddm \
+	config/includes.chroot_after_packages/etc/NetworkManager/dispatcher.d/90-cyberdeck-multiwan
 
 cp "${ROOT}/installer/cyberdeck-backports.list" config/archives/backports.list.chroot
 cp "${ROOT}/installer/cyberdeck-kernel.pref" config/archives/backports.pref.chroot
@@ -146,5 +184,20 @@ lb config noauto \
 mkdir -p config/bootloaders/grub-pc/live-theme
 cp "${ROOT}/branding/grub-theme.txt" config/bootloaders/grub-pc/live-theme/theme.txt
 cp "${ROOT}/branding/splash.svg" config/bootloaders/splash.svg
+# 1024x768 and a 15 second menu, on the live ISO.
+if [ -f config/bootloaders/grub-pc/config.cfg ]; then
+	sed -i \
+		-e 's/set gfxmode=800x600/set gfxmode=1024x768,auto/' \
+		-e 's/set gfxpayload=keep/set gfxpayload=1024x768/' \
+		config/bootloaders/grub-pc/config.cfg
+	grep -q '^set timeout=' config/bootloaders/grub-pc/config.cfg || printf '%s\n' 'set timeout=15' 'set timeout_style=menu' >> config/bootloaders/grub-pc/config.cfg
+fi
+for cfg in config/bootloaders/isolinux/isolinux.cfg config/bootloaders/syslinux/syslinux.cfg; do
+	if [ -f "$cfg" ]; then
+		sed -i 's/^timeout 0/timeout 150/' "$cfg"
+		grep -q 'menu resolution' "$cfg" || printf '%s\n' 'menu resolution 1024 768' >> "$cfg"
+	fi
+done
+find config/bootloaders -name stdmenu.cfg -print0 | xargs -0 -r sed -i 's/^menu vshift .*/menu vshift 16/'
 
 echo "Cyberdeck OS live-build config ready (profile ${PROFILE})."

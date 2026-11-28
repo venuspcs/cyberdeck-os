@@ -11,7 +11,7 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     ports:
-      - "8080:8080"
+      - "127.0.0.1:8080:8080"
     volumes:
       - /library/nomad/storage:/app/storage
       - /var/run/docker.sock:/var/run/docker.sock
@@ -77,6 +77,11 @@ services:
     environment:
       - OLLAMA_BASE_URL=http://ollama:11434
       - DEFAULT_MODELS=llama3.2:3b
+      - WEBUI_AUTH=true
+      - ENABLE_SIGNUP=false
+      - DEFAULT_USER_ROLE=pending
+      - WEBUI_AUTH_TRUSTED_EMAIL_HEADER=X-Cyberdeck-Email
+      - WEBUI_AUTH_TRUSTED_NAME_HEADER=X-Cyberdeck-Name
     volumes:
       - /library/open-webui:/app/backend/data
     depends_on:

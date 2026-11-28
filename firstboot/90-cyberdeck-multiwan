@@ -1,0 +1,9 @@
+#!/bin/sh
+# Rebuild the multipath default route when a link or VPN changes.
+# $1 is the interface, $2 is the NetworkManager action.
+set -u
+case "${2:-}" in
+	up|down|vpn-up|vpn-down|connectivity-change|dhcp4-change) ;;
+	*) exit 0 ;;
+esac
+exec /usr/sbin/cyberdeck-multiwan apply

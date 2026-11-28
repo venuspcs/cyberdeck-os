@@ -1,15 +1,15 @@
-#!/bin/sh
-# Install Alpha 3 software that is too large for the ISO, or not redistributable.
+#!/bin/bash
+# Install software that is too large for the ISO, or not redistributable.
 # Safe to run again. A missing package is logged and does not stop the rest.
 set -u
-LOG=/var/log/cyberdeck-extras.log
+. /usr/lib/cyberdeck/verbose.sh
+cyberdeck_verbose_begin extras "$@"
 DONE=/var/lib/cyberdeck/extras.done
 mkdir -p /var/lib/cyberdeck /etc/apt/keyrings /etc/apt/sources.list.d
-exec >>"$LOG" 2>&1
-echo "=== cyberdeck-extras $(date -Is) ==="
+cyberdeck_step "Install Extras"
+cyberdeck_step "Checking the network"
 if ! curl -fsS --max-time 20 -o /dev/null https://deb.debian.org/debian/; then
-	echo "offline, will try again later"
-	exit 0
+	cyberdeck_finish ERROR "offline, will try again later"
 fi
 export DEBIAN_FRONTEND=noninteractive
 
@@ -72,9 +72,9 @@ Components: contrib
 Architectures: amd64
 Signed-By: /etc/apt/keyrings/virtualbox.gpg"
 
-apt-get update || true
+cyberdeck_apt update || true
 for pkg in gimp krita kdenlive audacity obs-studio calibre kicad arduino platformio kdegames grok-bot brave-browser signal-desktop code virtualbox-7.2; do
-	if apt-get install -y "$pkg"; then
+	if cyberdeck_apt install -y "$pkg"; then
 		echo "installed $pkg"
 	else
 		echo "skipped $pkg"
@@ -96,4 +96,8 @@ fi
 echo "Not in Debian 13, and no signed package is shipped: kismet, speedcrunch, foxtrotgps, briar, veracrypt."
 echo "Debian already provides rustc, cargo, and rust-analyzer. rustup is optional."
 date -Is > "$DONE"
-echo "extras finished"
+if [ -f /usr/share/applications/code.desktop ]; then
+	sed -i 's/^Categories=.*/Categories=Development;IDE;TextEditor;/' /usr/share/applications/code.desktop
+	echo "VS Code menu category set to Development"
+fi
+cyberdeck_finish DONE "extras finished"

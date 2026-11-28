@@ -15,7 +15,7 @@ The AMD64 image is a hybrid ISO named `cyberdeck-os-amd64-amd64.hybrid.iso`. Dow
 
 1. Unzip the download if GitHub wrapped it. Check the SHA256 against `SHA256SUMS`.
 2. Write the ISO to an 8 GB or larger USB. This erases the USB. Use Rufus in DD Image mode, balenaEtcher, or `dd`. With Ventoy, install Ventoy first, then copy the ISO onto the USB.
-3. Boot the USB in UEFI or legacy BIOS. Secure Boot is not supported; turn it off.
+3. Boot the USB in UEFI or legacy BIOS. Secure Boot can stay on. The Vivobook test booted the live USB and the installed system with Secure Boot Active and the factory keys.
 4. On the live desktop, open **Install Cyberdeck OS**. Back up your files first.
 
 Checksum commands, firmware notes, and fixes are in [docs/INSTALL.md](docs/INSTALL.md).
@@ -31,9 +31,10 @@ The full locked spec is in [docs/SPEC.md](docs/SPEC.md). The milestone checklist
 - An **Install Cyberdeck OS** desktop icon that launches Calamares, with erase-disk, install-alongside, and manual partitioning. Full-disk encryption is optional.
 - Erase-disk installs use GPT, including drives larger than 2 TB, with one Btrfs root after the EFI system partition. Install alongside keeps the other operating system and adds a Btrfs root in the free space. Snapshots run before every update, with rollback from the boot menu (Snapper and grub-btrfs style).
 - A first-boot Welcome app: choose Daybreak or Nightwatch, pick the `/library` drive, join Wi-Fi, install ROCm or CUDA when the hardware needs it, set a password, then install Project Nomad and its containers.
-- Nomad admin stays on port 8080, Open WebUI on port 3000, and Ollama on localhost port 11434.
+- Nomad admin stays on port 8080 on this computer, with no password. From another computer on the LAN it is https:// port 8443, and the login is a Cyberdeck administrator account. Open WebUI is on port 3000 and Ollama on localhost port 11434.
 - Firefox ESR, Google Chrome (from Google's apt repository, installed when online), full media codecs, VLC, a Jellyfin client, LibreOffice, Flatpak with Flathub, firmware, Mesa/Vulkan, Meshtastic tools, and a ham/SDR set (GQRX, WSJT-X, Fldigi, CHIRP).
 - A host firewall enabled by default.
+- Automatic multi-WAN load balancing. When Ethernet, Wi-Fi, and a USB tether are up together, new connections are spread across the healthy links and a dead link is dropped. This is per-flow routing, not single-stream bonding. The kernel hashes each connection, including its ports. One download stays on one link. `cyberdeck-multiwan status` shows the choice. Set `ENABLED=no` in `/etc/cyberdeck/multiwan.conf` to turn it off.
 - In-kernel AMD and Intel NPU support. The NVIDIA proprietary driver is included and turned on when a matching GPU is detected. ROCm and CUDA are offered from Welcome when that hardware is present, and they are not part of the image.
 - An offline package cache on `/library`, a Cyberdeck Control Panel, and a low-power/solar mode toggle.
 - Two themes, with working names Daybreak (light) and Nightwatch (dark). Each has its own rural homestead / off-grid wallpaper. Boot splash and login follow the selected theme. The theme can switch automatically at sunrise and sunset, by location or by set times.
@@ -50,7 +51,7 @@ Apple Silicon is outside this project. A supported install needs at least 256 GB
 
 | Hardware | Architecture | Session | Image | Status |
 | --- | --- | --- | --- | --- |
-| PCs and laptops | AMD64 | KDE Plasma (Wayland) | Live and installer ISO | Alpha 3 (Hatchet) |
+| PCs and laptops | AMD64 | KDE Plasma (Wayland) | Live and installer ISO | Beta 1 (Plow), not released yet |
 | Generic UEFI laptops, desktops, and boards | ARM64 | KDE Plasma (Wayland) | One generic UEFI image | On hold |
 | PinePhone Pro | ARM64 | Plasma Mobile | Per-device image | On hold |
 | Librem 5 | ARM64 | Plasma Mobile | Per-device image | On hold |

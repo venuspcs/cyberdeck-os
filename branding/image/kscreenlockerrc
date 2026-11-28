@@ -2,5 +2,5 @@
 WallpaperPlugin=org.kde.image
 
 [Greeter][Wallpaper][org.kde.image][General]
-Image=/usr/share/cyberdeck/branding/wallpapers/daybreak.png
+Image=/usr/share/cyberdeck/branding/wallpapers/daybreak.jpg
 FillMode=2

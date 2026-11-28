@@ -1,0 +1,8 @@
+# Turn on meshtasticd's built-in web server. The package leaves the port
+# commented out, so nothing listens on 9443 until this file is present.
+# The certificate and key are created on first start when they are missing.
+Webserver:
+  Port: 9443
+  RootPath: /usr/share/meshtasticd/web
+  SSLKey: /etc/meshtasticd/ssl/private_key.pem
+  SSLCert: /etc/meshtasticd/ssl/certificate.pem
