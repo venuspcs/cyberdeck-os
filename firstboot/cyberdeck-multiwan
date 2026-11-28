@@ -19,6 +19,12 @@ load_conf() {
 	CHECK_HOSTS="1.1.1.1 8.8.8.8"
 	[ -f "$CONF" ] || return 0
 	while IFS='=' read -r key value; do
+		value="${value#"${value%%[![:space:]]*}"}"
+		value="${value%"${value##*[![:space:]]}"}"
+		value="${value#\"}"
+		value="${value%\"}"
+		value="${value#\'}"
+		value="${value%\'}"
 		case "$key" in
 			\#*|"") ;;
 			ENABLED) ENABLED="$value" ;;
@@ -47,6 +53,12 @@ clear_route() {
 }
 
 vpn_owns_default() {
+	if ip -4 route show default 2>/dev/null | grep -E 'dev (tun|tap|wg|ppp|tailscale)' | grep -vq "metric ${METRIC}"; then
+		return 0
+	fi
+	if ip rule show 2>/dev/null | awk 'NR>3 { print }' | grep -q .; then
+		return 0
+	fi
 	command -v nmcli >/dev/null 2>&1 || return 1
 	nmcli -t -f TYPE,NAME connection show --active 2>/dev/null | while IFS=: read -r type name; do
 		case "$type" in
@@ -68,7 +80,7 @@ list_uplinks() {
 		[ -n "$dev" ] && [ "$dev" != "--" ] || continue
 		[ "$state" = "connected" ] || continue
 		case "$type" in
-			ethernet|wifi|wwan|bt|vlan) ;;
+			ethernet|wifi|gsm|cdma|wwan|bluetooth|vlan) ;;
 			*) continue ;;
 		esac
 		case "$dev" in
@@ -89,45 +101,59 @@ list_uplinks() {
 }
 
 link_healthy() {
-	addr="$1"
+	dev="$1"
+	command -v ping >/dev/null 2>&1 || return 1
 	for host in $CHECK_HOSTS; do
 		case "$host" in
 			''|*[!0-9.]*) continue ;;
 		esac
-		if ping -n -I "$addr" -c 1 -W 2 "$host" >/dev/null 2>&1; then
+		if ping -n -I "$dev" -c 1 -W 2 "$host" >/dev/null 2>&1; then
 			return 0
 		fi
 	done
 	return 1
 }
 
+remember() {
+	msg="$*"
+	state=/run/cyberdeck-multiwan.state
+	old=""
+	[ -f "$state" ] && old="$(cat "$state")"
+	if [ "$old" != "$msg" ]; then
+		printf '%s\n' "$msg" > "$state" 2>/dev/null || true
+		log "$msg"
+	fi
+}
+
 apply_routes() {
 	load_conf
 	if [ "$ENABLED" != "yes" ]; then
 		clear_route
-		log "disabled; normal routing"
+		remember "disabled; normal routing"
 		return 0
 	fi
+	sysctl -w net.ipv4.fib_multipath_hash_policy=1 >/dev/null 2>&1 || true
 	if vpn_owns_default; then
 		clear_route
-		log "a VPN owns the default route; leaving it alone"
+		remember "a VPN owns the default route; leaving it alone"
 		return 0
 	fi
 	devs=()
 	gws=()
+	notes=()
 	while read -r dev gw addr; do
 		[ -n "$dev" ] || continue
-		if link_healthy "$addr"; then
+		if link_healthy "$dev"; then
 			devs+=("$dev")
 			gws+=("$gw")
-			log "$dev via $gw is healthy"
+			notes+=("$dev via $gw healthy")
 		else
-			log "$dev via $gw has no internet; left out of the route"
+			notes+=("$dev via $gw no internet")
 		fi
 	done < <(list_uplinks)
 	if [ "${#devs[@]}" -lt 2 ]; then
 		clear_route
-		log "fewer than two healthy links; normal routing"
+		remember "fewer than two healthy links; normal routing (${notes[*]:-none})"
 		return 0
 	fi
 	args=(route replace default metric "$METRIC" proto static)
@@ -137,9 +163,9 @@ apply_routes() {
 		i=$((i + 1))
 	done
 	if ip "${args[@]}"; then
-		log "multipath default route installed (${#devs[@]} links, equal weight)"
+		remember "multipath default route installed (${notes[*]})"
 	else
-		log "could not install the multipath route"
+		remember "could not install the multipath route"
 		return 1
 	fi
 }
@@ -159,7 +185,7 @@ status_cmd() {
 	while read -r dev gw addr; do
 		[ -n "$dev" ] || continue
 		found=1
-		if link_healthy "$addr"; then
+		if link_healthy "$dev"; then
 			echo "  $dev via $gw ($addr) healthy"
 		else
 			echo "  $dev via $gw ($addr) no internet"

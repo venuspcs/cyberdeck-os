@@ -365,7 +365,7 @@ The installed system opens **Project Nomad Setup** once, in a terminal, at first
 
 If more than one internet connection is up (wired Ethernet plus Wi-Fi, or a USB phone tether), Cyberdeck OS spreads new outbound connections across the ones that can actually reach the internet. A link that is connected but has no internet is left out. If a link drops, new connections use the ones that remain. With only one healthy link, routing stays ordinary.
 
-This is not single-stream bonding. One download, or one video, stays on one link. Two downloads at the same time can use two links, which is why several transfers at once can be faster.
+This is not single-stream bonding. The kernel hashes each connection, including its ports, so two downloads can use two links. One download, or one video, is not split across links.
 
 A VPN that takes the default route is left in charge. Split-tunnel VPNs keep their own routes.
 

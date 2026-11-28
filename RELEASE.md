@@ -4,7 +4,7 @@ Cyberdeck OS Beta 1 (Plow) is an AMD64 pre-release. These notes are the draft th
 
 When two or more internet connections are up at once, such as wired Ethernet plus Wi-Fi or a USB tether, new outbound connections are spread across the healthy links. Each connection keeps its own gateway. A link with no internet is dropped from the route, and traffic fails over when a link goes down. One healthy link uses normal routing. A VPN that takes the default route is left alone.
 
-This is not single-stream bonding. One download stays on one link. Several downloads at once can use several links, which is why that case is faster.
+This is not single-stream bonding. The kernel hashes each connection, including its ports, so two downloads can use two links. One download is not split across links.
 
 `cyberdeck-multiwan status` shows the current choice. It is on unless `/etc/cyberdeck/multiwan.conf` says `ENABLED=no`.
 
