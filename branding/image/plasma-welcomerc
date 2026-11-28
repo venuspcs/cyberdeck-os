@@ -1,0 +1,5 @@
+[General]
+CustomIntroText=Cyberdeck OS Beta 1 (Plow). Support Cyberdeck OS is in the application menu. Donations are optional.
+CustomIntroIcon=file:///usr/share/cyberdeck/branding/logo.png
+CustomIntroIconLink=https://github.com/venuspcs/cyberdeck-os
+CustomIntroIconCaption=Cyberdeck OS

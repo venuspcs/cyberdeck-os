@@ -1,10 +1,10 @@
-# One file for the Alpha 3 identity. Scripts and the image copy these strings.
+# One file for the Beta 1 identity. Scripts and the image copy these strings.
 CYBERDECK_NAME="Cyberdeck OS"
-CYBERDECK_VERSION="Alpha 3 (Hatchet)"
-CYBERDECK_VERSION_ID=alpha3
-CYBERDECK_VARIANT="Alpha 3"
-CYBERDECK_BUILD=3
-CYBERDECK_PRETTY="Cyberdeck OS Alpha 3 (Hatchet)"
+CYBERDECK_VERSION="Beta 1 (Plow)"
+CYBERDECK_VERSION_ID=beta1
+CYBERDECK_VARIANT="Beta 1"
+CYBERDECK_BUILD=4
+CYBERDECK_PRETTY="Cyberdeck OS Beta 1 (Plow)"
 CYBERDECK_HOME_URL="https://github.com/venuspcs/cyberdeck-os"
 CYBERDECK_SUPPORT_URL="https://github.com/venuspcs/cyberdeck-os"
 CYBERDECK_BUG_URL="https://github.com/venuspcs/cyberdeck-os/issues"

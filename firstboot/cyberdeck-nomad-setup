@@ -1,24 +1,45 @@
-#!/bin/sh
+#!/bin/bash
 # First-boot Project Nomad installer.
 # Picks the /library drive, mounts it by UUID, holds Docker until that
 # mount exists, writes the Nomad compose file, and offers ROCm or CUDA.
 set -eu
 
+if [ ! -t 1 ] && command -v konsole >/dev/null 2>&1; then
+	exec konsole --hold -e "$0" "$@"
+fi
 if [ "$(id -u)" -ne 0 ]; then
+	echo "Type your password. Nothing will show as you type."
 	exec sudo /usr/sbin/cyberdeck-nomad-setup "$@"
+fi
+LOG=/var/log/cyberdeck-nomad-setup.log
+mkdir -p /var/log
+exec > >(tee -a "$LOG") 2>&1
+echo "======== Project Nomad Setup ========"
+echo "Log: $LOG"
+
+force=0
+if [ "${1:-}" = "--force" ] || [ "${CYBERDECK_SETUP_FORCE:-}" = 1 ]; then
+	force=1
 fi
 
 if grep -q 'cyberdeck.skip-nomad' /proc/cmdline 2>/dev/null; then
+	echo "DONE: Nomad setup skipped by the boot command."
+	echo "Press Enter to close."
+	read -r _ || true
 	exit 0
 fi
 
-if [ -e /var/lib/cyberdeck/nomad.done ]; then
+if [ "$force" != 1 ] && [ -e /var/lib/cyberdeck/nomad.done ]; then
+	echo "DONE: Project Nomad Setup already finished."
+	echo "Log: $LOG"
+	echo "Press Enter to close."
+	read -r _ || true
 	exit 0
 fi
 
 # On a live boot, leave the wizard to the menu. The autostart entry
 # calls this script; exiting here keeps the live desktop usable.
-if [ -d /run/live/medium ] && [ "${CYBERDECK_SETUP_FORCE:-}" != 1 ]; then
+if [ "$force" != 1 ] && [ -d /run/live/medium ]; then
 	exit 0
 fi
 
@@ -166,16 +187,26 @@ display_pci() {
 }
 
 if display_pci | grep -qi nvidia; then
-	if ask_yes "An NVIDIA GPU is present. Install nvidia-driver and nvidia-cuda-toolkit, and let Ollama use the GPU?"; then
-		apt-get update
-		apt-get install -y nvidia-driver nvidia-cuda-toolkit || apt-get install -y nvidia-driver || true
-		echo "NVIDIA driver install was requested. Ollama stays bound to 127.0.0.1:11434. Give the container GPUs after nvidia-container-toolkit is installed." > /var/lib/cyberdeck/gpu.txt
-	fi
+	echo "-------- NVIDIA --------"
+	echo "An NVIDIA GPU is present."
+	ver=$(apt-cache policy nvidia-driver | awk '/Candidate:/{print $2; exit}')
+	echo "Debian nvidia-driver candidate: ${ver:-none}"
+	case "$ver" in
+		550.*|"")
+			echo "ERROR: driver ${ver:-550} does not build on kernel 7.3. Not installing it."
+			echo "NVIDIA driver was not installed." | tee /var/lib/cyberdeck/gpu.txt
+			;;
+		*)
+			echo "Installing nvidia-driver $ver"
+			apt-get -o DPkg::Lock::Timeout=600 update
+			apt-get -o DPkg::Lock::Timeout=600 install -y nvidia-driver || echo "ERROR: nvidia-driver install failed"
+			;;
+	esac
 fi
 if display_pci | grep -Eqi 'amd/ati|advanced micro devices'; then
 	if ask_yes "An AMD display device is present. Install the Debian ROCm packages that exist in this release (rocminfo) and keep Ollama ready for a GPU?"; then
-		apt-get update
-		if apt-get install -y rocminfo; then
+		apt-get -o DPkg::Lock::Timeout=600 update
+		if apt-get -o DPkg::Lock::Timeout=600 install -y rocminfo; then
 			echo "Installed rocminfo. A full ROCm stack is not in the Debian 13 image; Ollama stays on the CPU build until that stack is installed." | tee /var/lib/cyberdeck/gpu.txt
 		else
 			echo "rocminfo is not installable from the configured apt sources." | tee /var/lib/cyberdeck/gpu.txt

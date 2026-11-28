@@ -9,9 +9,9 @@ windowPlacement: center
 strings:
     productName: "Cyberdeck OS"
     shortProductName: "Cyberdeck OS"
-    version: "Alpha 3 (Hatchet)"
-    shortVersion: "alpha3"
-    versionedName: "Cyberdeck OS Alpha 3 (Hatchet)"
+    version: "Beta 1 (Plow)"
+    shortVersion: "beta1"
+    versionedName: "Cyberdeck OS Beta 1 (Plow)"
     shortVersionedName: "Cyberdeck OS"
     bootloaderEntryName: "Cyberdeck OS"
     productUrl: "https://github.com/venuspcs/cyberdeck-os"

@@ -9,20 +9,20 @@ endobj
 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
 endobj
 4 0 obj
-<< /Length 1923 >>
+<< /Length 1911 >>
 stream
 BT
 /F1 11 Tf
 50 780 Td
 14 TL
-(Cyberdeck OS Alpha 3 \(Hatchet\)) '
+(Cyberdeck OS Beta 1 \(Plow\)) '
 (How-To guide) '
 () '
 (README.md) '
 () '
 (Cyberdeck OS How-To guide) '
 () '
-(Status: written for Alpha 3 \(Hatchet\). The chapters below match this image. They are not a) '
+(Status: written for Beta 1 \(Plow\). The chapters below match this image. They are not a) '
 (substitute for the specification.) '
 () '
 (This guide ships on the desktop as a PDF and an ODT file. Okular opens the PDF.) '
@@ -49,7 +49,7 @@ BT
 () '
 (Installing) '
 () '
-(Status: written for Alpha 3 \(Hatchet\).) '
+(Status: written for Beta 1 \(Plow\).) '
 () '
 (Download the ISO from GitHub Releases. Join the parts if the release split the file, check) '
 (SHA256, then write the USB. Secure Boot stays off. The full walk-through is) '
@@ -67,7 +67,7 @@ ET
 endstream
 endobj
 5 0 obj
-<< /Length 1987 >>
+<< /Length 1959 >>
 stream
 BT
 /F1 11 Tf
@@ -78,7 +78,7 @@ BT
 () '
 (Live use) '
 () '
-(Status: written for Alpha 3 \(Hatchet\).) '
+(Status: written for Beta 1 \(Plow\).) '
 () '
 (The live user is cyberdeck with password cyberdeck, and that account can use sudo without) '
 (a password. The installed account cannot. Project Nomad Setup does not auto-start on the) '
@@ -89,8 +89,8 @@ BT
 (network when those devices exist.) '
 () '
 (The live firewall drops incoming traffic and allows outgoing traffic. Chrome installs) '
-(itself when the network is up. The larger Alpha 3 apps install from Install Alpha 3 extras) '
-(or the background timer.) '
+(itself when the network is up. The larger Alpha 3 apps install from Install Extras or the) '
+(background timer.) '
 () '
 (This guide is licensed under [CC BY 4.0]\(../../LICENSE-docs\).) '
 () '
@@ -98,7 +98,7 @@ BT
 () '
 (Updates) '
 () '
-(Status: written for Alpha 3 \(Hatchet\).) '
+(Status: written for Beta 1 \(Plow\).) '
 () '
 (unattended-upgrades installs Debian security and stable updates. It does not reboot the) '
 (machine for you. Backports stay available for the kernel, Mesa, and most firmware.) '
@@ -108,7 +108,7 @@ BT
 (takes a Snapper snapshot before it changes packages.) '
 () '
 (Google Chrome, Docker CE, Brave, Signal, VS Code, VirtualBox, and Grok Bot update from) '
-(their own signed repositories after Install Alpha 3 extras has added those repositories.) '
+(their own signed repositories after Install Extras has added those repositories.) '
 () '
 (This guide is licensed under [CC BY 4.0]\(../../LICENSE-docs\).) '
 () '
@@ -116,7 +116,7 @@ BT
 () '
 (Repair and rollback) '
 () '
-(Status: written for Alpha 3 \(Hatchet\).) '
+(Status: written for Beta 1 \(Plow\).) '
 () '
 (At the installed GRUB menu, the advanced or main list includes snapshot entries from) '
 (grub-btrfs after apt has taken a snapshot. Booting a snapshot returns the Btrfs root to) '
@@ -125,7 +125,7 @@ ET
 endstream
 endobj
 6 0 obj
-<< /Length 1957 >>
+<< /Length 1953 >>
 stream
 BT
 /F1 11 Tf
@@ -141,7 +141,7 @@ BT
 () '
 (Maintaining the OS and Nomad) '
 () '
-(Status: written for Alpha 3 \(Hatchet\).) '
+(Status: written for Beta 1 \(Plow\).) '
 () '
 (Wi-Fi) '
 () '
@@ -183,7 +183,7 @@ ET
 endstream
 endobj
 7 0 obj
-<< /Length 2060 >>
+<< /Length 2044 >>
 stream
 BT
 /F1 11 Tf
@@ -201,7 +201,7 @@ BT
 () '
 (Adding software) '
 () '
-(Status: written for Alpha 3 \(Hatchet\).) '
+(Status: written for Beta 1 \(Plow\).) '
 () '
 (Debian packages install with apt. The host sources are Debian 13 \(main, contrib, non-free,) '
 (non-free-firmware\), updates, security, and backports. Do not add Ubuntu, Sid, or Testing.) '
@@ -215,8 +215,8 @@ BT
 () '
 (GIMP, Krita, Kdenlive, Audacity, OBS Studio, Calibre, KiCad, Arduino, PlatformIO, the KDE) '
 (games set, RetroArch, PeaZip, GitHub Desktop, Brave, Signal, VS Code, VirtualBox, and Grok) '
-(Bot install when the machine is online. Open Install Alpha 3 extras or wait for its timer.) '
-(They are not copied into the ISO because of size or license.) '
+(Bot install when the machine is online. Open Install Extras or wait for its timer. They) '
+(are not copied into the ISO because of size or license.) '
 () '
 (Kismet, SpeedCrunch, FoxtrotGPS, Briar, and VeraCrypt are not in Debian 13 and this image) '
 (does not add an unsigned repository for them.) '
@@ -230,7 +230,7 @@ BT
 () '
 (Other systems with Distrobox) '
 () '
-(Status: written for Alpha 3 \(Hatchet\).) '
+(Status: written for Beta 1 \(Plow\).) '
 () '
 (The image includes Distrobox and Podman. Use them when a program is packaged for Ubuntu or) '
 (Arch.) '
@@ -241,7 +241,7 @@ ET
 endstream
 endobj
 8 0 obj
-<< /Length 2094 >>
+<< /Length 2086 >>
 stream
 BT
 /F1 11 Tf
@@ -259,7 +259,7 @@ BT
 () '
 (Drives and Project Nomad) '
 () '
-(Status: written for Alpha 3 \(Hatchet\).) '
+(Status: written for Beta 1 \(Plow\).) '
 () '
 (Project Nomad Setup asks where /library lives, writes it to fstab by UUID, and orders) '
 (Docker after that mount. It then starts Nomad admin on port 8080, Open WebUI on) '
@@ -284,7 +284,7 @@ BT
 () '
 (Meshtastic) '
 () '
-(Status: written for Alpha 3 \(Hatchet\).) '
+(Status: written for Beta 1 \(Plow\).) '
 () '
 (meshtasticd is installed from the Meshtastic repository configured for Debian 13.) '
 (Meshtastic Web is one of the Supply Depot containers, published on port 9443 for the local) '
@@ -299,7 +299,7 @@ ET
 endstream
 endobj
 9 0 obj
-<< /Length 560 >>
+<< /Length 556 >>
 stream
 BT
 /F1 11 Tf
@@ -307,14 +307,14 @@ BT
 14 TL
 (Ham and SDR tools) '
 () '
-(Status: written for Alpha 3 \(Hatchet\).) '
+(Status: written for Beta 1 \(Plow\).) '
 () '
 (The full image includes GQRX, WSJT-X, Fldigi, CHIRP, JS8Call, Pat, Dire Wolf, Xastir, and) '
 (gpsd. FoxtrotGPS is not in Debian 13, so it is not installed. Map tiles you add yourself) '
 (belong under /library.) '
 () '
 (Serial consoles for radios and boards use minicom, picocom, or screen. Arduino IDE and) '
-(PlatformIO install with the Alpha 3 extras. KiCad does too.) '
+(PlatformIO install with the Install Extras. KiCad does too.) '
 () '
 (This guide is licensed under [CC BY 4.0]\(../../LICENSE-docs\).) '
 () '
@@ -346,18 +346,18 @@ xref
 0000000058 00000 n 
 0000000151 00000 n 
 0000000221 00000 n 
-0000002196 00000 n 
-0000004235 00000 n 
-0000006244 00000 n 
-0000008356 00000 n 
-0000010502 00000 n 
-0000011113 00000 n 
-0000011240 00000 n 
-0000011367 00000 n 
-0000011494 00000 n 
-0000011621 00000 n 
-0000011748 00000 n 
+0000002184 00000 n 
+0000004195 00000 n 
+0000006200 00000 n 
+0000008296 00000 n 
+0000010434 00000 n 
+0000011041 00000 n 
+0000011168 00000 n 
+0000011295 00000 n 
+0000011422 00000 n 
+0000011549 00000 n 
+0000011676 00000 n 
 trailer << /Size 16 /Root 1 0 R >>
 startxref
-11875
+11803
 %%EOF

@@ -1,6 +1,6 @@
 # Drives and Project Nomad
 
-**Status: written for Alpha 3 (Hatchet).**
+**Status: written for Beta 1 (Plow).**
 
 Project Nomad Setup asks where `/library` lives, writes it to fstab by UUID, and orders Docker after that mount. It then starts Nomad admin on port 8080, Open WebUI on `127.0.0.1:3000`, Ollama on `127.0.0.1:11434`, Dozzle logs on `127.0.0.1:9999`, and Qdrant on `127.0.0.1:6333`.
 

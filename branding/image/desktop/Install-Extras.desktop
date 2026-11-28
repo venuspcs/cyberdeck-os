@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Install Extras
+Comment=Download the large Beta 1 applications
+Exec=cyberdeck-extras
+Icon=system-software-install
+Terminal=false
+Categories=System;

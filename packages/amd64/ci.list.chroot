@@ -57,3 +57,5 @@ systemd-timesyncd
 okular
 python3-tk
 inotify-tools
+ocean-sound-theme
+sound-theme-freedesktop

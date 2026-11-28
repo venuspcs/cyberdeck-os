@@ -1,6 +1,6 @@
 # Repair and rollback
 
-**Status: written for Alpha 3 (Hatchet).**
+**Status: written for Beta 1 (Plow).**
 
 At the installed GRUB menu, the advanced or main list includes snapshot entries from grub-btrfs after apt has taken a snapshot. Booting a snapshot returns the Btrfs root to that moment. Data you stored only on `/library` is not inside the root snapshot.
 

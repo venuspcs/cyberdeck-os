@@ -1,6 +1,6 @@
 # Meshtastic
 
-**Status: written for Alpha 3 (Hatchet).**
+**Status: written for Beta 1 (Plow).**
 
 `meshtasticd` is installed from the Meshtastic repository configured for Debian 13. Meshtastic Web is one of the Supply Depot containers, published on port 9443 for the local network. MeshCore Web is started on port 9444 when its image can be pulled. Vaultwarden is not installed.
 

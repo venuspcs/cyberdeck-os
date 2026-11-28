@@ -50,7 +50,7 @@ Apple Silicon is outside this project. A supported install needs at least 256 GB
 
 | Hardware | Architecture | Session | Image | Status |
 | --- | --- | --- | --- | --- |
-| PCs and laptops | AMD64 | KDE Plasma (Wayland) | Live and installer ISO | Alpha 3 (Hatchet) |
+| PCs and laptops | AMD64 | KDE Plasma (Wayland) | Live and installer ISO | Beta 1 (Plow), not released yet |
 | Generic UEFI laptops, desktops, and boards | ARM64 | KDE Plasma (Wayland) | One generic UEFI image | On hold |
 | PinePhone Pro | ARM64 | Plasma Mobile | Per-device image | On hold |
 | Librem 5 | ARM64 | Plasma Mobile | Per-device image | On hold |

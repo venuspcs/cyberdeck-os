@@ -33,4 +33,27 @@ Relogin=false
 
 [General]
 DisplayServer=wayland
+Numlock=on
 EOF
+
+home=$(getent passwd "${USER_NAME}" | cut -d: -f6)
+if [ -n "${home}" ]; then
+	mkdir -p "${home}/Desktop" "${home}/.config"
+	for icon in Cyberdeck-OS-Manual.desktop Install-Extras.desktop Project-Nomad-Setup.desktop; do
+		if [ -f "/etc/skel/Desktop/${icon}" ]; then
+			cp "/etc/skel/Desktop/${icon}" "${home}/Desktop/${icon}"
+			chmod 755 "${home}/Desktop/${icon}"
+		fi
+	done
+	if [ -f /usr/share/applications/cyberdeck-install-system.desktop ]; then
+		cp /usr/share/applications/cyberdeck-install-system.desktop "${home}/Desktop/Install-System.desktop"
+		chmod 755 "${home}/Desktop/Install-System.desktop"
+	fi
+	cat > "${home}/.config/kscreenlockerrc" <<'EOF'
+[Daemon]
+Autolock=false
+LockOnResume=false
+Timeout=0
+EOF
+	chown -R "${USER_NAME}:${USER_NAME}" "${home}/Desktop" "${home}/.config"
+fi

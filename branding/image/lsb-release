@@ -1,4 +1,4 @@
 DISTRIB_ID=Cyberdeck
-DISTRIB_RELEASE=alpha3
+DISTRIB_RELEASE=beta1
 DISTRIB_CODENAME=trixie
-DISTRIB_DESCRIPTION="Cyberdeck OS Alpha 3 (Hatchet)"
+DISTRIB_DESCRIPTION="Cyberdeck OS Beta 1 (Plow)"

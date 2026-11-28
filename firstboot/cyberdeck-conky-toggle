@@ -1,0 +1,22 @@
+#!/bin/sh
+# Turn the Conky HUD on or off and remember that for the next login.
+set -u
+auto="${HOME}/.config/autostart/cyberdeck-conky.desktop"
+mkdir -p "${HOME}/.config/autostart"
+if [ ! -f "$auto" ]; then
+	cp /etc/xdg/autostart/cyberdeck-conky.desktop "$auto" 2>/dev/null || true
+fi
+if pgrep -x conky >/dev/null 2>&1; then
+	pkill -x conky || true
+	if [ -f "$auto" ]; then
+		sed -i 's/^X-GNOME-Autostart-enabled=.*/X-GNOME-Autostart-enabled=false/' "$auto" || true
+		grep -q '^X-GNOME-Autostart-enabled=' "$auto" || printf '%s\n' 'X-GNOME-Autostart-enabled=false' >> "$auto"
+	fi
+	echo "Conky HUD off"
+else
+	if [ -f "$auto" ]; then
+		sed -i 's/^X-GNOME-Autostart-enabled=.*/X-GNOME-Autostart-enabled=true/' "$auto" || true
+	fi
+	conky -c /etc/cyberdeck/conky.conf >/dev/null 2>&1 &
+	echo "Conky HUD on"
+fi

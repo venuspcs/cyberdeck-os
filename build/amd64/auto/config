@@ -23,6 +23,7 @@ mkdir -p config/package-lists \
 	config/includes.chroot_after_packages/usr/sbin \
 	config/includes.chroot_after_packages/usr/bin \
 	config/includes.chroot_after_packages/usr/lib/live/config \
+	config/includes.chroot_after_packages/usr/lib/cyberdeck \
 	config/includes.chroot_after_packages/usr/share/cyberdeck \
 	config/includes.chroot_after_packages/usr/share/applications \
 	config/includes.chroot_after_packages/etc/xdg/autostart \
@@ -97,6 +98,10 @@ cp "${ROOT}/firstboot/cyberdeck-extras.desktop" config/includes.chroot_after_pac
 cp "${ROOT}/firstboot/cyberdeck-conky.desktop" config/includes.chroot_after_packages/etc/xdg/autostart/cyberdeck-conky.desktop
 cp "${ROOT}/installer/cyberdeck-lan-firewall" config/includes.chroot_after_packages/usr/sbin/cyberdeck-lan-firewall
 cp "${ROOT}/firstboot/nomad-supply.yml.in" config/includes.chroot_after_packages/usr/share/cyberdeck/nomad-supply.yml.in
+cp "${ROOT}/firstboot/cyberdeck-verbose.sh" config/includes.chroot_after_packages/usr/lib/cyberdeck/verbose.sh
+cp "${ROOT}/firstboot/cyberdeck-conky-toggle" config/includes.chroot_after_packages/usr/bin/cyberdeck-conky-toggle
+cp "${ROOT}/firstboot/cyberdeck-conky-toggle.desktop" config/includes.chroot_after_packages/usr/share/applications/cyberdeck-conky-toggle.desktop
+cp "${ROOT}/installer/cyberdeck-install-system" config/includes.chroot_after_packages/usr/bin/cyberdeck-install-system
 cp "${ROOT}/firstboot/cyberdeck-nomad-launch" config/includes.chroot_after_packages/usr/bin/cyberdeck-nomad-launch
 cp "${ROOT}/firstboot/cyberdeck-theme.desktop" config/includes.chroot_after_packages/etc/xdg/autostart/cyberdeck-theme.desktop
 chmod 755 config/includes.chroot_after_packages/usr/sbin/* \
@@ -146,5 +151,19 @@ lb config noauto \
 mkdir -p config/bootloaders/grub-pc/live-theme
 cp "${ROOT}/branding/grub-theme.txt" config/bootloaders/grub-pc/live-theme/theme.txt
 cp "${ROOT}/branding/splash.svg" config/bootloaders/splash.svg
+# 1024x768 and a 15 second menu, on the live ISO.
+if [ -f config/bootloaders/grub-pc/config.cfg ]; then
+	sed -i \
+		-e 's/set gfxmode=800x600/set gfxmode=1024x768,auto/' \
+		-e 's/set gfxpayload=keep/set gfxpayload=1024x768/' \
+		config/bootloaders/grub-pc/config.cfg
+	grep -q '^set timeout=' config/bootloaders/grub-pc/config.cfg || printf '%s\n' 'set timeout=15' 'set timeout_style=menu' >> config/bootloaders/grub-pc/config.cfg
+fi
+for cfg in config/bootloaders/isolinux/isolinux.cfg config/bootloaders/syslinux/syslinux.cfg; do
+	if [ -f "$cfg" ]; then
+		sed -i 's/^timeout 0/timeout 150/' "$cfg"
+		grep -q 'menu resolution' "$cfg" || printf '%s\n' 'menu resolution 1024 768' >> "$cfg"
+	fi
+done
 
 echo "Cyberdeck OS live-build config ready (profile ${PROFILE})."

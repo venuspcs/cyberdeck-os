@@ -1,7 +1,7 @@
 desktop-image: "../splash.png"
 title-color: "#ffffff"
 title-font: "Unifont Regular 16"
-title-text: "Cyberdeck OS Alpha 3 (Hatchet)"
+title-text: "Cyberdeck OS Beta 1 (Plow)"
 message-font: "Unifont Regular 16"
 terminal-font: "Unifont Regular 16"
 

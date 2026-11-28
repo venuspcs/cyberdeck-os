@@ -1,6 +1,6 @@
 # Installing
 
-**Status: written for Alpha 3 (Hatchet).**
+**Status: written for Beta 1 (Plow).**
 
 Download the ISO from GitHub Releases. Join the parts if the release split the file, check SHA256, then write the USB. Secure Boot stays off. The full walk-through is [docs/INSTALL.md](../INSTALL.md).
 

@@ -1,8 +1,8 @@
 [Desktop Entry]
 Type=Application
-Name=Install Alpha 3 extras
-Comment=Download GIMP, KiCad, Grok Bot, Brave, and the other large Alpha 3 apps
-Exec=konsole -e sudo cyberdeck-extras
+Name=Install Extras
+Comment=Download GIMP, KiCad, Grok Bot, Brave, and the other large applications
+Exec=cyberdeck-extras
 Icon=system-software-install
 Terminal=false
 Categories=System;
