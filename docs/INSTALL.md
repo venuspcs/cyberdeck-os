@@ -361,6 +361,16 @@ When Calamares finishes, reboot and remove the USB when the computer asks you to
 
 The installed system opens **Project Nomad Setup** once, in a terminal, at first login. The live desktop does not open that setup by itself. You can start it later from the menu under the same name. It asks where the `/library` drive lives. You can skip the network parts and come back to them.
 
+### Multi-WAN
+
+If more than one internet connection is up (wired Ethernet plus Wi-Fi, or a USB phone tether), Cyberdeck OS spreads new outbound connections across the ones that can actually reach the internet. A link that is connected but has no internet is left out. If a link drops, new connections use the ones that remain. With only one healthy link, routing stays ordinary.
+
+This is not single-stream bonding. One download, or one video, stays on one link. Two downloads at the same time can use two links, which is why several transfers at once can be faster.
+
+A VPN that takes the default route is left in charge. Split-tunnel VPNs keep their own routes.
+
+It is on by default. `cyberdeck-multiwan status` prints the links and the route. To turn it off, set `ENABLED=no` in `/etc/cyberdeck/multiwan.conf`. `sudo cyberdeck-multiwan off` does the same and removes the extra route. `sudo cyberdeck-multiwan on` turns it back on.
+
 ## 6. Troubleshooting
 
 ### The USB is not in the boot menu

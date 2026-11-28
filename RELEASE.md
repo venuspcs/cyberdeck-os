@@ -1,4 +1,12 @@
-Cyberdeck OS Alpha 3 (Hatchet) is an AMD64 pre-release. Build id 3. Secure Boot can stay on.
+Cyberdeck OS Beta 1 (Plow) is an AMD64 pre-release. These notes are the draft the release workflow publishes when this image is tagged. Secure Boot can stay on.
+
+## Headline: automatic multi-WAN load balancing
+
+When two or more internet connections are up at once, such as wired Ethernet plus Wi-Fi or a USB tether, new outbound connections are spread across the healthy links. Each connection keeps its own gateway. A link with no internet is dropped from the route, and traffic fails over when a link goes down. One healthy link uses normal routing. A VPN that takes the default route is left alone.
+
+This is not single-stream bonding. One download stays on one link. Several downloads at once can use several links, which is why that case is faster.
+
+`cyberdeck-multiwan status` shows the current choice. It is on unless `/etc/cyberdeck/multiwan.conf` says `ENABLED=no`.
 
 ## Join the ISO
 
@@ -23,7 +31,7 @@ Write the joined ISO to an 8 GB or larger USB. This erases the USB. Rufus in DD 
 
 ## What this image is
 
-The system identifies itself as Cyberdeck OS Alpha 3 (Hatchet). The live account is `cyberdeck` on the host `cyberdeck`. Daybreak runs from 06:30 to 18:30 local time. Nightwatch is the other hours. `systemd-timesyncd` is enabled. The manual opens in Okular. Project Nomad setup starts Dozzle on 127.0.0.1:9999, Qdrant on 127.0.0.1:6333, and the Supply Depot apps except Vaultwarden. The model it pulls is `llama3.2:3b`. Tags that contain `-text-` are refused. The firewall drops incoming traffic, allows outgoing traffic, and opens Nomad 8080, Jellyfin 8490, Kiwix 8090, and Meshtastic Web 9443 only to 192.168.0.0/16 and 10.0.0.0/8. Ollama and Open WebUI stay on localhost. Snapper keeps four numbered snapshots.
+The system identifies itself as Cyberdeck OS Beta 1 (Plow). The live account is `cyberdeck` on the host `cyberdeck`. Daybreak runs from 06:30 to 18:30 local time. Nightwatch is the other hours. `systemd-timesyncd` is enabled. The manual opens in Okular. Project Nomad setup starts Dozzle on 127.0.0.1:9999, Qdrant on 127.0.0.1:6333, and the Supply Depot apps except Vaultwarden. The model it pulls is `llama3.2:3b`. Tags that contain `-text-` are refused. The firewall drops incoming traffic, allows outgoing traffic, and opens Nomad 8080, Jellyfin 8490, Kiwix 8090, Meshtastic Web 9443, and MeshCore Web 9444 only to 192.168.0.0/16 and 10.0.0.0/8. Ollama and Open WebUI stay on localhost. Snapper keeps four numbered snapshots.
 
 GIMP, Krita, Kdenlive, Audacity, OBS, Calibre, KiCad, Arduino, PlatformIO, the KDE games, RetroArch, PeaZip, GitHub Desktop, Brave, Signal, VS Code, VirtualBox, and Grok Bot download on first boot when the network is up. They are not inside the ISO.
 

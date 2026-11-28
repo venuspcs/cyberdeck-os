@@ -33,6 +33,8 @@ mkdir -p config/package-lists \
 	config/includes.chroot_after_packages/etc/apt/sources.list.d \
 	config/includes.chroot_after_packages/etc/apt/preferences.d \
 	config/includes.chroot_after_packages/etc/systemd/system \
+	config/includes.chroot_after_packages/etc/systemd/system/timers.target.wants \
+	config/includes.chroot_after_packages/etc/NetworkManager/dispatcher.d \
 	config/includes.chroot_after_packages/etc/polkit-1/rules.d \
 	config/includes.chroot_after_packages/usr/share/doc/cyberdeck-os \
 	config/archives \
@@ -103,10 +105,16 @@ cp "${ROOT}/firstboot/cyberdeck-conky-toggle" config/includes.chroot_after_packa
 cp "${ROOT}/firstboot/cyberdeck-conky-toggle.desktop" config/includes.chroot_after_packages/usr/share/applications/cyberdeck-conky-toggle.desktop
 cp "${ROOT}/installer/cyberdeck-install-system" config/includes.chroot_after_packages/usr/bin/cyberdeck-install-system
 cp "${ROOT}/firstboot/cyberdeck-nomad-launch" config/includes.chroot_after_packages/usr/bin/cyberdeck-nomad-launch
+cp "${ROOT}/firstboot/cyberdeck-multiwan" config/includes.chroot_after_packages/usr/sbin/cyberdeck-multiwan
+cp "${ROOT}/firstboot/90-cyberdeck-multiwan" config/includes.chroot_after_packages/etc/NetworkManager/dispatcher.d/90-cyberdeck-multiwan
+cp "${ROOT}/firstboot/cyberdeck-multiwan.service" config/includes.chroot_after_packages/etc/systemd/system/cyberdeck-multiwan.service
+cp "${ROOT}/firstboot/cyberdeck-multiwan.timer" config/includes.chroot_after_packages/etc/systemd/system/cyberdeck-multiwan.timer
+ln -sfn ../cyberdeck-multiwan.timer config/includes.chroot_after_packages/etc/systemd/system/timers.target.wants/cyberdeck-multiwan.timer
 cp "${ROOT}/firstboot/cyberdeck-theme.desktop" config/includes.chroot_after_packages/etc/xdg/autostart/cyberdeck-theme.desktop
 chmod 755 config/includes.chroot_after_packages/usr/sbin/* \
 	config/includes.chroot_after_packages/usr/bin/* \
-	config/includes.chroot_after_packages/usr/lib/live/config/9990-cyberdeck-sddm
+	config/includes.chroot_after_packages/usr/lib/live/config/9990-cyberdeck-sddm \
+	config/includes.chroot_after_packages/etc/NetworkManager/dispatcher.d/90-cyberdeck-multiwan
 
 cp "${ROOT}/installer/cyberdeck-backports.list" config/archives/backports.list.chroot
 cp "${ROOT}/installer/cyberdeck-kernel.pref" config/archives/backports.pref.chroot

@@ -29,6 +29,8 @@ install -m 0644 "$B/docker.sources" /etc/apt/sources.list.d/docker.sources
 install -m 0644 "$B/cyberdeck-hardware.pref" /etc/apt/preferences.d/cyberdeck-hardware
 install -m 0644 "$B/default-wifi-powersave-off.conf" /etc/NetworkManager/conf.d/default-wifi-powersave-off.conf
 install -m 0644 "$B/wifi-stable-mac.conf" /etc/NetworkManager/conf.d/wifi-stable-mac.conf
+install -d -m 0755 /etc/cyberdeck
+install -m 0644 "$B/multiwan.conf" /etc/cyberdeck/multiwan.conf
 install -m 0644 "$B/mt7921e.conf" /etc/modprobe.d/mt7921e.conf
 install -d -m 0755 /etc/xdg /etc/skel/.config /etc/cyberdeck
 install -m 0644 "$B/mimeapps.list" /etc/xdg/mimeapps.list
