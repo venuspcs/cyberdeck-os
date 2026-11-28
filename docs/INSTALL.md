@@ -271,20 +271,13 @@ Prefer UEFI when the menu lists both a UEFI USB entry and a legacy USB entry. Th
 
 The same ISO also has a legacy BIOS bootloader (syslinux). Use it when the computer has no UEFI, or when the UEFI entry will not start.
 
-If the USB is missing, open firmware setup and enable CSM or Legacy support. Many PCs hide the legacy entry until CSM is on. Turn Secure Boot off before you enable CSM. Some firmware will not enable both.
+If the USB is missing, open firmware setup and enable CSM or Legacy support. Many PCs hide the legacy entry until CSM is on. Some firmware will not enable CSM and Secure Boot at the same time. Use the UEFI entry when Secure Boot is on.
 
 ### Secure Boot
 
-Secure Boot is **not** supported. The image installs `grub-efi-amd64-bin` and `grub-pc-bin`. It does not install `shim-signed` or a signed GRUB EFI binary, so firmware that requires a signed bootloader will refuse the USB.
+Secure Boot can stay on. On the ASUS Vivobook S16 test, firmware reported Secure Boot Active in User mode with the factory keys, and both the live USB and the installed system booted.
 
-Turn Secure Boot off:
-
-1. Open firmware setup.
-2. Find **Secure Boot** under Boot or Security.
-3. Set it to **Disabled**. Save and exit.
-4. If the switch is greyed out, the PC may want a supervisor password first, or an OS type set to **Other OS** instead of **Windows UEFI**. Write that password down. Set it only if the firmware will not disable Secure Boot without it.
-
-Then open the boot menu again and choose the USB.
+Leave Secure Boot enabled and choose the USB from the boot menu. If a machine's firmware refuses the USB, that is a firmware quirk on that machine, not a requirement to turn Secure Boot off for Cyberdeck OS.
 
 ### Fast Boot and Windows Fast Startup
 
@@ -333,7 +326,7 @@ Booting the USB does not install anything. It starts a live desktop. Your intern
 
 **Back up first.** Copy personal files off the computer before you confirm the install. Erase disk deletes every partition on the drive you select. Install alongside keeps the other system and resizes its partition, and that resize can still leave the other system unable to boot. If Windows is encrypted, save the BitLocker recovery key before you start.
 
-1. At the menu titled **Cyberdeck OS Alpha 3 (Hatchet)**, choose a **Live system** line. The current image lists two kernels on that menu: `Live system, kernel 7.3.4+deb13-amd64` and `Live system, kernel 6.12.118+deb13-amd64`. Either line is a valid start. The 6.12 line is the fallback when the newer kernel misbehaves (including some Wi-Fi chips). A later image may print different version numbers. Use the lines that menu shows.
+1. At the menu titled **Cyberdeck OS Beta 1 (Plow)**, choose a **Live system** line. The current image lists two kernels on that menu: `Live system, kernel 7.3.4+deb13-amd64` and `Live system, kernel 6.12.118+deb13-amd64`. Either line is a valid start. The 6.12 line is the fallback when the newer kernel misbehaves (including some Wi-Fi chips). A later image may print different version numbers. Use the lines that menu shows.
 2. Wait for the desktop. The live session logs in by itself as the user `cyberdeck`, password `cyberdeck`, on KDE Plasma (Wayland). That account can use `sudo`. This password is only for the live session.
 3. Open **Install Cyberdeck OS** on the desktop or in the application menu. That starts Calamares.
 4. Walk through Welcome, location, keyboard, partitions, and the user account for the **installed** system. Read the summary. The disk is written when you confirm.
@@ -372,7 +365,7 @@ The installed system opens **Project Nomad Setup** once, in a terminal, at first
 
 - Reboot and tap the boot-menu key earlier. Use a USB port on the computer itself, not a hub. On a desktop, try a USB 2.0 port on the back.
 - Turn firmware **Fast Boot** off, and turn off Windows Fast Startup, then shut Windows down fully (hold Shift).
-- Turn **Secure Boot** off. This image is not signed.
+- Leave Secure Boot on and try the UEFI USB entry. The Vivobook test booted with Secure Boot Active.
 - In firmware setup, enable USB boot. On Acer and some Toshiba models, enable the F12 boot menu.
 - Rufus must be in **DD Image mode**, or the stick was written with Etcher or `dd`. A file copy of the ISO does not boot. Ventoy is the exception: the ISO is a file, and the Ventoy installer prepared the stick.
 - Recreate the stick. Then try the other firmware mode (UEFI if you used legacy, or legacy/CSM if you used UEFI).

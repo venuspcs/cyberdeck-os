@@ -118,6 +118,28 @@ install -m 0644 "$B/kwalletrc" /etc/skel/.config/kwalletrc
 install -m 0644 "$B/kwalletrc" /etc/xdg/kwalletrc
 install -m 0644 "$B/kdeglobals" /etc/skel/.config/kdeglobals
 install -m 0644 "$B/kdeglobals" /etc/xdg/kdeglobals
+install -m 0644 "$B/powerdevilrc" /etc/skel/.config/powerdevilrc
+install -m 0644 "$B/powerdevilrc" /etc/xdg/powerdevilrc
+install -d -m 0755 /etc/xdg/plasma-workspace/env /usr/share/grub/themes/cyberdeck
+install -m 0755 "$B/plasma-workspace-env-sound.sh" /etc/xdg/plasma-workspace/env/cyberdeck-sound-theme.sh
+if [ -f /usr/share/desktop-base/kf5-settings/kdeglobals ]; then
+	if ! grep -q '^\[Sounds\]' /usr/share/desktop-base/kf5-settings/kdeglobals; then
+		printf '\n[Sounds]\nEnable=true\nTheme=ocean\n' >> /usr/share/desktop-base/kf5-settings/kdeglobals
+	fi
+fi
+for defaults in /usr/share/plasma/look-and-feel/*/contents/defaults; do
+	if [ -f "$defaults" ] && ! grep -q '\[kdeglobals\]\[Sounds\]' "$defaults"; then
+		printf '\n[kdeglobals][Sounds]\nTheme=ocean\nEnable=true\n' >> "$defaults"
+	fi
+done
+if [ -f "$B/grub/theme.txt" ]; then
+	install -m 0644 "$B/grub/theme.txt" /usr/share/grub/themes/cyberdeck/theme.txt
+	install -m 0644 "$B/grub/background.png" /usr/share/grub/themes/cyberdeck/background.png
+	cp -a "$B"/grub/menu_*.png "$B"/grub/select_*.png /usr/share/grub/themes/cyberdeck/
+	if [ -f /usr/share/grub/unicode.pf2 ]; then
+		install -m 0644 /usr/share/grub/unicode.pf2 /usr/share/grub/themes/cyberdeck/unicode.pf2
+	fi
+fi
 install -m 0644 "$B/plasma-welcomerc" /etc/xdg/plasma-welcomerc
 install -m 0644 "$B/applications/code.desktop" /usr/local/share/applications/code.desktop
 
@@ -137,6 +159,8 @@ if [ "${1:-}" = "--packages" ]; then
 	apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 	# containerd.io replaces Debian containerd. Put Podman back if that removal took it.
 	apt-get install -y podman distrobox crun
+	apt-get install -y power-profiles-daemon
+	systemctl enable power-profiles-daemon.service || true
 	# MT7922 firmware from trixie, not the backports snapshot.
 	# 1001 allows this to replace a newer backports package already installed.
 	apt-get install -y --allow-downgrades firmware-mediatek

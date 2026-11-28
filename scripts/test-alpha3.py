@@ -45,7 +45,7 @@ def main():
     version = (root / "version" / "cyberdeck-os.version").read_text(encoding="utf-8")
     expect("CYBERDECK_VERSION_ID=beta1" in version, "version id")
     expect('CYBERDECK_VERSION="Beta 1 (Plow)"' in version, "version name")
-    expect("CYBERDECK_BUILD=4" in version, "build number")
+    expect("CYBERDECK_BUILD=5" in version, "build number")
     os_release = (root / "branding" / "image" / "os-release").read_text(encoding="utf-8")
     expect("VERSION_ID=beta1" in os_release, "os-release id")
     expect("Beta 1 (Plow)" in os_release, "os-release pretty")

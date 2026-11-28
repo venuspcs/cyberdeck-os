@@ -165,5 +165,6 @@ for cfg in config/bootloaders/isolinux/isolinux.cfg config/bootloaders/syslinux/
 		grep -q 'menu resolution' "$cfg" || printf '%s\n' 'menu resolution 1024 768' >> "$cfg"
 	fi
 done
+find config/bootloaders -name stdmenu.cfg -print0 | xargs -0 -r sed -i 's/^menu vshift .*/menu vshift 16/'
 
 echo "Cyberdeck OS live-build config ready (profile ${PROFILE})."

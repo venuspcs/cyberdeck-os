@@ -12,3 +12,5 @@ find . -type f \( -name '*.cfg' -o -name '*.svg' -o -name 'theme.txt' \) -print0
 if [ -f boot/grub/config.cfg ] && ! grep -q '^set timeout=' boot/grub/config.cfg; then
 	printf '%s\n' 'set timeout=15' 'set timeout_style=menu' >> boot/grub/config.cfg
 fi
+# Keep the menu in the lower part of a 1024x768 screen, under the title.
+find . -name stdmenu.cfg -print0 | xargs -0 -r sed -i 's/^menu vshift .*/menu vshift 16/'

@@ -15,7 +15,7 @@ The AMD64 image is a hybrid ISO named `cyberdeck-os-amd64-amd64.hybrid.iso`. Dow
 
 1. Unzip the download if GitHub wrapped it. Check the SHA256 against `SHA256SUMS`.
 2. Write the ISO to an 8 GB or larger USB. This erases the USB. Use Rufus in DD Image mode, balenaEtcher, or `dd`. With Ventoy, install Ventoy first, then copy the ISO onto the USB.
-3. Boot the USB in UEFI or legacy BIOS. Secure Boot is not supported; turn it off.
+3. Boot the USB in UEFI or legacy BIOS. Secure Boot can stay on. The Vivobook test booted the live USB and the installed system with Secure Boot Active and the factory keys.
 4. On the live desktop, open **Install Cyberdeck OS**. Back up your files first.
 
 Checksum commands, firmware notes, and fixes are in [docs/INSTALL.md](docs/INSTALL.md).

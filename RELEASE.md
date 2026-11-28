@@ -1,4 +1,4 @@
-Cyberdeck OS Alpha 3 (Hatchet) is an AMD64 pre-release. Build id 3. Secure Boot is off; turn it off in firmware before you boot the USB.
+Cyberdeck OS Alpha 3 (Hatchet) is an AMD64 pre-release. Build id 3. Secure Boot can stay on.
 
 ## Join the ISO
 
